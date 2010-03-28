@@ -237,7 +237,7 @@ SUPER
 
 .SUPER 1 - B, BT, T, x+y 
 -Level 1 ou 2
-Kisame utiliza o Jutsu do tubarão, sumonando 5 dragões de agua ao seu redor.
+Kisame utiliza o Jutsu do tubarão, sumonando 5 tubarões de agua ao seu redor.
 
 .SUPER 2 - B, BT, T, z+x
 -Level 2/2
