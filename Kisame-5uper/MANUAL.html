@@ -13,13 +13,13 @@
 <link href="manual_lib/css/5uper.css" rel="stylesheet" type="text/css">
 <script type="text/javascript">
 function exibirItem(id){
-	if (document.getElementById("corpo_" + id).style.display == "none"){
-		document.getElementById("corpo_" + id).style.display = "";
-		for(i = 1; i < 20; i++){
+	if (document.getElementById("corpo_" + id).style.display == "none"){		
+		for(i = 1; i < 15; i++){
 			if(i != id){
 				document.getElementById("corpo_" + i).style.display = "none";
 			}
 		}
+		document.getElementById("corpo_" + id).style.display = "";
 	}
 }
 </script>
@@ -47,8 +47,8 @@ function exibirItem(id){
                         <li><a href="javascript:exibirItem(10);">Biografia</a></li>
                         <li><a href="javascript:exibirItem(11);">Modos</a></li>
                         <li><a href="javascript:exibirItem(12);">Comandos</a></li>
-                        <li><a href="javascript:exibirItem(14);">Agradecimentos</a></li>
-                        <li><a href="javascript:exibirItem(15);">Conclusão</a></li>
+                        <li><a href="javascript:exibirItem(13);">Agradecimentos</a></li>
+                        <li><a href="javascript:exibirItem(14);">Conclusão</a></li>
                     </ul>
                 </div>
                 <div id="corpo">
@@ -247,7 +247,7 @@ function exibirItem(id){
                         Kisame faz uma onda ao redor do oponente e depois joga a onda em cima do oponente.</p>
                         <img src="manual_lib/img/hyper1.jpg" /><br /><br />
                     </div>
-                    <div id="corpo_14" style="display:none;">
+                    <div id="corpo_13" style="display:none;">
                     	<h3><b>AGRADECIMENTOS</b></h3>
                     	<p><b>*Elecbyte</b> - Por ter criado essa Engine maravilhosa!!!<br />
                         <b>*MD_NARUTO</b> - Professor da Mugen School, e que tem paciencia desde o ano passado me encinando xD<br />
@@ -257,7 +257,7 @@ function exibirItem(id){
                         <b>*BERTO</b></b> - Por ter me indicado a Mugen School onde conheci o pessoal (MD_Naruto, WK, e etc)<br />
                         <b>*Neimed e zxcv11791</b> - Por ter ripado esse Excelente Sprite!</p>
                     </div>
-                    <div id="corpo_15" style="display:none;">
+                    <div id="corpo_14" style="display:none;">
                     	<h3><b>CONCLUSÃO</b></h3>
                     	<p>Espero que todos gostem do char, e podem utilizar da forma que quiserem...</p>
                     </div>
