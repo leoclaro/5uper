@@ -9,6 +9,7 @@ Chester
 Rid
 Kratos
 Stahn
+Race
 KyaroValkyrie
 
 

@@ -4,7 +4,7 @@
 M.U.G.E.N ver 2003.06.14 status log
 -----------------------------------
 Parsing command line...
-Command line: F:\MUGEN\Meus Projetos\Tales of\winmugen.exe
+Command line: E:\PROGRAMAS\etc\Minhas Criações\5uper\Tales of\winmugen.exe
 Parse command line OK
 Initializing...
 Allocating game variables
@@ -56,13 +56,6 @@ Set up graphics...timer...OK
 Initializing character info...OK
 Initializing select screen...finding characters...OK
 Entering main loop.
-Attempting to set graphics to 640x480x32 mode 0x44584143...success
-Unloading system background data...sprite data...OK
-
-Using original loader on chars/kfm/kfm.def
-
-Using original loader on chars/kfm/kfm.def
-Reloading system sprite data...Reloading system background data...OK
 Returned from main loop.
 Deinitializing...
 Clearing player cache...OK
