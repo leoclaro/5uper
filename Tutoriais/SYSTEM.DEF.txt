@@ -1,0 +1,90 @@
+[Dimensions]
+rows = {número de filas você quer}    (linhas horizontais)
+colomns = {número de colunas você quer}    (linhas verticais)
+spacing = {quantia de espaço entre cada caixa de seleção}
+wrapping = {1 for yes, 0 for no}  (Deixa o cursor para embrulhar ao redor)
+start = {x,y}    (Posição do começo da seleção dos quadros)
+startP1 = {x,y}    (Onde a caixa de seleção de jogador 1 começa)
+startP2 = {x,y}    (Onde a caixa de seleção de jogador 2 começa)
+celldim = {x,y}    (As dimensões da cela de Caráter)
+
+spr = { Diretório e arquivo do Select.SFF } (Usually data/select.sff
+
+title.pos = {x,y}    (Posição de Título)
+title.font = {x,y}    (Fonte de Título, -1 para nenhum)
+
+[Portrait]
+p1.pos = {x,y}    (Posição de jogador 1's retrato)
+p2.pos = {x,y}    (Posição de jogador 2's retrato)
+p1.name.pos = {x,y}    (Posição de jogador 1's nome)
+p1.name.font = {x,y}    (Fonte do jogador 1's name)
+p2.name.pos = {x,y}    (Posição de jogador 2's nome)
+p2.name.font = {x,y}    (Fontw do jogador 2's name)
+
+[VS Screen]
+time = { Tempo para mostrar o VS Screen}
+p1.pos = {x,y}    (Posicione para pôr o jogador 1's retrato)
+p2.pos = {x,y}    (Posicione para pôr o jogador 2's retrato)
+p1.name.dir = {-1 para esquerda, 0 para meio, or 1 para direita} (Alinhamento de nome)
+p1.name.pos = {x,y}
+p1.name.font = {x,y}
+p2.name.dir = {-1, 0, or 1}  (Alinhamento de nome)
+p2.name.pos = {x,y}
+p2.name.font = {x,y}
+
+[Music]
+
+bgmusic = {diretório e arquivo da música do select screen} (Normalmente sound/select.mp3
+vsmusic = { diretório e arquivo da música do Vs screen} (Normalmente sound/Vs.mp3
+
+[BGdef]
+
+spr = { diretório e arquivo do selectbg.sff}  (Normalmente data/selectbg.sff)
+
+(Aqui você soma [BG #], onde #É um número e isto começo de 0 e entra em uma ordem ascendendo.  Cada um é um PCX diferente dentro do arquivo Selectbg.sff ).
+Aqui é um exemplo (Nota: Você não digita dentro {e}, só o valor entre):
+
+[BG 0]
+
+type = {normal, parallax, anim, etc}  (Tipo of BG)
+spriteno =  {x,y}    (Número de grupo, número de Imagem) (Definido no arquivo de txt antes que fosse compilado)
+layerno = {0-50}    (Qual camada na que a imagem é.  O mais alto o mais para cima frente é)
+start = {x,y}    (Posição onde os começos de pic)
+velocity = {x,y}    (Opcional; Acelere a qual os movimentos de pic)
+mask = {0 for no, 1 for yes}  (Opcional; Faz a imagem se aparecer transparente)
+
+Nota:  Você pode somar como muitos BG como você queira.
+Para o último BGs, elas são sua tela de opção.  É a mesma coisa como acima.
+
+System.sff
+
+Você pode editar isto no System.def dentro do diretório de Dados de MUGEN.
+
+Isto é o que você pôs:
+
+[Music]
+bgmusic = { Diretório e arquivo de música }  (Usually sound\title.mp3)
+
+[Bgdef]
+spr = { Diretório e arquivo do system.sff}  (Usually data\system.sff
+
+
+Então some [BG #] que está igual a select.cfg. 
+ 
+Para um intro (animação), ponha isto (Tenha certeza aquele Title.pcx é um 1 x 1 pic transparente):
+
+[BG 1]
+type = anim
+actionno = 10
+layerno = 2
+start = -160,0
+[Begin Action 10]
+Então você digita uma animação básica que você faria para um arquivo de Ar (Confira meu Ar Tutorial
+:descubra como e mais detalhes). seria algo assim:
+
+0,1, 0,0, 10
+0,2, 0,0, 10
+0,3, 0,0, 10
+0,4, 0,0, 10
+0,5, 0,0, 10
+0,6, 0,0, 1000
