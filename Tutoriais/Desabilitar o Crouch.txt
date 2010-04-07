@@ -1,0 +1,8 @@
+Override the crouch states (10-12  in common1.cns) so the states within have something like this:
+
+[State 10, Override]
+type = ChangeState
+trigger1 = 1
+value = 20*((command = "holdfwd") || (command = "holdback"))
+
+Don't forget to remove the anim parameter in the statedefs where appropriate.
