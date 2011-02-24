@@ -1,0 +1,11 @@
+FrontEdgeDist <= -40
+
+ele vai buscar a posição em relação ao lado da tela q ele ta olhando
+[c=1][b]Roberto[/b][/c] diz:
+valores negativos são fora da tela
+[c=1][b]Roberto[/b][/c] diz:
+como ele vai pra frente
+[c=1][b]Roberto[/b][/c] diz:
+então é Front
+[c=1][b]Roberto[/b][/c] diz:
+ou seja, quando ele passar 40 depois da tela, ele some

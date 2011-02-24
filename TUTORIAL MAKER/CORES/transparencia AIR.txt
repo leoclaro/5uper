@@ -1,0 +1,24 @@
+AS0D222 azul
+AS150D0 numa agua 
+AS150D256 uma bola azul
+AS100D256 rosa
+
+
+AS80D245 agua subindo
+
+
+AS150D150 efeito agua veloz
+AS200D200 outro efeito agua veloz
+AS100D250 agua vindo do chao
+AS120D256 onda gigante         --------------------- ESSE È MASSA
+
+
+AS150D200 efeito de um golpe
+
+S
+
+A1
+
+
+AS70D256
+AS70D256

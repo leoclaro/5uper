@@ -1,0 +1,24 @@
+Alterar tamanho do Explod
+
+
+no Explod
+[c=1][b]Roberto[/b][/c] diz:
+se vc colocar a linha
+[c=1][b]Roberto[/b][/c] diz:
+Scale = 1, 1
+o tamanho fica normal
+[c=1][b]Roberto[/b][/c] diz:
+se colocar
+[c=1][b]Roberto[/b][/c] diz:
+Scale = 2, 2
+[c=1][b]Roberto[/b][/c] diz:
+o tamanho dobra
+[c=1][b]Roberto[/b][/c] diz:
+se colocar
+[c=1][b]Roberto[/b][/c] diz:
+Sclae = 0.5, 0.5
+[c=1][b]Roberto[/b][/c] diz:
+o tamanho cai pela metade
+[c=1][b]Roberto[/b][/c] diz:
+é ótimo pra sparks gigantes!
+os sparks do meu char estão com tamanho 0.2, 0.25 e 0.3

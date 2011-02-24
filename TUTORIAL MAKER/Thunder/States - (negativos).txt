@@ -1,0 +1,3 @@
+statedef -2 = state q está SEMPRE em execução
+[c=1][b]Roberto[/b][/c] diz:
+statedef - 3 = state q está em execução apenas quando seu char está em states próprios, ou seja, não executados quando o char leva um throw

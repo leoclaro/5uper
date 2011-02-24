@@ -1,0 +1,4 @@
+NumHits = 7
+colocar no hitdef
+
+é para colocar valor de quantos hits deu

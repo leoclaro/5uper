@@ -1,0 +1,6 @@
+Snap = ifelse(P2Dist X < 0, -20, 20), -80 ; ifelse(condição, valor-se-a-condição-for-verdadeira, valor-se-a-condição-for-falsa)
+
+pra isso existe o trigger IFELSE
+
+SE P2Dist X < 0, ele vai pra posição X -20 (atrás do char), se naum for vai pra posição X 20 (na frente do char)
+ifelse(condição, valor-se-a-condição-for-verdadeira, valor-se-a-condição-for-falsa)

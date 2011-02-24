@@ -1,0 +1,3199 @@
+				Índice de Triggers
+				=============
+							M.U.G.E.N, (c) Elecbyte 2001
+							Documentation for version 2001.04.14
+
+====================================================================
+
+Este é um índice por ordem alfabética dos triggers (acionadores). Para detalhes de 
+como um trigger pode trabalhar com expressões aritméticas, veja o documento 
+Expresso.Txt. A menos se especificado em contrário, P1 representa o seu 
+personagem, e P2 o adversário (usualmente, o oponente mais próximo quando no 
+modo team).
+
+Alguns triggers são não-padronizados e não podem receber uma expressão para 
+avaliá-la. Eles estão marcados com um (*) no índice. Alguns triggers foram 
+depreciados e podem ser retirados nas próximas versões; eles foram marcados 
+com (**). Triggers de sintaxe antiga são marcados com (***); aparecem apenas 
+na forma 
+(trigger) (operador) (value).
+
+Para todos os triggers, SFalse irá ser retornado se o trigger for redirecionado 
+para um destino não-existente, ou se o seu número ID para a redireção retornar 
+SFalse. Isto não será avaliado como erro.
+
+- A maioria dos triggers pode ser redirecionado para os pais ou raízes 
+de "helpers" pela especificação do destino antes do trigger. Por exemplo, 
+trigger1 = parent, stateno = 1000
+trigger2 = root, stateno = 2000
+aciona se o pai do atual personagem está no estado 1000, ou se a raiz 
+do atual personagem está no estado 2000.
+
+- A partir da versão 27/06 foram adicionados
+trigger1 = target, pos y > 0
+trigger2 = target(50), command = x      ;1º target com chain-ID 50
+
+- A partir da versão 14/04/2001 foram adicionados enemy, enemyNear, 
+partner, playerID
+  value = EnemyNear, ID                      ; pega ID do mais próximo oponente
+  trigger1 = enemynear(1), name = "Squash"   ; pega nome do "          "
+
+
+
+Alphabetical Trigger Index
+--------------------------
+-Abs
+-Acos
+-Alive
+-Anim
+-AnimElem(*,***)
+-AnimElemNo
+-AnimElemTime
+-AnimExist
+-AnimTime
+-Asin
+-Atan
+-AuthorName(*,***)	(versão 14/04/2001 ou superior)
+-BackEdgeBodyDist
+-BackEdgeDist
+-CanRecover
+-Ceil
+-Command(*,***)
+-Const(*)
+-Cos
+-Ctrl
+-DrawGame		(versão 29/11/2000 ou superior)
+-E
+-Exp
+-Facing
+-Floor
+-FrontEdgeBodyDist
+-FrontEdgeDist
+-FVar
+-GameTime
+-GetHitVar(*)
+-HitCount
+-HitDefAttr(*,***)
+-HitFall
+-HitOver
+-HitPauseTime
+-HitShakeOver
+-HitVel
+-ID			(versão 14/04/2001 ou superior)
+-IfElse
+-IsHelper
+-IsHomeTeam		(versão 14/04/2001 ou superior)
+-Life
+-Ln
+-Log
+-Lose
+-MatchNo		(versão 31/07/2000 ou superior)
+-MatchOver
+-MoveContact
+-MoveGuarded
+-MoveHit
+-MoveType(*,***)
+-Name(*,***)		(versão 14/04/2001 ou superior)
+-NumEnemy		(versão 14/04/2001 ou superior)
+-NumExplod
+-NumHelper 
+-NumPartner		(versão 14/04/2001 ou superior)
+-NumProj
+-NumProjID
+-NumTarget
+-P1Name(*)
+-P2BodyDist
+-P2Dist
+-P2Life
+-P2MoveType(*,***)
+-P2Name(*,***)
+-P2StateNo
+-P2StateType(*,***)
+-P3Name(*,***)
+-P4Name(*,***)
+-PalNo
+-ParentDist
+-Pi
+-PlayerIDExist		(versão 14/04/2001 ou superior)
+-PrevStateNo
+-Pos
+-Power
+-ProjCancelTime
+-ProjContact(*,***)
+-ProjContactTime
+-ProjGuarded(*,***)
+-ProjGuardedTime
+-ProjHit(*,***)
+-ProjHitTime
+-Random
+-RootDist
+-RoundNo
+-RoundsExisted		(versão 14/04/2001 ou superior)
+-RoundState
+-ScreenPos
+-SelfAnimExist
+-Sin
+-StateNo
+-StateType(*,***)
+-SysFVar
+-SysVar
+-Tan
+-TeamMode(*,***)	(versão 14/04/2001 ou superior)
+-TeamSide		(versão 14/04/2001 ou superior)
+-TicksPerSecond	(versão 01/04/2001 ou superior)
+-Time
+-TimeMod(*,**,***)
+-UniqHitCount		(versão 31/07/2000 ou superior)
+-Var
+-Vel
+-Win
+
+List of math triggers: (a subset of the above)
+----------------------
+-abs
+-acos
+-asin
+-atan
+-ceil
+-cos
+-e
+-exp
+-floor
+-IfElse
+-ln
+-log
+-pi
+-sin
+-tan
+
+
+
+------------------------------------------------------------
+Abs
+------------------------------------------------------------
+
+Calcula o valor absoluto da expressão (ignora sinal).
+
+Formato:
+  abs(exprn)
+
+Argumentos:
+  exprn
+    É a expressão que será avaliada.
+
+Tipo de retorno:
+  O mesmo tipo de exprn.
+
+Condições de erro:
+  Retorna SFalse se exprn avaliado der SFalse.
+
+
+------------------------------------------------------------
+Acos
+------------------------------------------------------------
+
+Calcula o arco-cosseno (em radianos) de um específico argumento.
+
+Formato:
+  acos(exprn)
+
+Argumentos:
+  exprn
+    Expressão a ser avaliado seu arco-cosseno de (nº real).
+
+Tipo de retorno:
+  Nº real.
+
+Condições de erro:
+  Retorna SFalse se exprn avaliado der SFalse, ou se exprn não está no domínio 
+do arco-cosseno (exprn deve estar na região [-1.0,1.0]).
+
+Exemplo:
+  value = acos(1)
+    Calcula o arco-cosseno de 1, que é aproximadamente 0 (possivelmente pode 
+haver um erro de cálculo). Qualquer calculadora científica possui essa 
+função:  arco-cosseno é um função matemática !!
+
+
+------------------------------------------------------------
+Alive
+------------------------------------------------------------
+
+Retorna 1 se o personagem está apto a lutar, 0 se ele foi nocauteado.
+
+Formato:
+  alive
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = alive = 0
+    Aciona se o personagem foi nocauteado.
+
+
+------------------------------------------------------------
+Anim
+------------------------------------------------------------
+
+Retorna o número da animação atual do personagem.
+
+Formato:
+  Anim
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = Anim = 200
+    Aciona se o personagem está rodando a animação 200.
+
+
+------------------------------------------------------------
+AnimElem(*,***)
+------------------------------------------------------------
+
+Retorna 1 quando a animação corrente chega em determinada imagem.
+Muito útil para sincronizar imagens com a programação.
+(Lembre-se que a primeira imagem é o elemento 1, não é 0).
+
+AnimElemTime têm funcionalidade similar a AnimElem, mas pode pegar 
+expressões como argumento.
+
+Formato:
+  1.  AnimElem = value1
+  2.  AnimElem = value1, [operador] value2
+
+Argumentos:
+  [operador]
+    =, !=, <, >, <=, >=
+  value1 (inteiro)
+    Número do elemento da animação (imagem) a checar.
+  value2 (inteiro)
+    Valor do tempo de animação a ser comparado.
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Retorna SFalse se o nº de elemento especificado não é válido para esta 
+animação ("Action"), isto é, um nº maior ou menor.
+
+Detalhes:
+  O trigger no formato 1 é verdadeiro se a imagem especificada por value1 está 
+no começo ao ser mostrada.
+  O trigger no formato 2 é verdadeiro se a imagem especificada por value1 está 
+sendo mostrada a t game-ticks, onde t é igual a value2.
+  Se value1 não é um número válido (zero, números fracionários) o MUGEN detecta, 
+sai para o DOS e acusa erro.
+
+Exemplos:
+  trigger1 = AnimElem = 2
+  trigger1 = AnimElem = 2, = 0
+    São equivalentes:  ambos acionam ao primeiro game-tick da imagem 
+    (elemento de animação), número 2 da animação corrente.
+
+  trigger1 = AnimElem = 2, = 4
+    Aciona após 4 game-ticks, quando o personagem atinge a segunda imagem
+    da animação corrente.
+
+  trigger1 = AnimElem = 2, >= 0
+  trigger1 = AnimElem = 3, < 0
+    Aciona no período em que o personagem está na segunda imagem. Se não 
+    existisse a terceira imagem, a segunda linha deveria ser substituída por:
+      trigger1 = AnimTime <= 0
+
+------------------------------------------------------------
+AnimElemNo
+------------------------------------------------------------
+
+Retorna o número da imagem ("element") da animação atual ("Action") em um tempo 
+específico. O argumento para AnimElemNo representa o tempo a ser checado, 
+expresso em game-ticks, relativo ao presente.
+
+Formato:
+  AnimElemTime(exprn)
+
+Argumentos:
+  exprn
+    Expressão que avalia a posição com relação ao tempo (inteiro).
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Retorna SFalse se você tentar checar um tempo que caia antes do começo 
+da animação atual (um tempo anterior ao elemento 1 da animação). Ou seja, 
+se a animação possui 30 game-ticks, ela não pode ter, em caso algum, 
+um argumento superior a 30. Veja os exemplos.
+
+Notas:
+  Se a animação está em "loop", então é assumido que o "loop" é eterno. Isto 
+significa que, não importa o quão longe no passado você chegue, AnimElemNo 
+sempre retorna um número de elemento que mente com a porção do "loop".
+
+Exemplos:
+  trigger1 = AnimElemNo(0) = 2
+    Verdadeiro quando o elemento é mostrado 0 ticks no futuro, isto é, 
+agora, é o elemento 2. Isto é equivalente a:
+      trigger1 = AnimElem = 2, >= 0
+      trigger1 = AnimElem = 3, < 0
+
+  trigger1 = AnimElemNo(2) = 4
+    Verdadeiro quando o elemento da animação que será mostrado daqui a 2 ticks 
+é o elemento 4. Isto é equivalente a:
+      trigger1 = AnimElem = 4, >= -2
+      trigger1 = AnimElem = 5, < -2
+
+------------------------------------------------------------
+AnimElemTime
+------------------------------------------------------------
+
+Pega um o tempo da animação que já passou desde o começo de um específico 
+elemento da animação atual. Muito útil para sincronizar eventos a elementos de 
+animação.
+Lembre-se: o primeiro elemento da animação é o elemento 1, não o 0.
+
+Formato:
+  AnimElemTime(exprn)
+
+Argumentos:
+  exprn
+    Expressão que será avaliada para um número de elemento a ser checado (inteiro).
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Retorna SFalse se exprn avaliado der SFalse, ou se exprn não é um número 
+de elemento válido para a atual "Action".
+
+Exemplos:
+  trigger1 = AnimElemTime(2) = 0
+    Verdadeiro para o primeiro tick do elemento 2 da animação atual. É equivalente 
+a dizer:
+      trigger1 = AnimElem = 2
+
+  trigger1 = AnimElemTime(2) = 4
+    Verdadeiro 4 ticks depois de começar o segundo elemento da animação.
+
+  trigger1 = AnimElemTime(2) >= 0
+  trigger1 = AnimElemTime(3) < 0
+    Verdadeiro para o intervalo entre o segundo elemento e o terceiro elemento. 
+Se o terceiro elemento não existe, a segunda linha é avaliada como SFalse, e 
+este trigger1 nunca será acionado. Neste caso, a segunda linha pode ser 
+lida como:
+      trigger1 = AnimTime <= 0
+
+
+------------------------------------------------------------
+AnimExist
+------------------------------------------------------------
+
+Retorna 1 se uma determinada "Action" (animação) existe para o
+personagem. O resultado deste trigger não é definido se o
+personagem foi transferido para um estado customizado devido a um
+golpe bem sucedido. Nesta situação, utilize SelfAnimExist.
+
+Formato:
+  AnimExist(exprn)
+
+Argumentos:
+  exprn
+    Uma expressão para ser avaliada como um número de animação ("Action"). 
+Deve ser um número inteiro.
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Retorna SFalse se exprn avaliado der SFalse.
+
+Exemplo:
+  trigger1 = !AnimExist(200)
+    Aciona se o personagem não possui a Action 200. As Action são as animações 
+do personagem, definidos no arquivo AIR:
+    [Begin Action 200]
+
+
+------------------------------------------------------------
+AnimTime
+------------------------------------------------------------
+
+Dá a diferença entre o tempo de laço ("looptime") da animação corrente.
+Lembre-se que no arquivo AIR, quando uma animação chega ao fim, ela
+volta para o começo, indefinidamente. É no arquivo CNS que ocorre a 
+mudança de uma animação para outra. Durante a animação, AnimTime 
+sempre retorna um número não positivo.
+AnimTime é muito utilizado quando se quer saber quando uma animação
+chega ao fim.
+
+Formato:
+  AnimTime
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = AnimTime = 0
+    Aciona quando falta 0 game-ticks para a animação corrente começar
+de novo, isto é, avisa o fim da animação ("Action").
+
+
+------------------------------------------------------------
+Asin
+------------------------------------------------------------
+
+Calcula o arco-seno (em radianos) de um argumento específico.
+
+Formato:
+  asin(exprn)
+
+Argumentos:
+  exprn
+    Expressão a ser calculado o arco-seno (Nº real.).
+
+Tipo de retorno:
+  Nº real.
+
+Condições de erro:
+  Retorna SFalse se exprn avaliado der SFalse, ou se exprn não estiver no 
+domínio do arco-seno (que é o intervalo [-1.0,1.0]).
+
+Exemplo:
+  value = asin(1)
+    Calcula o valor do arco-seno, que é aproximadamente pi/2 (possivelmente 
+com uma pequena variação).
+
+
+------------------------------------------------------------
+Atan
+------------------------------------------------------------
+
+Calcula o arco-tangente (em radianos) de um argumento específico.
+
+Formato:
+  atan(exprn)
+
+Argumentos:
+  exprn
+    Expressão a ser calculado o arco-tangente.
+
+Tipo de retorno:
+  Nº real.
+
+Condições de erro:
+  Retorna SFalse se exprn avaliado der SFalse.
+
+Exemplo:
+  value = atan(1)
+    Calcula o arco cosseno de 1, que é aproximadamente pi/4 (possivelmente 
+com alguma variação).
+
+
+------------------------------------------------------------
+AuthorName(*,***)
+------------------------------------------------------------
+
+Retorna o nome do autor do personagem (que foi especificado no arquivo DEF).
+Isto pode ser útil para separar personagens de mesmo nome e de diferentes 
+autores.
+
+Formato:
+  AuthorName [operador] "name"
+
+Argumentos:
+  [operadores]
+    =, != (outros operadores não são válidos)
+  "name" (variável tipo "string")
+    Nome a ser comparado. Deve estar entre aspas.
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Nenhum
+
+Exemplo:
+  trigger1 = Authorname = "Gorjeador"
+    Retorna verdadeiro se o nome do autor for Gorjeador.
+
+
+------------------------------------------------------------
+BackEdgeBodyDist
+------------------------------------------------------------
+
+BackEdgeBodyDist dá a distância da parte de trás de seu personagem,
+determinada pelo fim de sua barra "Width" (uma constante de largura, 
+que você configura logo no início do arquivo CNS) à parede que
+está atrás do personagem.
+
+Formato:
+  BackEdgeBodyDist
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  Nº real.
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = BackEdgeBodyDist < 30
+    Aciona se as costas do personagem (parâmetro "width") está a 30 
+pixels da parede (fim do "stage") que está atrás do personagem.
+
+
+------------------------------------------------------------
+BackEdgeDist
+------------------------------------------------------------
+
+BackEdgeDist dá a distância entre o eixo x do personagem e a parede 
+da tela atrás do personagem.
+
+Formato:
+  BackEdgeDist
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  Nº real.
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = BackEdgeBodyDist < 30
+    Aciona se o personagem está com 30 pixels de distância da parede da 
+tela atrás do personagem.
+
+
+------------------------------------------------------------
+CanRecover
+------------------------------------------------------------
+
+Se o personagem está em um estado de queda, retorna verdadeiro se ele pode 
+se recuperar, e falso se ele não está apto a se recuperar. Se o personagem 
+não está em queda, a saída deste trigger não é definida.
+
+Formato:
+  CanRecover
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Nenhum.
+
+Exemplo.
+  Nenhum.
+
+
+------------------------------------------------------------
+Ceil
+------------------------------------------------------------
+
+Implementa um função arredondamento. Retorna o mínimo inteiro que é 
+maior que ou igual a um argumento específico.
+
+Formato:
+  ceil(exprn)
+
+Argumentos:
+  exprn
+    Expressão a ser avaliada.
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Retorna SFalse se exprn avaliado der SFalse.
+
+Exemplo:
+  1. value = ceil(5.5)
+    Retorna 6.
+  2. value = ceil(-2)
+    Retorna -2.
+
+
+------------------------------------------------------------
+Command (*,***)
+------------------------------------------------------------
+
+Aciona se você, jogador, entrar com um comando específico.
+
+Formato:
+  Command (operador) command_name
+
+Argumentos:
+  (operador)
+    =, != (outros operadores não são válidos)
+  command_name (string)
+    command_name é o nome do comando. os comandos são definidos no 
+arquivo CMD, e são sensíveis a letras maiúsculas/minúsculas. Se o CMD 
+possui múltiplos comandos com o mesmo nome, então apenas um destes comandos 
+irá funcionar. Nomes de comando devem aparecer entre aspas.
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = Command = "fireball_motion"
+    Aciona se o jogador entrar com o comando correspondente ao nome de 
+comando "fireball_motion".
+
+
+------------------------------------------------------------
+Const (*)
+------------------------------------------------------------
+
+Retorna o valor de uma das constantes do personagem.
+Não confundir constantes com variáveis (var).
+
+Formato:
+  Const(param_name)
+
+Argumentos:
+  param_name
+    O nome da constante a ser checada. Veja os valores válidos em "detalhes".
+      
+Tipo de retorno:
+  Depende do parâmetro. Veja "detalhes".
+
+Condições de erro:
+  Nenhum.
+
+Detalhes:
+  Os seguintes valores para param_name retorna os valores especificados 
+no grupo [Data] das constantes do personagem (em geral, ficam logo no 
+início do arquivo CNS).
+
+  data.life: Retorna o valor do parâmetro "life".  (inteiro)
+  data.attack: Retorna o valor do parâmetro "attack".     (inteiro)
+  data.defence: Retorna o valor do parâmetro "defence". (inteiro)
+  data.fall.defence_mul: Retorna o valor do multiplicador de defesa, calculado 
+           como 100/(f+100), onde f é o parâmetro "fall.defence_up".  (Nº real)
+  data.liedown.time: Retorna o valor do parâmetro "liedown.time"    (inteiro)
+  data.airjuggle: Retorna o valor do parâmetro "airjuggle" (inteiro)
+  data.sparkno: Retorna o valor do parâmetro "sparkno"  (inteiro)
+  data.guard.sparkno: Retorna o valor do parâmetro "guard.sparkno" (inteiro)
+  data.KO.echo: Retorna o valor do parâmetro "ko.echo"  (inteiro)
+  data.IntPersistIndex: Retorna o valor do parâmetro "IntPersistIndex"  (inteiro)
+  data.FloatPersistIndex: Retorna o valor do parâmetro "FloatPersistIndex"  (inteiro)
+
+  Os seguintes valores de param_name retornam os valores específicos das 
+constantes do grupo [Size].
+
+  size.xscale: Retorna o valor do parâmetro "xscale". (Nº real.)
+  size.yscale: Retorna o valor do parâmetro "yscale". (Nº real.)
+  size.ground.back: Retorna o valor do parâmetro "ground.back". (inteiro)
+  size.ground.front: Retorna o valor do parâmetro "ground.front".  (inteiro)
+  size.air.back: Retorna o valor do parâmetro "air.back".  (inteiro)
+  size.air.front: Retorna o valor do parâmetro "air.front".   (inteiro)
+  size.height: Retorna o valor do parâmetro "height".       (inteiro)
+  size.attack.dist: Retorna o valor do parâmetro "attack.dist".      (inteiro)
+  size.proj.attack.dist: Retorna o valor do parâmetro "proj.attack.dist"  (inteiro)
+  size.proj.doscale: Retorna o valor do parâmetro "proj.doscale"   (inteiro)
+  size.head.pos.x: Retorna a componente X de "head.pos"   (inteiro)
+  size.head.pos.y: Retorna da componente Y de "head.pos" (inteiro)
+  size.mid.pos.x: Retorna da componente X de "mid.pos"     (inteiro)
+  size.mid.pos.y: Retorna da componente Y de "mid.pos"     (inteiro)
+  size.shadowoffset: Retorna o valor do parâmetro "shadowoffset"  (inteiro)
+  size.draw.offset.x: Retorna da componente X de "draw.offset"     (inteiro)
+  size.draw.offset.y: Retorna da componente Y de "draw.offset"    (inteiro)
+
+  Os seguintes valores de param_name retornam os valores específicos das 
+constantes do grupo [Velocity].
+
+  velocity.walk.fwd.x: Retorna o valor do parâmetro "walk.fwd"      (Nº real)
+  velocity.walk.back.x: Retorna o valor do parâmetro "walk.back" (Nº real)
+  velocity.run.fwd.x: Retorna da componente X de "run.fwd"    (Nº real)
+  velocity.run.fwd.y: Retorna da componente Y de "run.fwd"   (Nº real)
+  velocity.run.back.x: Retorna da componente X de "run.back"   (Nº real)
+  velocity.run.back.y: Retorna da componente Y de "run.back"   (Nº real)
+  velocity.jump.y: Retorna da componente Y de "jump.neu"
+           Nota:  este NÃO é "velocity.jump.neu.y". O parâmetro "neu" têm 
+           componente y apenas. (Nº real)
+  velocity.jump.neu.x: Retorna da componente X de "jump.neu"     (Nº real)
+  velocity.jump.back.x: Retorna o valor do parâmetro "jump.back"  (Nº real)
+  velocity.jump.fwd.x: Retorna o valor do parâmetro "jump.fwd"      (Nº real)
+  velocity.runjump.back.x: Retorna o valor do parâmetro "runjump.back"   (Nº real)
+  velocity.runjump.fwd.x: Retorna o valor do parâmetro "runjump.fwd"   (Nº real)
+  velocity.airjump.y: Retorna da componente Y de "airjump.neu"
+           Nota:  isto NÃO é "velocity.airjump.neu.y".  (Nº real)
+  velocity.airjump.neu.x: Retorna da componente X de "airjump.neu"    (Nº real)
+  velocity.airjump.back.x: Retorna o valor do parâmetro "airjump.back" (Nº real)
+  velocity.airjump.fwd.x: Retorna o valor do parâmetro "airjump.fwd"     (Nº real)
+
+  Os seguintes valores de param_name retornam os valores específicos das 
+constantes do grupo [Movement].
+
+  movement.airjump.num: Retorna o valor do parâmetro "airjump.num"       (inteiro)
+  movement.airjump.height: Retorna o valor do parâmetro "airjump.height"  (inteiro)
+  movement.yaccel: Retorna o valor do parâmetro "yaccel"    (Nº real)
+  movement.stand.friction: Retorna o valor do parâmetro "stand.friction"      (Nº real)
+  movement.crouch.friction: Retorna o valor do parâmetro "crouch.friction"  (Nº real)
+
+Exemplo:
+  trigger1 = Const(velocity.walk.fwd.x) > 4
+    Aciona se a velocidade com que seu personagem anda for maior que 4. 
+Vale lembrar que a velocidade é medida em pixels por game-tick.
+
+
+------------------------------------------------------------
+Cos
+------------------------------------------------------------
+
+Calcula o cosseno de um argumento (em radianos).
+
+Formato:
+  cos(exprn)
+
+Argumentos:
+  exprn
+    Expressão a ser calculada o cosseno.
+
+Tipo de retorno:
+  Nº real.
+
+Condições de erro:
+  Retorna SFalse se exprn avaliado der SFalse.
+
+Exemplo:
+  value = cos(0)
+    Calcula o cosseno de 0, que é aproximadamente 1.0 (com alguma 
+variação).
+
+
+------------------------------------------------------------
+Ctrl
+------------------------------------------------------------
+
+Retorna o estado da flag de controle de P1.
+
+Formato:
+  Ctrl
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = Ctrl
+    Aciona se o personagem têm o controle.
+
+
+------------------------------------------------------------
+DrawGame
+------------------------------------------------------------
+
+Retorna 1 se o seu personagem (ou seu time, no team mode) terminaou 
+o round com um empate, 0 em caso contrário.
+
+Formato:
+  Draw
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Nenhum.
+
+Exemplos:
+  trigger1 = DrawGame
+    Aciona se o personagem (ou o time) terminou o round empatado.
+
+
+------------------------------------------------------------
+E
+------------------------------------------------------------
+
+Retorna o valor do número de Euler (2.718281828...)
+
+Formato:
+  e
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  Nº real.
+
+Condições de erro:
+  Nenhum.
+
+Exemplo.
+  Nenhum.
+
+
+------------------------------------------------------------
+Exp
+------------------------------------------------------------
+
+Calcula o exponencial do argumento (e elevado à potência do argumento). 
+Este trigger calcula mais precisamente que e**(argumento).
+
+Formato:
+  exp(exprn)
+
+Argumentos:
+  exprn
+    Expressão a ser calculado o exponencial. (Nº real).
+
+Tipo de retorno:
+  Nº real.
+
+Condições de erro:
+  Retorna SFalse se exprn avaliado der SFalse.
+
+Exemplo:
+  value = exp(4-var(0))
+    Calcula o número (e) elevado a 4-var(0).
+
+
+------------------------------------------------------------
+Facing
+------------------------------------------------------------
+
+Retorna 1 se o personagem está olhando para a direita, e -1 se ele está olhando
+para a esquerda.
+
+Formato:
+  Facing
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  Trigger = Facing = -1
+    Aciona se o personagem para a esquerda da tela.
+
+
+------------------------------------------------------------
+Floor
+------------------------------------------------------------
+
+Implementa a função arredondamento. Retorna o maior inteiro menor 
+que ou igual ao argumento.
+Enquanto o trigger Ceil arredonda para cima, Floor arredonda para baixo.
+
+Formato:
+  floor(exprn)
+
+Argumentos:
+  exprn
+    Expressão a ser arredondada.
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Retorna SFalse se exprn avaliado der SFalse.
+
+Exemplos:
+  1. value=floor(5.5)
+    Retorna 5.
+  2. value=floor(-2)
+    Retorna -2.
+
+
+------------------------------------------------------------
+FrontEdgeBodyDist
+------------------------------------------------------------
+
+FrontEdgeBodyDist dá a distância entre a frente do jogador (como 
+determinado em sua variável width bar) e a parede da tela que está 
+na sua frente.
+
+Formato:
+  FrontEdgeBodyDist
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  Nº real.
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = FrontEdgeBodyDist < 30
+    Aciona se a parede da frente está a menos de 30 pixels da cara 
+do seu personagem.
+
+
+------------------------------------------------------------
+FrontEdgeDist
+------------------------------------------------------------
+
+FrontEdgeDist dá a distância entre o eixo x do seu personagem e a parede 
+da tela em frente ao seu personagem.
+
+Formato:
+  FrontEdgeDist
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  Nº real.
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = FrontEdgeDist < 30
+    Aciona se a parede da frente está a menos de 30 pixels do eixo x 
+do seu personagem.
+
+
+------------------------------------------------------------
+FVar
+------------------------------------------------------------
+
+Retorna o valor armazenado por uma variável real.
+
+Formato:
+  FVar(exprn)
+
+Argumentos:
+  exprn
+    É uma expressão que será utilizada como o índice da variável. Valores válidos 
+são entre 0 e 39, ou seja, o Mugen fornece apenas 40 variáveis reais.
+
+Tipo de retorno:
+  Nº real.
+
+Condições de erro:
+  Retorna SFalse se exprn avaliado der SFalse, ou se exprn resulatar em um 
+índice inválido.
+
+Exemplo:
+  trigger1 = FVar(5) = -1.23
+    Aciona se a variável real 5 contém o valor -1.23.
+
+
+------------------------------------------------------------
+GameTime
+------------------------------------------------------------
+
+Retorna o total número de ticks que passaram desde que o game começou.
+
+Formato:
+  GameTime
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = (GameTime%27)=0
+    Aciona a cada 27 game ticks.
+
+
+------------------------------------------------------------
+GetHitVar(*)
+------------------------------------------------------------
+
+Quando o personagem está em um estado de "hit", retorna o valor de um 
+específico parâmetro de "hit".
+
+Formato:
+  GetHitVar(param_name)
+
+Argumentos:
+  param_name
+    O nome do parâmetro de "hit" a checar. Valores válidos são:
+      xveladd, yveladd, type, animtype, airtype, groundtype, damage,
+      hitcount, fallcount, hitshaketime, hittime, slidetime, ctrltime,
+      recovertime, xoff, yoff, zoff, xvel, yvel, yaccel, hitid, 
+      chainid, guarded, fall, fall.damage, fall.xvel, fall.yvel,
+      fall.recover, fall.time, fall.recovertime (fall.envshake.*, fall.kill somente 
+      disponíveis a partir da versão 29/11).
+
+Tipo de retorno:
+  Depende do tipo do parâmetro. Veja "Detalhes".
+
+Condições de erro:
+  Nenhum.
+
+Detalhes:
+  xveladd: Retorna a velocidade X que é adicionada quando ele é nocauteado. (Nº real)
+  yveladd: Retorna a velocidade Y que é adicionada quando ele é nocauteado. (Nº real)
+  type: Retorna o tipo do "hit":  0 para nenhum, 1 para high, 2 para low, 3 para trip
+          (apenas "hits" ground).
+  animtype: Retorna o tipo de animação (0 para light, 1 para medium, 2 para hard, 
+          3 para back, 4 para up, 5 para diag-up
+  airtype: Retorna o tipo especificado no HitDef para um golpe no ar.
+  groundtype: Retorna o tipo especificado no HitDef para um golpe no chão.
+  damage: Retorna o dano ("damage"). (inteiro)
+  hitcount: Retorna o número de "hits" no atual combo. (inteiro)
+  fallcount: Retorna o número de vezes que o personagem atingiu no solo no atual 
+                combo. (inteiro)
+  hitshaketime: Retorna o tempo que o personagem é congelado durante o "hit". 
+                       Este número conta de forma decrescente até zero.  (inteiro)
+  hittime: Retorna o tempo antes que o personagem retome o controle. (inteiro)
+  slidetime: Retorna o tempo que o personagem é empurrado (no chão) após o 
+                 "hit". (inteiro)
+  ctrltime: Retorna o tempo antes do personagem retomar o controle após defender. 
+               (inteiro)
+  recovertime: Retorna o tempo antes do personagem se levantar de um "liedown state"
+               Este número conta decrescente até 0, e irá contar mais rapidamente se os 
+               botões são pressionados rapidamente. (inteiro)
+  xoff: "Snap" x quando em "hit" (depreciado)
+  yoff: "Snap" y quando em "hit" (depreciado)
+  zoff: "Snap" z quando em "hit" (depreciado)
+  xvel: Velocidade X imprimida pelo golpe  (Nº real)
+  yvel: Velocidade Y imprimida pelo golpe  (Nº real)
+  yaccel: Aceleração Y imprimida pelo golpe (Nº real)
+  chainid: chainID para o último golpe tomado. (inteiro)
+  guarded: Verdadeiro se o último "hit" foi defendido, falso caso contrário.
+  fall: Verdadeiro se estiver caindo, falso caso contrário (inteiro)
+  fall.damage: Dano na queda (inteiro)
+  fall.xvel: Velocidade X após quicar no chão. (Nº real)
+  fall.yvel: Velocidade Y após quicar no chão. (Nº real)
+  fall.recover: Verdadeiro se o personagem pode se recuperar, falso caso contrário (0/1).
+  fall.recovertime: tempo antes do personagem poder se recuperar (inteiro)
+  fall.kill: valor de fall.kill do HitDef. (inteiro)
+  fall.envshake.time: Veja abaixo. (inteiro)
+  fall.envshake.freq: Veja abaixo. (Nº real)
+  fall.envshake.ampl: Veja abaixo. (inteiro)
+  fall.envshake.phase: Retorna o valor do fall.envshake.* do HitDef  (Nº real)
+
+Exemplo:
+  trigger1 = GetHitVar(yvel) < -5.5
+    Aciona se seu personagem têm velocidade menor que -5.5 após ser golpeado, 
+ou seja, depende do HitDef do adversário.
+
+
+------------------------------------------------------------
+HitCount
+------------------------------------------------------------
+
+A paritr da versão 31/07 mudou completamente.
+Retorna o número de vezes que o movimento de ataque atual acertou 
+um ou mais oponentes. Este valor é válido apenas para simples estado; 
+depois de qualquer mudança de estado, ele é resetado (volta a 0). Para prevenir 
+o reset, mude o parâmetro hitcountpersist no StateDef (veja documentação de 
+CNS para maiores detalhes).
+O HitCount e UniqHitCount diferem apenas quando o personagem está atingindo 
+mais de um adversário. No caso do personagem atingir dois adversários com 
+um mesmo ataque, HitCount irá incrementar 1 para cada "hit", enquanto 
+UniqHitCount incrementa 2.
+
+Formato:
+  HitCount
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = HitCount > 8
+    Aciona se mais que 8 "hits" foram impostos ao adversário desde que 
+começou o movimento de ataque.
+
+
+------------------------------------------------------------
+HitDefAttr(*,***)
+------------------------------------------------------------
+
+Gets the attribute parameter of the player's currently-active HitDef. 
+If the player is not in an attack state, then the condition does not 
+trigger.
+Can be used for simple move-interrupts from weaker to stronger attacks 
+in the CMD file.
+
+Formato:
+  HitDefAttr [operador] value1, value2
+
+Argumentos:
+  (operador)
+    =, !=
+  value1
+    Uma string com ao menos uma das letras "S", "C" e "A", para 
+standing (em pé), crouching (agachado) e ataques aerial (aéreo), 
+respectivamente. Por exemplo, "SA" é para ataques em pé e aéreos.
+  value2
+    Uma combinação de 2 letras ("strings"):
+A 1a é:  "N" para "normal", "S" para "special", ou "H" para "hyper".
+a 2a é:  "A" para "attack", "T" para agarrão ("throw").
+Por exemplo, "NA, ST" é para ataques normais e agarrões especiais.
+
+Assumindo que o atribbuto do Hitdef do seu personagem está na forma:
+      arg1, arg2
+
+Então a condição de trigger é determinada para verdadeira apenas se 
+arg1 está contida em value1, E arg2 está contida em value2.
+Veja o parâmetro "attr" do controle Hitdef para maiores detalhes.
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = A, HA
+    Aciona se o personagem está em um estado de ataque, onde o 
+atual Hitdef têm os seguintes atributos:
+    1. é um ataque aéreo
+    2. é um ataque hyper (super)
+
+  trigger1 = SC, NA, SA
+    Aciona quando o personagem está em um estado de ataque, onde o 
+atual Hitdef têm os seguintes atributos:
+    1. o ataque pode ser em pé ou agachado
+    2. o movimento é um ataque normal ou especial (não super/hyper)
+
+
+------------------------------------------------------------
+HitFall
+------------------------------------------------------------
+
+Se o personagem está atualmente em um estado de "Hit", este comando 
+retorna a flag de queda ("fall") do personagem. A saída deste trigger 
+não é definida se o personagem não está em um estado de "Hit".
+Para uma explicação da flag de queda ("fall"), veja o controle "HitDef".
+
+Formato:
+  HitFall
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = !HitFall
+    Aciona se o "Hit" não pôs o personagem em um estado de queda.
+
+
+------------------------------------------------------------
+HitOver
+------------------------------------------------------------
+
+Se o personagem está em um estado de "Hit", retorna verdadeiro quando 
+o "hittime" terminou.
+Para uma explicação de "hittime", veja o controle "HitDef".
+
+Formato:
+  HitOver
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = HitOver = 1
+    Aciona quando o "hittime" do personagem terminou (quando ele se recuperar 
+de um golpe do adversário).
+
+
+------------------------------------------------------------
+HitPauseTime
+------------------------------------------------------------
+
+Retorna o tempo que falta para o "hitpause" do personagem terminar. 
+O personagem entra em "hitpause" quando seu ataque entra em contato 
+com o adversário. O valor inicial é igual ao primeiro valor do parâmetro 
+"pausetime" do HitDef. Se ignorehitpause não está setado, este trigger 
+irá sempre retornar 0.
+
+Formato:
+  HitPauseTime
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = HitPauseTime = 0
+    Aciona quando o personagem não está em "pause" devido ao golpe.
+
+
+------------------------------------------------------------
+HitShakeOver
+------------------------------------------------------------
+
+Se o personagem está em um estado de "Hit", retorna verdadeiro quando seu 
+personagem recebe um golpe e pára de balançar, e falso caso contrário.
+Para uma explicação sobre o assunto, veja o controle "HitDef"
+(pausetime = p1_pausetime, p2_shaketime).
+
+Formato:
+  HitShakeOver
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = HitShakeOver = 0
+    Aciona se o personagem ainda está balançando devido a um "Hit".
+
+
+------------------------------------------------------------
+HitVel
+------------------------------------------------------------
+
+Pega o valor da velocidade imprimida ao personagem devido a um "Hit".
+Você deve especificar a componente que você quer checar, isto é, 
+"HitVel Y" para checar a velocidade vertical.
+
+Formato:
+  HitVel [componente]
+ 
+Argumentos:
+  [componente]
+    X, Y
+
+Tipo de retorno:
+  Nº real.
+
+Condições de erro:
+  Nenhum.
+
+Detalhes:
+  Um positivo valor de Y significa que o personagem está se movendo 
+para cima (?). Um valor de X positivo significa que o personagem está 
+se movendo para trás. Note que "HitVel X" encara de maneira oposta 
+ao trigger "Vel X".
+
+Exemplo:
+  trigger1 = HitVel X > 0.5
+    Aciona quando o personagem têm velocidade, em eestado de "Hit", 
+maior do que 0.5 pixels/game-tick para trás.
+
+
+------------------------------------------------------------
+ID
+------------------------------------------------------------
+
+Retorna o número de identificação ID de alguém. O número ID é único para cada 
+um: qualquer helper criado recebe um ID único. Este trigger pode ser utilizado para 
+pegar o ID do adversário, para ser mais tarde usado com a redireção "playerID".
+(veja o arquivo sobre expressões).	
+
+Formato:
+  ID
+
+Argumentos:
+  nenhum
+
+Tipo de retorno:
+  Inteiro.
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  value = ID
+    Seta "value" com o ID do personagem atual.
+  value = EnemyNear, ID
+    Seta "value" com o ID do adversário mais próximo.
+
+
+------------------------------------------------------------
+IfElse
+------------------------------------------------------------
+
+Este trigger toma três argumentos:
+. Se o primeiro é não nulo, IfElse retorna o valor do segundo argumento.
+. Se o primeiro argumento é nulo, IfElse retorna o valor do terceiro argumento.
+
+Formato:
+  IfElse(exp_cond,exp_true,exp_false)
+
+Argumentos:
+  exp_cond
+    Expressão a ser checada.
+  exp_true
+    Valor que retornará se exp_cond é não nulo.
+  exp_false
+    Valor que retornará se exp_cond é nulo.
+
+Tipo de retorno:
+  Tipo do exp_true ou exp_false, aquele que for retornado.
+
+Condições de erro:
+  Retorna SFalse se qualquer um dos argumentos der SFalse.
+
+Exemplo:
+  value = ifelse(var(3),1,2)
+    Retorna 1 se var(3) é diferente de zero, e retorna 2 se var(3) é igual a zero.
+
+
+------------------------------------------------------------
+IsHelper
+------------------------------------------------------------
+
+Este trigger pega um opcional número de identificação ("ID number") como 
+sufixo. Se este número de identificação for omitido, IsHelper retorna 
+verdadeiro se o personagem é um personagem tipo "helper". Se o número 
+de ID for incluído, então IsHelper se o personagem é um personagem tipo 
+"helper" com o número ID especificado, e falso caso contrário.
+
+Formato:
+IsHelper
+IsHelper(exprn) 
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Retorna SFalse se exprn avaliado der SFalse.
+
+Exemplos:
+  1. trigger1 = !IsHelper
+    Aciona se o personagem não é um personagem tipo "helper".
+  2. trigger1 = IsHelper1234 = 1
+    Aciona se o personagem é um personagem tipo "helper" com ID 1234.
+
+
+------------------------------------------------------------
+IsHomeTeam
+------------------------------------------------------------
+
+Retorna 1 se o time do personagem é considerado "time da casa". No 
+modo arcade, o computador é sempre considerado o time da casa. No 
+modo versus, o lado esquerdo (tipicamente chamado P1) é considerado 
+o time da casa.
+
+Formato:
+  IsHomeTeam
+
+Argumentos:
+  nenhum
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  nenhum
+
+Exemplo:
+  nenhum
+
+
+------------------------------------------------------------
+Life
+------------------------------------------------------------
+
+Retorna a quantia da barra de "Life".
+
+Formato:
+  Life
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = life <= 10
+    Aciona se o personagem têm 10 ou menos de energia na barra de "Life".
+    
+
+------------------------------------------------------------
+Log
+------------------------------------------------------------
+
+Toma dois argumentos a e b, e calcula o logarítimo de b na base a.
+
+Formato:
+  Log(exp1,exp2)
+
+Argumentos:
+  exp1
+    Expressão que será a base do logarítimo. Deve ser positivo.
+  exp2
+    Expressão que dá o número para ser calculado o logarítimo. Deve ser positivo.
+
+Tipo de retorno:
+  Nº real.
+
+Condições de erro:
+  Retorna SFalse se exp1 ou exp2 der SFalse, ou se eles não são positivos.
+
+Exemplo:
+  value=log(2,64)
+    Calcula o logarítimo de 64 na base 2, que é 6.0.
+
+
+------------------------------------------------------------
+Ln
+------------------------------------------------------------
+
+Calcula o logarítimo natural do argumento. Este trigger têm maior 
+precisão do que log(e,(argument)).
+
+Formato:
+  ln(exprn)
+
+Argumentos:
+  exprn
+    Expressão a ser calculada o logarítimo natural.
+
+Tipo de retorno:
+  Nº real.
+
+Condições de erro:
+  Retorna SFalse se exprn avaliado der SFalse, ou se exprn não é positivo.
+
+Exemplo:
+  value = ln(time)
+    Calcula o logarítimo natural do tempo de estado do personagem.
+
+
+------------------------------------------------------------
+Lose
+------------------------------------------------------------
+
+Retorna verdadeiro se o personagem (ou o time do personagem, no "team mode" 
+perdeu o round, e falso caso contrário. Pode receber o sufixo "KO" ou "Time" 
+para acionar apenas quando o personagem perder o round por KO ou por tempo, 
+respectivamente.
+
+Formato:
+  1. Lose
+  2. LoseKO
+  3. LoseTime
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Nenhum.
+
+Exemplos:
+  1. trigger1 = Lose = 1
+    Aciona se o personagem (ou seu time) perdeu o round.
+  2. trigger1 = LoseKO = 0
+    Aciona se o personagem (ou seu time) não perdeu o round por KO. Por 
+exemplo, este comando aciona se o seu personagem ainda não perdeu o round, 
+ou se perdeu o round por tempo.
+
+
+------------------------------------------------------------
+MatchNo
+------------------------------------------------------------
+
+Retorna o número da atual luta.
+
+Formato:
+  MatchNo
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  inteiro
+
+Detalhes:
+  O atual round é sempre 1 no modo versus. No Arcade e no team mode, 
+MatchNo começa com 1 e incrementa cada vez que um novo adversário 
+surge. Se você terminou o modo Arcade e começou um novo jogo, 
+MatchNo recomeça do 1.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+MatchOver
+------------------------------------------------------------
+
+Retorna verdadeiro se a luta acabou. Por exemplo, em caso de melhor de 
+três rounds, este trigger retorna verdadeiro quando um dos dois lutadores 
+tiver ganho dois rounds.
+Para saber se o seu lutador ganhou ou perdeu, utiliza-se os triggers "Win", 
+"Lose" ou mesmo "Life" em conjunto com "MatchOver".
+
+Formato:
+  MatchOver
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Nenhum.
+
+Detalhes:
+  Atualmente, MatchOver não retorna verdadeiro a menos que o personagem 
+comece com sua posição de vitória (State 180). Isto pode estar sujeito a 
+mudanças nas versões futuras.
+
+Exemplo:
+  trigger1 = matchover
+    Aciona se a luta não (??) terminou. Por exemplo, o round atual pode 
+ainda não ter terminado, ou ter terminado sem que seja o último round 
+da luta.
+
+
+------------------------------------------------------------
+MoveContact
+------------------------------------------------------------
+
+Este trigger é válido apenas quando o personagem está atacando.
+Movecontact dá 1 se P2 sofreu o Hit, ou está defendendo o ataque de P1.
+Dá 0 caso contrário (ataque sem contato). Tipicamente, usado com
+"StateNo" e "Command" para detectar a interrupção do movimento 
+no arquivo CMD.
+
+Formato:
+  MoveContact
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = MoveContact
+    Verdadeiro se o ataque de seu personagem não errar o adversário.
+
+
+------------------------------------------------------------
+MoveGuarded
+------------------------------------------------------------
+
+Este trigger é válido apenas quando o personagem está atacando.
+Moveguarded dá 1 se o adversário está defendendo, ou defendeu o ataque de
+seu personagem. Dá 0 se o ataque errou ou se acertou e deu Hit (ataque
+bem sucedido). Tipicamente, usado com "StateNo" e "Command" para detectar 
+a interrupção do movimento no arquivo CMD.
+
+Formato:
+  MoveGuarded
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = MoveGuarded
+    Verdadeiro se o ataque de seu personagem foi bloqueado pelo adversário.
+
+
+------------------------------------------------------------
+MoveHit
+------------------------------------------------------------
+
+Este trigger é válido apenas quando o personagem está em um estado de 
+ataque (por isso, quando for definir um State, defina-o corretamente !!).
+MoveHit retorna 1 se o adversário receber o "Hit". Ele retorna 0 se 
+o ataque errou ou foi defendido.
+Tipicamente, é utilizado com os triggers "StateNo" e "Command" para 
+fazer combos, no arquivo CMD.
+
+Formato:
+  MoveHit
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = MoveHit
+    Verdadeiro se o ataque do seu personagem atingiu o adversário, 
+sem que ele defendesse.
+
+
+------------------------------------------------------------
+MoveType(*,***)
+------------------------------------------------------------
+
+Movetype dá o tipo de movimento que o personagem está realizando. 
+Veja a seção sobre Statedef para maiores detalhes sobre Movetype.
+Muito usado para interromper movimentos no arquivo CMD, e realizar 
+combos.
+
+Formato:
+  MoveType [operador] move_type
+
+Argumentos:
+  [operador]
+    =, !=   (outros operadores não são válidos)
+  move_type (char)
+    A, I, H
+    Tipos de movimento: Ataque, neutro e sofrendo "Hit".
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = movetype != H
+    Aciona se o personagem não está em um estado de "Hit".
+
+
+------------------------------------------------------------
+Name(*,***)
+------------------------------------------------------------
+
+Retorna o nome do personagem (nome interno especificado no 
+arquivo DEF, que pode não ser o mesmo que é mostrado - display).
+
+Formato:
+  Name [operador] "name"
+
+Argumentos:
+  [operador]
+    =, != (outros operadores não são válidos)
+  "name" (variável "string")
+    Nome a ser comparado. Deve estar entre aspas.
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = Name = "Goro"
+    Retorna verdadeiro se o nome do personagem é Goro.
+
+
+------------------------------------------------------------
+NumEnemy
+------------------------------------------------------------
+
+NumEnemy retorna o número de oponentes que existem. Jogadores neutros 
+e "helpers" normais não são considerados oponentes.
+
+Formato:
+  NumEnemy
+
+Argumentos:
+  nenhum
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = NumEnemy = 2
+  trigger1 = enemynear(1), name = "Squash"
+    Aciona se há dois oponentes, e o mais próximo se chamar Squash.
+
+
+------------------------------------------------------------
+NumExplod
+------------------------------------------------------------
+
+Este trigger pega um número de identificação (ID number) opcional como 
+sufixo. Se o número de ID for omitido, "NumExplod" de "Explod" mantidas 
+pelo personagem. Se o número de ID for incluído, então "NumExplod" 
+retorna o número de "Explod" com aquele número de ID que são mantidas
+pelo personagem.
+Número ID de -1 ou menor é o mesmo que omitir o número ID.
+Para maiores informações, veja o controle "Explod".
+
+Formato:
+  1. NumExplod
+  2. NumExplod(exprn)
+
+Argumentos:
+  exprn 
+    Expressão que dá o número ID. (inteiro).
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Retorna SFalse se exprn avaliado der SFalse.
+
+Exemplos:
+  1. trigger1 = NumExplod >= 4
+    Aciona se o personagem tem atualmente 4 ou mais "Explod".
+  2. trigger1 = NumExplod1234 >= 4
+    Aciona se o personagem tem atualmente 4 ou mais "Explod com 
+número de ID 1234.
+
+
+------------------------------------------------------------
+NumHelper
+------------------------------------------------------------
+
+Este trigger pega um número de identificação (ID number) opcional como 
+sufixo. Se o número de ID for omitido, "NumHelper" retorna o número 
+total de "helpers" mantidos pelo personagem. Se o número ID estiver 
+incluso, então "NumHelper" retorna o número de "helper" com aquele 
+específico número de ID mantidos por um personagem pai (pode ser o seu 
+personagem, ou um outro "helper".
+Se ID for 0 ou menor, então todos os "helpers" são contados.
+
+Formato:
+  1. NumHelper
+  2. NumHelper(exprn)
+
+Argumentos:
+  exprn
+    Expressão que dá o número ID. (inteiro).
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Retorna SFalse se exprn avaliado der SFalse.
+
+Exemplos:
+  1. trigger1 = NumHelper < 2
+    Aciona se o personagem têm agora menos que dois "helpers".
+  2. trigger1 = NumHelper1234 < 2
+    Aciona se o personagem têm agora menos de dois "helpers" com 
+número de ID igual a 1234.
+
+
+------------------------------------------------------------
+NumPartner
+------------------------------------------------------------
+
+NumPartner retorna o número de parceiros que existem. Jogadores neutros e 
+e "helpers" normais não são considerados parceiros.
+
+Formato:
+  NumPartner
+
+Argumentos:
+  nenhum
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = NumPartner = 1
+  trigger1 = partner, life < 200
+    Aciona se o seu personagem tem um parceiro com menos de 200 
+de vida.
+
+
+------------------------------------------------------------
+NumProj
+------------------------------------------------------------
+
+Retorna o atual número de projéteis atualmente mantidos pelo 
+personagem.
+Para criar um projétil, veja o controle "Projectile".
+
+Formato:
+  NumProj
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = NumProj = 0
+    Aciona se o personagem não ativou nenhum projétil.
+
+
+------------------------------------------------------------
+NumProjID
+------------------------------------------------------------
+
+Este comando requer como argumento um número de ID. Ele retorna o 
+número de de projéteis com o específico número ID que atualmente estão 
+sendo mantidos pelo seu personagem.
+
+Formato:
+  NumProjID(exprn)
+
+Argumentos:
+  exprn
+    Expressão que dá o número ID. (inteiro).
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Se um número negativo de ID for especificado, então o ID é encarado 
+como 0. Retorna SFalse se exprn der SFalse.
+
+Exemplo:
+  trigger1 = NumProjID(1234) = 1
+    Aciona se o personagem têm exatamente apenas 1 projétil com 
+número de ID 1234.
+
+
+------------------------------------------------------------
+NumTarget
+------------------------------------------------------------
+
+
+Este trigger pega um número de identificação (ID number) opcional como 
+sufixo. Se o número de ID for omitido, "NumTarget" retorna o número 
+total de "targets" do personagem. Se o número ID estiver incluso, então 
+"NumTarget" retorna o número de "targets" com aquele específico número 
+de ID.
+Se ID for -1 ou menor, o efeito é o mesmo se ID fosse omitido.
+
+Formato:
+  1. NumTarget
+  2. NumTarget(exprn)
+
+Argumentos:
+  exprn 
+    Expressão que dá o número ID. (inteiro).
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Retorna SFalse se exprn avaliado der SFalse.
+
+Exemplos:
+  Nenhum.
+
+
+------------------------------------------------------------
+P1Name(*,***)
+------------------------------------------------------------
+
+Retorna o nome do personagem (nome especificado por "name" no 
+arquivo .DEF, o qual pode não ser o mesmo que o nome que é 
+mostrado durante a luta - "displayname").
+
+Formato:
+  P1Name [operador] "name"
+
+Argumentos:
+  [operador]
+    =, != (outros operadores não são válidos)
+  "name" (string)
+    Nome a ser comparado com. Deve estar entre aspas.
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = P1Name = "Goro"
+    Retorna verdadeiro se o nome é Goro.
+
+
+------------------------------------------------------------
+P2BodyDist
+------------------------------------------------------------
+
+Dá a distância entre P2 e P1, onde P1 é o seu personagem e P2 é o
+oponente. P2BodyDist é útil em CMD para casos onde P1 têm um ataque 
+diferente para cada distância.
+
+Formato:
+   P2BodyDist [componente]
+
+Argumentos:
+  [componente]
+    X, Y
+
+Tipo de retorno:
+  Nº real.
+
+Condições de erro:
+  Nenhum.
+
+Detalhes:
+  Para a distância Y, P2BodyDist dá a diferença de posição em Y entre 
+os lutadores. Um valor negativo significa que P2 está acima de P1. Para a 
+distância X, P2BodyDist dá a distância a P2 um em frente do outro. Então, 
+se o personagem está face a face com o adversário, a distância é zero. Lembre-se 
+que você pode ajustar a largura do seu personagem através do "front.width", etc. 
+sob [Size] nas variáveis do personagem.
+  Veja também P2Dist.
+
+Exemplo:
+  trigger1 = P2BodyDist X < 30
+    Aciona se P2 está a menos de 30 pixels da frente de P1.
+
+
+------------------------------------------------------------
+P2Dist
+------------------------------------------------------------
+
+Dá a distância entre P2 e P1, onde P1 é o seu personagem e P2 é o 
+adversário.
+
+Formato:
+  P2Dist [componente]
+
+Argumentos:
+  [componente]
+    X, Y
+
+Tipo de retorno:
+  Nº real.
+
+Condições de erro:
+  Nenhum.
+
+Detalhes:
+  Para a distância Y, P2Dist dá a diferença entre os eixos Y entre os 
+personagens. Um valor negativo significa que P2 está acima de P1. Para a 
+distância X, P2Dist compara a distância entre os eixos X. Então, um valor 
+positivo significa que P2 está na frente de P1.
+  Veja também "P2BodyDist".
+
+Exemplo:
+  trigger1 = P2Dist Y <= -12
+    Aciona se P2 está ao menos 12 pixels mais alto do que P1.
+
+
+------------------------------------------------------------
+P2Life
+------------------------------------------------------------
+
+Mesmo que "Life", exceto que este trigger retorna a quantia na barra de 
+"Life" do adversário.
+
+
+------------------------------------------------------------
+P2MoveType
+------------------------------------------------------------
+
+Mesmo que "MoveType", exceto que retorna o tipo de movimento do 
+adversário (A, I, H - ataque, neutro ou sofrendo "Hit").
+
+
+------------------------------------------------------------
+P2Name(*,***)
+------------------------------------------------------------
+
+Mesmo que "P1Name", exceto que este retorna o nome do adversário. 
+No "team mode", este trigger retorna o nome do primeiro adversário.
+
+Se não há nenhum adversário primário, então p2name = "name" retorna 0 
+não importa qual nome esteja especificado. Similarmente, p2name != "name" 
+irá retornar 1 não importando o nome especificado.
+
+
+------------------------------------------------------------
+P2StateNo
+------------------------------------------------------------
+
+Mesmo que "StateNo", esceto que este retorna o número do estado em que 
+se encontra o adversário.
+
+Condições de erro:
+  Retorna SFalse se p2 não existe. (Por exemplo, se o round foi vencido.)
+
+
+------------------------------------------------------------
+P2StateType
+------------------------------------------------------------
+
+Mesmo que "Statetype", exceto que este retorna o tipo de estado do 
+adversário (S, C, A  -  em pé("standing"), agachado ("crouch") ou no 
+ar ("air").
+
+Condições de erro:
+  Retorna SFalse se p2 não existe. (Por exemplo, se o round foi vencido.)
+
+
+------------------------------------------------------------
+P3Name(*,***)
+------------------------------------------------------------
+
+Mesmo que P1Name, exceto que este retorna o nome dos personagens 
+do seu time, quando presente (quando não estão presentes, este 
+comando nunca aciona).
+
+
+------------------------------------------------------------
+P4Name(*,***)
+------------------------------------------------------------
+
+Mesmo que P1Name, exceto que este retorna o nome dos adversários 
+secundários do "team mode" (se não estão presentes, este comando nunca 
+aciona).
+
+
+------------------------------------------------------------
+PalNo
+------------------------------------------------------------
+
+Retorna o número da paleta do personagem (isto é, a cor escolhida pelo 
+personagem durante a seleção de personagens).
+
+Formato:
+  PalNo
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  inteiro entre 1 e 12.
+
+Condições de erro:
+  Nenhum.
+
+Detalhes:
+  A ordem das paletas é:
+  X Y Z
+  4 5 6
+  A B C
+  1 2 3
+  Segurar "Start" enquanto pressiona um dos botões adiciona 6 ao número 
+da paleta.
+
+Exemplo:
+  trigger1 = PalNo = 5
+    Aciona se a atual paleta é a de número 5 (o número da paleta é definido 
+pelo arquivo .DEF).
+
+
+------------------------------------------------------------
+ParentDist
+------------------------------------------------------------
+
+Este trigger é válido apenas para personagens tipo "helper".
+ParentDist retorna a distância do "helper" ao seu pai (o personagem 
+que o criou, ou um outro "helper"). Trabalha similarmente ao P2Dist.
+
+Formato:
+  ParentDist [componente]
+
+Argumentos:
+  [componente]
+    X, Y
+
+Tipo de retorno:
+  Nº real.
+
+Condições de erro:
+  Retorna SFalse se o personagem não tem pai (por exemplo, se o pai foi 
+destruído por um KO).
+
+Detalhes:
+  Para comparar valores em Y, ParentDist dá a diferença de altura entre 
+os eixos Y. Um valor negativo significa que seu pai está acima. Comparando 
+valores em X, um valor positivo indica que o pai está na sua frente.
+
+Exemplo:
+  trigger1 = ParentDist X != 0
+    Aciona se o pai não está exatamente na mesma posição X de seu 
+"helper".
+
+
+------------------------------------------------------------
+Pi
+------------------------------------------------------------
+
+Retorna o valor de pi (3.141593...)
+
+Formato:
+  pi
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  Nº real.
+
+Condições de erro:
+  Nenhum.
+
+
+------------------------------------------------------------
+Pos
+------------------------------------------------------------
+
+Pega o valor da posição do seu personagem. Você deve especificar a 
+componente que você quer checar, isto é, "Pos Y" checa a posição Y.
+
+Formato:
+  Pos [componente]
+
+Argumentos:
+  [componente]
+    X, Y
+
+Tipo de retorno:
+  Nº real.
+
+Condições de erro:
+  Nenhum.
+
+Detalhes:
+  Para "Pos X", o valor é relativo ao centro da tela (valor 0). Valores 
+negativos estão à esquerda, e positivos à direita. Para "Pos Y", o 
+valor é relativo ao chão. Valores negativos estão acima, e valores 
+positivos estão abaixo do chão.
+Detalhes:
+
+Exemplo:
+  trigger1 = Pos Y >= 0
+    Verdadeiro quando o personagem está abaixo do chão.
+
+
+------------------------------------------------------------
+Power
+------------------------------------------------------------
+
+Retorna a quantia da barra de Power que seu lutador tem.
+
+Formato:
+  Power
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = power >= 1000
+    Aciona se o personagem tem 1000 de power ou mais (level 1).
+
+
+------------------------------------------------------------
+PlayerIDExist
+------------------------------------------------------------
+
+Retorna 1 se o personagem com ID específico existe, e 0 caso 
+contrário. O número ID pode ser obtido utilizando o trigger "ID".
+
+Formato:
+  PlayerIDExist(ID_number)
+
+Argumentos:
+  ID_number
+    Expressão que dá o número ID. (inteiro).
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Retorna SFalse se ID_number for uma expressão e der SFalse.
+
+Exemplo:
+  trigger1 = PlayerIDExist(var(4))
+    Aciona se existir um personagem com ID de mesmo valor ao 
+armazenado na variável 4.
+
+
+------------------------------------------------------------
+PrevStateNo
+------------------------------------------------------------
+
+Retorna o número do último estado em que o personagem esteve. O 
+resultado deste trigger não têm precisão garantida.
+
+Formato:
+  StateNo
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+ProjCancelTime
+------------------------------------------------------------
+
+Este trigger requer um número de ID não negativo como argumento. Se o 
+último projétil do personagem faz qualquer tipo de contato de cancelamento 
+com um projétil adversário, e têm o número de ID especificado, então 
+ProjCancelTime retorna o número de ticks desde que o contato ocorreu.
+Se o ID especificado for 0, então o ID do projétil não é checado. Se 
+nenhum projétil tem todas estas condições satisfeitas, então 
+ProjCancelTime retorna -1.
+
+Formato:
+  ProjCancelTime(exprn)
+
+Argumentos:
+  exprn
+    Expressão que dá o número ID. (inteiro não negativo).
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Retorna SFalse se exprn avaliado der SFalse. Se ID for negativo, então 
+será considerado como se fosse 0.
+
+Exemplos:
+  1. trigger1 = ProjCancelTime(1234) = 1
+    Aciona se o projétil com ID 1234 acabou de ser cancelado por um 
+projétil adversário.
+  2. trigger1 = ProjGuardedTime(0) != -1 && ProjGuardedTime(0) < 15
+    Aciona se qualquer projétil do seu personagem foi cancelado nos 
+últimos 15 ticks.
+
+
+------------------------------------------------------------
+ProjContact(*,***)
+------------------------------------------------------------
+
+Este trigger pega um número de identificação ("ID number") opcional como 
+sufixo. Se este número ID é omitido, ProjContact retorna verdadeiro se 
+qualquer um de seus projéteis acertou o adversário, com ou sem defesa. 
+Quando o número de ID é especificado, ProjContact retorna verdadeiro 
+apenas se o projétil têm este número de ID.
+Para maiores informações, veja o controle "Projectile".
+
+Formato:
+  1. ProjContact[ID] = value
+  2. ProjContact[ID] = value, [operador] value2
+
+Argumentos:
+  [ID]
+    Número ID opcional.
+  value (boolean)
+    O valor a ser comparado. Pode ser 0 (falso) ou 1 (verdadeiro).
+  [operador]
+    =, !=, <, >, <=, >=
+  value2
+    Tempo em que a comparação deva ocorrer.
+
+Tipo de retorno:
+  boolean inteiro
+
+Condições de erro:
+  Nenhum.
+
+Detalhes:
+  ProjContact irá acionar uma vez para cada "Hit" do projétil, então um 
+projétil com múltiplos "Hits" pode acionar este trigger múltiplas vezes. 
+  A forma mostrada no primeiro exemplo, aciona apenas ao primeiro 
+game-tick após o contato, diferente de "MoveContact".
+  Para o segundo exemplo, "ProjContact" retorna verdadeiro se o projétil 
+não fizer contato pelo menos 15 game-ticks depois.
+
+Exemplos:
+  1. trigger1 = ProjContact1234 = 1
+    Aciona se o projétil com ID 1234 entrou em contato com o oponente.
+  2. trigger1 = ProjContact456 = 0, < 15
+    Aciona se nenhum projétil com ID 456 tiver feito contato com oponente 
+ao menos nos últimos 15 game-ticks.
+
+
+------------------------------------------------------------
+ProjContactTime
+------------------------------------------------------------
+
+Este trigger requer um número ID não negativo como argumento. 
+Se o último projétil do personagem que fez qualquer tipo de contato, 
+tiver feito contato com o adversário e possuir um específico ID, 
+então ProjContactTime retorna o número de ticks desde que o contato 
+ocorreu. Se este específico ID é 0, então o ID não é checado. Se 
+nenhum projétil atender a todas as especificações, então ProjContactTime 
+retorna -1.
+
+Formato:
+  ProjContactTime(exprn)
+
+Argumentos:
+  exprn
+    Expressão que é avaliada como um ID (inteiro não negativo).
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Retorna SFalse se exprn avaliado der SFalse. Se um ID negativo for 
+especificado, então é encarado como zero.
+
+Exemplos:
+  1. trigger1 = ProjContactTime(1234) = 1
+    Aciona se o projétil com ID 1234 acabou de fazer contato com o 
+adversário.
+  2. trigger1 = ProjContactTime(0) != -1 && ProjContactTime(0) < 15
+    Aciona se qualquer um dos projéteis do personagem fez contato com 
+o oponente nos últimos 15 ticks (1 tick = 1/60 segundos).
+
+
+
+------------------------------------------------------------
+ProjGuarded(*,***)
+------------------------------------------------------------
+
+Este trigger pega um número de identificação ("ID number") opcional como 
+sufixo. Se este número ID é omitido, ProjGuarded retorna verdadeiro se 
+qualquer um dos projéteis do seu personagem for defendido pelo adversário. 
+Quando o número de ID é especificado, ProjGuarded retorna verdadeiro 
+apenas se o projétil têm este número de ID.
+
+Formato:
+  1. ProjGuarded[ID] = value
+  2. ProjGuarded[ID] = value, [operador] value2
+
+Argumentos:
+  [ID]
+    Número ID opcional.
+  value (boolean)
+    O valor a ser comparado. Pode ser 0 (falso) ou 1 (verdadeiro).
+  [operador]
+    =, !=, <, >, <=, >=
+  value2
+    Tempo em que a comparação deva ocorrer.
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Nenhum.
+
+Detalhes:
+  ProjGuarded irá acionar uma vez para cada contato do projétil. Desta 
+forma, projéteis com múltiplos acertos irão acionar este trigger múltiplas 
+vezes.
+  A forma mostrada no primeiro exemplo, aciona apenas ao primeiro 
+game-tick após o contato, diferente de "MoveGuarded".
+  Para o segundo exemplo, "ProjGuarded" retorna verdadeiro se o projétil 
+não fizer contato pelo menos 15 game-ticks depois.
+
+Exemplos:
+  1. trigger1 = ProjGuarded1234 = 1
+    Aciona se o adversário bloqueou um projétil com ID 1234.
+  2. trigger1 = ProjGuarded = 1, < 15
+    Aciona se o adversário bloqueou qualquer projétil nos últimos 
+15 game-ticks.
+
+ 
+------------------------------------------------------------
+ProjGuardedTime
+------------------------------------------------------------
+
+Este trigger requer um número ID não negativo como argumento. 
+Se o último projétil do personagem que fez qualquer tipo de contato, 
+e o adversário tiver defendido e possuir um específico ID, então 
+ProjGuardedTime retorna o número de ticks desde que o contato ocorreu. 
+Se este específico ID é 0, então o ID não é checado. Se nenhum projétil 
+atender a todas as especificações, então ProjGuardedTime retorna -1.
+
+Formato:
+  ProjCancelTime(exprn)
+
+Argumentos:
+  exprn
+    Expressão avaliada como o número de ID (inteiro não negativo).
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Retorna SFalse se exprn avaliado der SFalse. Se um ID negativo 
+é especificado, então o ID é avaliado como 0.
+
+Exemplos:
+  1. trigger1 = ProjGuardedTime(1234) = 1
+     Aciona se o projétil com ID 1234 acabou de ser bloqueado pelo 
+adversário.
+  2. trigger1 = ProjGuardedTime(0) != -1 && ProjGuardedTime(0) < 15
+    Aciona se qualquer um dos projéteis do personagem foi defendido 
+pelo adversário nos últimos 15 ticks.
+
+
+------------------------------------------------------------
+ProjHit(*,***)
+------------------------------------------------------------
+
+Este trigger pega um número de identificação ("ID number") opcional como 
+sufixo. Se este número ID é omitido, Projhit retorna verdadeiro se 
+o projétil atingiu o adversário sem que ele defenda ("Hit").
+Quando o número de ID é especificado, ProjHit retorna verdadeiro 
+apenas se o projétil têm este número de ID.
+
+Formato:
+  1. ProjHit[ID] = value
+  2. ProjHit[ID] = value, [operador] value2
+
+Argumentos:
+  [ID] (inteiro)
+    Número ID opcional.
+  value (boolean)
+    O valor a ser comparado. Pode ser 0 (falso) ou 1 (verdadeiro).
+  [operador]
+    =, !=, <, >, <=, >=
+  value2
+    Tempo em que a comparação deva ocorrer.
+
+Tipo de retorno:
+  boolean inteiro
+
+Condições de erro:
+  Nenhum.
+
+Detalhes:
+  ProjHit irá acionar uma vez para cada acerto do projétil, então 
+projéteis com múltiplos acertos irá acionar múltiplas vezes.
+  A forma mostrada no primeiro exemplo, aciona apenas ao primeiro 
+game-tick após o contato, diferente de "MoveHit".
+  Para o segundo exemplo, "ProjHit" retorna verdadeiro se o projétil 
+não atingir com "Hit" o adversário pelo menos 15 game-ticks depois.
+
+Exemplos:
+  1. trigger1 = ProjHit1234 = 1
+    Aciona se o projétil com ID 1234 atingir o adversário, sem que 
+ele defenda.
+  2. trigger1 = ProjHit1234 = 1, < 15
+    Aciona se um projétil atingir o adversário, sem que ele defenda, 
+nos últimos 15 game-ticks.
+
+
+------------------------------------------------------------
+ProjHitTime
+------------------------------------------------------------
+
+Este trigger requer um número ID não negativo como argumento. 
+Se o último projétil do personagem que fez qualquer tipo de contato, 
+e o adversário for atingido sem defendê-lo, e o projétil possuir um 
+específico ID, então ProjHit retorna o número de ticks desde que o 
+contato ocorreu. Se este específico ID é 0, então o ID não é checado. 
+Se nenhum projétil atender a todas as especificações, então ProjHit 
+retorna -1.
+
+Formato:
+  ProjHitTime(exprn)
+
+Argumentos:
+  exprn
+    Expressão que será avaliada como o número ID (inteiro não negativo).
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Retorna SFalse se exprn avaliado der SFalse. Se um ID negativo for 
+especificado, então é encarado como zero.
+
+Exemplos:
+  1. trigger1 = ProjHitTime(1234) = 1
+    Aciona se o projétil com ID 1234 acabou de acertar o adversário, 
+sem ele defenda.
+  2. trigger1 = ProjHitTime(0) != -1 && ProjHitTime(0) < 15
+    Aciona se qualquer projétil do seu personagem acertar o adversário 
+sem que ele defenda, nos últimos 15 ticks.
+
+
+------------------------------------------------------------
+Random
+------------------------------------------------------------
+
+Retorna um número aleatório entre 0 e 999, inclusive.
+
+Formato:
+  Random
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = Random <= 249
+    Aciona se gerado de forma aleatória for menor ou igual a 249. Isto 
+ocorre com 25 % de probabilidade).
+    
+
+------------------------------------------------------------
+RootDist
+------------------------------------------------------------
+
+Este trigger é válido apenas para personagens do tipo "helpers".
+RootDist a distância do "helper" a sua raiz. A raiz de um "helper" é 
+o personagem principal. por exemplo, se você selecionar o Goro, e 
+de alguma maneira criar "helpers" "pequenos goros", e, a partir 
+deles, criar "pinguins":
+	Goro é o pai dos "pequenos goros"
+	"pequenos goros" é o pai dos "pinguins"
+	Goro é a raiz de todos.
+RootDist trabalha similarmente a PDist.
+
+Formato:
+  RootDist [componente]
+
+Argumentos:
+  [componente]
+    X, Y
+
+Tipo de retorno:
+  Nº real.
+
+Condições de erro:
+  Retorna SFalse se o personagem não tiver raízes.
+
+Detalhes:
+  Para a distância Y, "RootDist" dá a diferença entre os eixos Y entre os 
+personagens. Um valor negativo significa que a raiz está acima do "helper". 
+Para a distância X, "RootDist" compara a distância entre os eixos X. Então, 
+um valor positivo significa que a raiz está na frente do "helper".
+
+Exemplo:
+  trigger1 = RootDist X != 0
+    Aciona se a raiz não está exatamente na mesma posição que o "helper".
+
+
+------------------------------------------------------------
+RoundNo
+------------------------------------------------------------
+
+Retorna o número do atual round.
+
+Formato:
+  RoundNo
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = RoundNo = 3
+    Aciona quando for o terceiro round.
+
+
+------------------------------------------------------------
+RoundsExisted
+------------------------------------------------------------
+
+Retorna o número de rounds que o personagem tem existido. No 
+primeiro round, retorna zero, independente do personagem.
+Muito útil para mudar a ¨Intro¨.
+
+Formato:
+  RoundsExisted
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = RoundsExisted = 0
+  trigger1 = TeamMode = Turns
+  trigger1 = RoundNo > 0
+    Aciona se se o personagem entrou no Modo Team antes do primeiro 
+Round. Você pode usar este exemplo com o controle ChangeState para 
+mudar a ¨intro¨ sobrepondo o estado de inicialização (state 5900).
+
+
+------------------------------------------------------------
+RoundState
+------------------------------------------------------------
+
+Retorna um número que corresponda o estado do round.
+
+Formato:
+  RoundState
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Nenhum.
+
+Detalhes:
+  Valores que podem ser retornados:
+  0: Pre-intro  - tela se abrindo
+  1: Intro
+  2: Fight - quando a luta está rolando ...
+  3: Pre-over - no momento do fim da luta
+  4: Over - poses de vitória
+
+Exemplo:
+  trigger1 = RoundState = 2
+    Aciona se o round se encontra no estado de luta.
+
+
+------------------------------------------------------------
+ScreenPos
+------------------------------------------------------------
+
+Toma um valor absoluto para a posição do personagem. Você deve especificar 
+a componente que você quer. Exemplo:  Pos Y  checa qual posição Y o 
+personagem está.
+
+Formato:
+  Pos [componente]
+
+Argumentos:
+  [componente]
+    X, Y
+
+Tipo de retorno:
+  Nº real.
+
+Condições de erro:
+  Nenhum.
+
+Detalhes:
+  Para "ScreenPos X", o valor é relativo ao canto esquerdo da tela (valor 0).
+Negativo está à esquerda, positivo à direita.
+  Para "ScreenPos Y", o valor é relativo ao topo da tela. Negativo está acima, 
+positivo está abaixo.
+
+Exemplo:
+  trigger1 = ScreenPos Y = [0,239]
+    Aciona quando o personagem está numa faixa de valores, com relação a sua 
+posição vertical.
+
+
+------------------------------------------------------------
+SelfAnimExist
+------------------------------------------------------------
+
+Como AnimExist, com exceção que este apenas checa a animação do arquivo 
+de P1. Se P1 tem pego a animação do P2 devido a um hit, SelfAnimExist 
+não irá checar a animação do P2 para determinar se existe ou não 
+a ação em questão.
+
+
+------------------------------------------------------------
+Sin
+------------------------------------------------------------
+
+Calcula o valor do seno de um específico argumento (em radianos).
+
+Formato:
+  sin(exprn)
+
+Argumentos:
+  exprn
+    Expressão que será calculada o seno (Nº real.)
+
+Tipo de retorno:
+  Nº real.
+
+Condições de erro:
+  Retorna SFalse se exprn avaliado der SFalse.
+
+Exemplo:
+  value = sin(pi/2)
+    Calcula o seno de pi/2, que é aproximadamente 1 (com pequenas variações).
+
+
+------------------------------------------------------------
+StateNo
+------------------------------------------------------------
+
+Retorna o atual número do estado do personagem. Muito utilizado no 
+arquivo CMD para interromper movimentos.
+
+Formato:
+  StateNo
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = stateno = [200,650]
+    Retorna verdadeiro se o número de estado está entre 200 e 650, 
+inclusive.
+
+
+------------------------------------------------------------
+StateType
+------------------------------------------------------------
+
+StateType dá o tipo de estado em que se encontra o personagem. 
+Refere-se à seção no Statedef do arquivo CNS. Este comando é muito 
+utilizado no arquivo CMD, para interromper movimentos.
+
+Formato:
+  StateType [operador] state_type
+
+Argumentos:
+  [operador]
+    =, !=   (outros operadores não são válidos)
+  state_type (char)
+    S, C, A
+    Stand (em pé), Crouch (agachado) e Air (no ar).
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = StateType != A
+    Aciona se o personagem não está no ar.
+
+
+------------------------------------------------------------
+SysFVar
+------------------------------------------------------------
+
+Este trigger requer um índice de variável como argumento. Ele retorna 
+o valor contido na variável real de sistema com o índice especificado. 
+Este trigger não deve ser utilizado em circunstâncias normais. Variáveis 
+de sistema são utilizadas como marcadores no arquivo common1.cns.
+
+Formato:
+  FVar(exprn)
+
+Argumentos:
+  exprn
+    Expressão que será avaliada como um índice de variável. Valores 
+válidos atualmente são de 0 a 4.
+
+Tipo de retorno:
+  Nº real.
+
+Condições de erro:
+  Retorna SFalse se exprn avaliado der SFalse, ou se exprn der um 
+número de índice inválido.
+
+Exemplo:
+  trigger1 = SysFVar(0) = -1.23
+    Aciona se a variável 0 de sistema possuir valor -1.23.
+
+
+------------------------------------------------------------
+SysVar
+------------------------------------------------------------
+
+Este trigger requer um índice de variável como argumento. Ele retorna 
+o valor contido na variável inteira de sistema com o índice especificado. 
+Este trigger não deve ser utilizado em circunstâncias normais. Variáveis 
+de sistema são utilizadas como marcadores no arquivo common1.cns.
+
+Formato:
+  Var(exprn)
+
+Argumentos:
+  exprn
+    Expressão que será avaliada como um índice de variável. Valores 
+válidos atualmente são de 0 a 4.
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Retorna SFalse se exprn avaliado der SFalse, ou se exprn der um 
+número de índice inválido.
+
+Exemplo:
+  trigger1 = SysVar(0) = -34
+    Aciona se a variável 0 de sistema possuir valor -34.
+
+
+------------------------------------------------------------
+Tan
+------------------------------------------------------------
+
+Calcula a tangente de um argumento específico (em radianos).
+
+Formato:
+  tan(exprn)
+
+Argumentos:
+  exprn
+    Expressão a ser calculado a tangente (Nº real.)
+
+Tipo de retorno:
+  Nº real.
+
+Condições de erro:
+  Retorna SFalse se exprn avaliado der SFalse.
+
+Exemplo:
+  value = tan(pi/4)
+    Calcula a tangente de pi/4, que é aproximadamente 1, com uma 
+pequena variação.
+
+
+------------------------------------------------------------
+TeamMode(*,***)
+------------------------------------------------------------
+
+TeamMode dá o estilo de luta do modo team.
+
+Formato:
+  TeamMode [operador] mode
+
+Argumentos:
+  [operador]
+    =, !=   (outros operadores não são válidos)
+  mode (variável "string" que pode ter os seguintes valores:)
+    single - single player
+    simul  - 2 players simultaneously
+    turns  - turns battle
+    
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = TeamMode = Single
+    Aciona se o personagem está no modo Team, estilo "Single Play".
+
+
+------------------------------------------------------------
+TeamSide
+------------------------------------------------------------
+
+Retorna o lado do time que o personagem está. 1 representa 
+lado esquerdo (tipicamente P1), e 2 lado direito.
+
+Formato:
+  TeamSide
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = TeamSide = 2
+    Aciona se o personagem é do time do lado direito.
+
+
+------------------------------------------------------------
+TicksPerSecond
+------------------------------------------------------------
+
+Retorna o número de "ticks" por segundo. Útil para cálculos sobre 
+o tempo.
+
+Formato:
+  TicksPerSecond
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = Time > 10 * TicksPerSecond
+    Aciona após 10 segundos, independentemente da velocidade do jogo.
+
+
+------------------------------------------------------------
+Time
+------------------------------------------------------------
+
+Dá o valor do tempo em que o personagem se encontra no atual estado.
+Cada personagem demora um determinado tempo em um [Statedef XX], que em 
+geral depende do tempo da animação [Begin Action XX] do arquivo AIR.
+
+Formato:
+  Time
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = Time = 2
+    Aciona quando o personagem está no estado a 2 game-ticks.
+
+
+------------------------------------------------------------
+TimeMod(*,**,***)
+------------------------------------------------------------
+
+Retorna o resto quando o tempo-de-estado (state-time) do personagem 
+é dividido por um valor específico.
+
+O operadot % substitui a utilização de TimeMod, então é recomendável 
+que você utilize %.
+
+Formato:
+  TimeMod [operador] divisor, value1
+
+Argumentos:
+  [operador]
+    =, !=, <, >, <=, >=
+  divisor (inteiro)
+    Número positivo que é utilizado como divisor.
+  value1 (inteiro)
+    Valor que será dividido e tomado o resto.
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Retorna SFalse se o divisor é 0.
+
+Exemplo:
+  trigger1 = TimeMod = 4, 3
+    Aciona quando o tempo-de-estado for múltiplo de quatro + 3, 
+ou seja, aciona quando for igual a 3, 7, 11, 15, ...
+  
+
+------------------------------------------------------------
+UniqHitCount
+------------------------------------------------------------
+
+Retorna o número total de "hits" para o atual ataque do seu personagem. 
+Este valor é computado apenas para um simples estado, depois que 
+qualquer estad muda (ChangeState ...), ele é ressetado a 0.
+Para prevenir o resset a 0, sete hitcountpersist no Statedef (veja a 
+documentação sobre cns). No caso do personagem atingir outros dois 
+personagens ao mesmo tempo, HitCount acrescenta 1 para cada "hit", 
+enquanto que UniqHitCount acrescenta 2.
+Conta exatamente igual ao antigo HitCount (Mugen 01/01).
+
+Formato:
+  UniqHitCount
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = UniqHitCount = [4,6]
+    Aciona quando seu personagem fizer um combo com 4, 5 até 6 "hits".
+
+
+------------------------------------------------------------
+Var
+------------------------------------------------------------
+
+Este trigger requer um índice de variável como argumento.
+Ele retorna o valor contido na variável.
+
+Formato:
+  Var(exprn)
+
+Argumentos:
+  exprn
+    Uma expressão que será avaliada como um índice de vriável. Valores 
+válidos atualmente são entre 0 e 59.
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Retorna SFalse se exprn avaliado der SFalse, ou se exprn der um 
+valor inválido para índice.
+
+Exemplo:
+  trigger1 = Var(0) = -34
+    Aciona se o valor da variável 0 for igual a -34.
+
+
+------------------------------------------------------------
+Vel
+------------------------------------------------------------
+
+Dá o valor da velocidade do personagem. Você deve especificar a componente 
+que você quer checar, ex "Vel Y" para checar a velocidade vertical.
+
+Formato:
+  Vel [componente]
+ 
+Argumentos:
+  [componente]
+    X, Y
+
+Tipo de retorno:
+  Nº real.
+
+Condições de erro:
+  Nenhum.
+
+Detalhes:
+  Para Vel X, um positivo valor indica que o personagem está se movendo 
+para frente. (Este é o oposto do HitVel X). Para Vel Y, um positivo valor 
+indica que o personagem está indo para baixo. A velocidade é medida em 
+pixels/game-ticks.
+
+Exemplo:
+  trigger1 = Vel Y >= 0
+    Aciona quando o personagem não está se movendo para cima.
+
+
+------------------------------------------------------------
+Win
+------------------------------------------------------------
+
+Retorna verdadeiro se o personagem (ou o time do personagem, no team mode) 
+venceu o round, falso caso contrário. Pode ser acompanhado do sufixo "KO", 
+"Time" ou "Perfect" para acionar apenas quando o round foi vencido por KO, 
+por tempo, ou sem perder nada de energia ("life"), respectivamente.
+
+Formato:
+  1. Win
+  2. WinKO
+  3. WinTime
+  4. WinPerfect
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Nenhum.
+
+Exemplos:
+  1. trigger1 = Win
+    Aciona se o personagem (ou seu time) venceu o round.
+  2. trigger1 = !WinKO
+    Aciona se o seu personagem (ou seu time) não venceu o round por KO. 
+Por exemplo, este comando aciona aciona quando o time ainda não venceu o 
+round, quando perdeu (?), ou quando ganhou por tempo.
+
+
+

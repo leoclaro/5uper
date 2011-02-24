@@ -1,0 +1,16 @@
+[State 0, SuperPause]
+type = SuperPause
+trigger1 =
+time =
+anim =
+sound =
+pos =
+move =
+darken = 1
+p2defmul = 0
+poweradd = 0
+unhittable = 1
+;endcmdbuftime = (winmugen only)
+;pausebg =  (winmugen only)
+;ignorehitpause =
+;persistent =
