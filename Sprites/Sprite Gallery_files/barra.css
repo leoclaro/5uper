@@ -1,0 +1,31 @@
+/* CSS Document */
+div#b_gris, div#b_azul   {  overflow: hidden;   width: 100%;   position: absolute;   bottom: 0;  left: 0;  }
+
+@media screen   { body>div#b_gris , body>div#b_azul  {    position: fixed;    }  }
+
+body  { height: 100%; overflow: auto; }
+
+form { margin: 0px}
+
+#content_barra_galeon {   width: 100%;   height: 100%;  overflow: auto;}
+#contenido_barra_galeon2 { margin-bottom:50px; width: 100%;  }
+
+#b_gris {position:relative; height:32px; margin-top:-32px; bottom:0px;
+background: url(http://www.galeon.com/img/pie/gratuitas/fondo_b_gris.gif) bottom repeat-x; color:#5A5A5A; font-size:10px; font-family:"Trebuchet MS", Arial; padding:0px; min-width:780px; z-index:10000}
+#b_azul {position:relative; height:32px; margin-top:-32px; bottom:0px;
+background: url(http://www.galeon.com/img/pie/gratuitas/fondo_b_azul.gif) bottom repeat-x; color:#97BBDC; font-size:10px; font-family:"Trebuchet MS", Arial; padding:0px; min-width:780px; z-index:10000} 
+#b_gris a { font-size:10px; }
+#b_azul a { color:#fff; font-size:10px; }
+
+#b_gris .imagen, #b_azul .imagen  { margin:0px 10px 0px 8px; float:left;}
+
+#b_gris .col_izq, #b_gris .col_bus, #b_gris .col_der { float:right; padding:3px 0px 0px 10px; line-height:12px; background: url(http://www.galeon.com/img/pie/gratuitas/separacion.gif) left no-repeat }
+#b_azul .col_izq, #b_azul .col_bus, #b_azul .col_der { float:right; padding:3px 0px 0px 10px; line-height:12px; background: url(http://www.galeon.com/img/pie/gratuitas/separacion_azul.gif) left no-repeat }
+
+#b_gris .col_izq, #b_azul .col_izq { width:190px}
+#b_gris .col_bus, #b_azul .col_bus { width:200px;}
+#b_gris .col_bus input, #b_azul .col_bus input { font-size:10px; margin-top:2px; width:120px}
+#b_gris .col_bus input.boton { background:url(http://www.galeon.com/img/pie/gratuitas/boton.gif) no-repeat; height:20px; width:56px; border:none; }
+#b_azul .col_bus input.boton { background:url(http://www.galeon.com/img/pie/gratuitas/boton_azul.gif) no-repeat; height:20px; width:56px; border:none; }
+
+#b_gris .col_der, #b_azul .col_der { width:200px;}
