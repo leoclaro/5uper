@@ -1,0 +1,6 @@
+Todo hitdef tem spark, que são efeitos proprios do mugen, eles vem com
+sparkno = 0
+
+para tirar é só por -1 
+
+sparkno = -1

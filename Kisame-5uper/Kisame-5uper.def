@@ -1,0 +1,18 @@
+[Info]
+name="Kisame-5uper"
+displayname="Hoshigaki Kisame"
+versiondate=22/02/2010
+mugenversion=
+author="Leonardo/5uper"
+pal.defaults=1
+[Files]
+sprite=Kisame-5uper.sff
+sound=Kisame-5uper.snd
+anim=Kisame-5uper.air
+cmd=Kisame-5uper.cmd
+cns=Kisame-5uper.cns
+st=Kisame-5uper.cns
+stcommon=common1.cns
+[Arcade]
+intro.storyboard=
+ending.storyboard=

@@ -1,0 +1,19 @@
+[Info]
+name="Blackbeard-5uper"
+displayname="Blackbeard"
+versiondate=22/02/2011
+mugenversion=
+author="Leonardo / 5uper"
+pal.defaults=1
+[Files]
+sprite=Blackbeard-5uper.sff
+sound=
+anim=Blackbeard-5uper.air
+cmd=Blackbeard-5uper.cmd
+cns=Blackbeard-5uper.cns
+st=Blackbeard-5uper.cns
+stcommon=common1.cns
+pal1=Blackbeard-5uper.act
+[Arcade]
+intro.storyboard=
+ending.storyboard=

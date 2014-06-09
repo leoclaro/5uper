@@ -1,0 +1,3231 @@
+Referência para controladores de estado
+============================
+M.U.G.E.N, (c) Elecbyte 2001, versão 2001.04.14
+
+
+
+====================================================================
+    Todos os controladores de estado têm dois parâmetros opcionais: "persistent" e 
+"ignorehitpause". Eles devem ser definidos com constantes inteiras (integer). Este 
+documento é originário para a versão 27/06, mas à medida do possível, damos atenção 
+a todas as versões.
+
+    Em todos os casos, se o parâmetro é definido por uma esxpressão, você 
+deve ter cuidado para que a expressão não seja avaliada como SFalsa, ou 
+então o parâmetro será setado como 0.
+
+AfterImage
+AfterImageTime
+AllPalFX		(versão 27/06 ou superior)
+AngleAdd
+AngleDraw
+AngleMul
+AngleSet
+AppendToClipboard	(versão 27/06 ou superior)
+AssertSpecial
+AttackDist
+AttackMulSet
+BGPalFX		(versão 27/06 ou superior)
+BindToParent
+BindToRoot
+BindToTarget
+ChangeAnim
+ChangeAnim2
+ChangeState
+ClearClipboard		(versão 27/06 ou superior)
+CtrlSet
+DefenceMulSet
+DestroySelf
+DisplayToClipboard 	(versão 27/06 ou superior)
+EnvColor
+EnvShake
+Explod
+ExplodBindTime		(versão 27/06 ou superior)
+FallEnvShake		(versão 29/11 ou superior)
+ForceFeedback
+GameMakeAnim
+Gravity
+Helper
+HitAdd
+HitBy
+HitDef
+HitFallDamage
+HitFallSet
+HitFallVel
+HitOverride
+HitVelSet
+LifeAdd
+LifeSet
+MakeDust
+ModifyExplod
+MoveHitReset
+NotHitBy
+Null
+Offset
+PalFX
+ParentVarAdd
+ParentVarSet
+Pause			(versão 27/06 ou superior)
+PlayerPush
+PlaySnd
+PosAdd
+PosFreeze
+PosSet
+PowerAdd
+PowerSet
+Projectile
+RemoveExplod
+ReversalDef
+ScreenBound
+SelfState
+SndPan			(versão 27/06 ou superior)
+SprPriority
+StateTypeSet
+StopSnd		(versão 27/06 ou superior)
+SuperPause
+TargetBind
+TargetDrop
+TargetFacing
+TargetLifeAdd
+TargetPowerAdd
+TargetState
+TargetVelAdd
+TargetVelSet
+Turn
+VarAdd
+VarRandom
+VarRangeSet		(versão 27/06 ou superior)
+VarSet
+VelAdd
+VelMul
+VelSet
+Width
+
+------------------------------------------------------------
+AfterImage
+------------------------------------------------------------
+
+Habilita no personagem efeitos de imagem anterior. As imagens do personagem 
+são armazenadas na memória "buffer", e são mostradas após algum tempo como 
+imagens passadas.
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  time = duration (inteiro)
+    Especifica o número de game-ticks que a imagem anterior (sombrasde hyper...) 
+deva ser mostrada (permanecer na tela). O padrão é 1.
+
+  length = no_of_frames (inteiro)
+    Seta a quantidade de imagens que são armazenadas. Assumindo valores 
+constantes para timegap e framegap, length pode incrementar o nº de imagens 
+mostradas ao mesmo tempo. Você pode mostrar entre 1 a 60 imagens anteriores. 
+O padrão é 20.
+  
+  palcolor = col (int)              (29/11)
+  palinvertall = invertall (bool)   (29/11)
+  palbright = add_r, add_g, add_b (inteiro)
+  palcontrast = mul_r, mul_g, mul_b (inteiro)
+  palpostbright = add2_r, add2_g, add2_b (inteiro)
+    Estes parâmetros determinam os efeitos na paleta de cores que serão 
+aplicados para todas as imagens anteriores. Primeiro, a cor é ajustada de acordo 
+com palcolor, e se invertall for não nulo, as cores são invertidas. 
+Depois disso, Palbright adiciona as cores RGB às respectivas da paleta do 
+personagem, então Palcontrast multiplica cada valor RGB da paleta do personagem 
+e normaliza, ou seja, divide por 256. Por fim, Palpostbright adiciona vaores RGB 
+ao resultado. Por exemplo, se pal_r for a componente vermelha da paleta do 
+personagem, a  componente R da paleta resultante após afterimage será dada por:
+    (pal_r+add_r)*mul_r/256 + add2_r   (assumindo palcolor e palinvertall padrões)
+    Os valores válidos para palbright e palpostbright são inteiros entre 0 e 255, 
+e para palcontrast é qualquer inteiro não negativo. O padrão é:
+    palbright = 30,30,30
+    palcontrast = 120,120,220
+    palpostbright = 0,0,0
+
+  paladd = add_r, add_g, add_b (inteiro)
+  palmul = mul_r, mul_g, mul_b (número real)
+    Estes parâmetros especificam efeitos repetidamente a cada imagem no afterimage. 
+Em uma aplicação destes efeitos, primeiro paladd adiciona valores RGB às componentes 
+na paleta modificada pelo afterimage (ver parâmetros palbright, palcontrast e palpostbright), 
+então as componentes são multiplicadas por palmul. Estes efeitos são aplicados no tempo 0 
+de cada imagem, ou seja, a cada nova imagem o efeito é aplicado na paleta novamente. 
+Valores válidos são inteiros entre 0 e 255 para paladd e inteiros não negativos para palmul. 
+Valores padrões:
+    paladd = 10,10,25
+    palmul = .65,.65,.75
+  
+  timegap = value (inteiro)
+    Este parâmetro controla quantas imagens são ignoradas (não são memorizadas). 
+O padrão é 1 (nenhuma imagem será ignorada). Para que apenas uma imagem a cada três 
+fique "presa", você deve usar timegap = 3.
+
+  framegap = value (inteiro)
+    Este parâmetro controla quais das imagens armazenadas na memória são utilizadas. 
+Por exemplo, se framegap = 4 (padrão), então a 1º, 5º, 9º ... imagens armazenadas irão 
+ser mostradas como afterimage.
+
+  trans = type (string)
+    Especifica o tipo de transparência para afterimage. Valores válidos são 
+-none	para uma afterimage opaca.
+-add	
+-add1	
+-sub	
+
+Exemplo:  Akuma têm imagens presas (sombras do passado ...) no Hyper.
+  [State 4110, 6]
+  type = AfterImage
+  trigger1 = time = 0
+  time = 999
+  TimeGap  = 1.5
+  FrameGap = 4
+  length = 15
+
+
+------------------------------------------------------------
+AfterImageTime
+------------------------------------------------------------
+
+Muda a duração do efeito de afterimage do personagem. Se nenhum efeito de 
+afterimage estiver sendo processado, este controle nada faz.
+Defeitos (bugs) conhecidos:  se o parâmetro timegap do Afterimage original 
+não é setado para 1, utilizando AfterImageTime irá causar distorções de posição 
+nas imagens (posições são resetadas).
+
+Parâmetros requeridos:
+  time = new_duration (inteiro)
+    Atribui um novo tempo para que as imagens sejam mostradas (permaneçam na tela).
+  
+Sintaxe alternativa:
+  value = new_duration (inteiro)
+
+Parâmetros opcionais:
+  Nenhum.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+AllPalFX	(versão 27/06 ou superior)
+------------------------------------------------------------
+
+O mesmo que PalFX, exceto que este controle afeta a paleta de cores de tudo: 
+estágio ("background"), barras de energia ("lifebars"), todos os personagens, 
+imagens colocadas por "Explod" (indiferente se têm o parâmetro "ownpal" ou não). 
+Veja o controle PallFX para mais detalhes.
+
+
+------------------------------------------------------------
+AngleAdd
+------------------------------------------------------------
+
+Adiciona uma rotação no ângulo utilizado por "AngleDraw".
+
+Argumentos requeridos:
+  value = add_angle (número real)
+    add_angle deve ser dado em graus.
+
+Argumentos opcionais:
+  Nenhum.
+
+Exemplo:  Adiciona 5º ao valor para AngleDraw (x+5º).
+  [State 200, 1]
+  type = AngleAdd
+  trigger1 = Time = 5
+  value = 5
+
+
+------------------------------------------------------------
+AngleDraw
+------------------------------------------------------------
+
+Desenha o personagem, por 1 frame (elemento de imagem), rotacionado rotacionado 
+sobre seu eixo do ângulo definido pelo controle "AngleSet". Quando está olhando 
+para a direita, um ângulo positivo dá uma rotação anti-horária.
+
+Argumentos requeridos:
+  Nenhum.
+
+Argumentos opcionais:
+  Nenhum.
+
+Exemplo:  Desenha seu personagem inclinado, de acordo com o armazenado, por 1 tick.
+  [State 200, 1]
+  type = AngleDraw
+  trigger1 = Time = 5
+
+
+------------------------------------------------------------
+AngleMul
+------------------------------------------------------------
+
+Multiplica o ângulo de rotação usado por "AngleDraw" por um fator específico.
+
+Argumentos requeridos:
+  value = angle_multiplier (número real)
+    Multiplica o ângulo de rotação por angle_multiplier.
+
+Argumentos opcionais:
+  Nenhum.
+
+Exemplo:  Multiplica por 5 o valor para AngleDraw (x*5).
+  [State 200, 1]
+  type = AngleMul
+  trigger1 = Time = 5
+  value = 5
+
+
+------------------------------------------------------------
+AngleSet
+------------------------------------------------------------
+
+Define o ângulo de rotação usado por AngleDraw. O ângulo inicial é zero.
+
+Argumentos requeridos:
+  value = angle (número real)
+    angle deve ser dado em graus.
+
+Argumentos opcionais:
+  Nenhum.
+
+Exemplo:  Armazena um valor para AngleDraw (5º).
+  [State 200, 1]
+  type = AngleSet
+  trigger1 = Time = 5
+  value = 5
+
+
+------------------------------------------------------------
+AppendToClipboard	(versão 27/06 ou superior)
+------------------------------------------------------------
+
+É o mesmo que "DisplayToClipboard", com exceção que a mensagem de texto é adicionada 
+a uma nova linha, em vez de sobrepor qualquer texto que estiver no "clipboard". 
+Veja o controle DisplayToClipboard para maiores detalhes.
+
+Exemplo:
+  [State 200, 1]
+  type = AppendToClipboard
+  trigger1 = Time = 5
+  text = "Mais oi"
+
+------------------------------------------------------------
+AssertSpecial
+------------------------------------------------------------
+
+Este controle permite você setar três "flags" especiais simultaneamente. O 
+MUGEN irá tentar ressetar cada "flag" a cada game-tick, então você deve setar 
+as "flags" em cada game-tick em que você quiser torná-las ativas.
+Este controle surgiu na versão 01/01/2000 sendo bastante utilizado desde então.
+
+Parâmetros requeridos:
+  flag = flag_name
+    flag_name é o nome ("string") da "flag" que você quer modificar.
+
+Parâmetros opcionais:
+  flag2 = flag2_name
+  flag3 = flag3_name
+    Você pode setar até três "flags" simultaneamente.
+
+Detalhes:
+  flag_name pode ser um dos seguintes nomes:
+
+- globalnoshadow	Desabilita mostrar as sombras de todos os personagens. Versão 27/06+.
+- intro		Avisa que o personagem está em sua pose de introdução. Deve ser 
+			setada a cada game-tick, enquanto estiver ocorrendo.
+- invisible		Torna o personagem invisível. Não afeta "AfterImages". Versão 27/06+.
+- roundnotover	Avisa que o personagem está em sua pose de vitória. Deve ser 
+			setada a cada game-tick, enquanto estiver ocorrendo.
+- nobardisplay	Desabilita mostrar barras de energia ("lifebar").  Versão 27/06+.
+- noBG		Tira o "background". A tela fica escura. Versão 31/07+.
+- noFG 		Desabilita o nível 1 do "background" ("the foreground"). Versão 31/07+.
+- nostandguard	Desabilita defesa em pé do personagem.
+- nocrouchguard	Desabilita defesa agachado do personagem.
+- noairguard	Desabilita defesa aérea do personagem.
+
+- noautoturn	Desabilita virar automaticamente.
+- nojugglecheck	Desabilita checagem de "juggle"; o adversário pode ser atingido sem 
+			limite de pontos "juggle". Versão 27/06+.
+- nokosnd		Suprime tocar o som 11,0 (som de KO) para personagem que foram 
+			nocauteados. Para personagens que têm eco (ver KO.echo no arquivo CNS,
+			"nokosnd" deve ser setado por 50 ou mais game-ticks 
+			após o personagem ter sido nocauteado.
+
+- nokoslow		Desabilita KO em velocidade lenta ("slow motion").
+- noshadow		Desabilita mostrar a sombra do seu personagem.
+
+- nomusic		Pára de tocar a música.
+- nowalk 		Desabilita o estado responsável pelo andar, se ele tiver o controle 
+			(ctrl = 1). Use para prevenir que andar cancele a corrida. Versão 31/07+.
+- timerfreeze	Congela o cronômetro da luta. Útil para evitar que o "round" termine por 
+			tempo no meio de uma "splash screen" (?). Versão 27/06+.
+- unguardable	Enquanto ativo, todos os golpes do seu personagem não podem ser 
+			defendidos, ou seja, as "guardflags" são ignoradas. Versão 27/06+.
+
+Exemplo: quando a April aparece no TMNT (posição de vitória).
+  [State -2, NoBGM]
+  type = AssertSpecial
+  trigger1 = Var26 = 1
+  flag = nomusic
+
+
+------------------------------------------------------------
+AttackDist
+------------------------------------------------------------
+
+Muda o valor do parâmetro "guard.dist" para o atual HitDef. Esse parâmetro diz a qual 
+distância de seu personagem o adversário irá para um estado de defesa se o adversário 
+estiver segurando o direcional em sentido contrário ao seu personagem (para trás). Se 
+seu personagem não têm nenhum HitDef ativo, então "AttackDist" nada faz.
+
+Parâmetros requeridos:
+  value = guard_dist (inteiro)
+    guard_dist têm que ser dado em pixels.
+
+Parâmetros opcionais:
+  Nenhum.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+AttackMulSet
+------------------------------------------------------------
+
+Define o multiplicador de ataque do seu personagem. Todo dano provocado por seu 
+personagem será multiplicado por este fator.
+
+Parâmetros requeridos:
+  value = attack_mul (número real)
+    Especifica o multiplicador desejado. Por exemplo, se attack_mul for 2, isto 
+duplicará o dano causado.
+
+Parâmetros opcionais:
+  Nenhum.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+BGPalFX	(versão 27/06 ou superior)
+------------------------------------------------------------
+
+O mesmo que PalFX, exceto que este afeta a paleta de cores do estágio ("background") 
+e das barras de energia ("lifebars") ao invés da paleta do personagem. Veja o controle 
+"PalFX" para maiores detalhes.
+
+
+------------------------------------------------------------
+BindToParent	Fix na versão 31/07
+------------------------------------------------------------
+
+Se o personagem é um "helper", liga esse personagem a uma posição específica em 
+relação ao seu pai. Se o personagem não é um "helper", este comando nada faz.
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  time = bind_time (inteiro)
+    Especifica o número de game-ticks que este controle estará ativo. O padrão é 1.
+
+  facing = facing_flag (inteiro)
+    Se facing_flag é -1, faz o personagem ficar com a face em direção oposta ao pai 
+durante o binding_time. Se for igual a 1, faz ficar na mesma direção. O padrão é 0, 
+ou seja, o "helper" não acompanha seu pai ("helper" e pai se viram juntos apenas quando 
+a virada é automática).
+
+  pos = pos_x (número real), pos_y (número real)
+    pos_x e pos_y especificam a posição ("off-set") em relação aos eixos do pai, 
+em que eles devem permanecer. O padrão é 0,0.
+
+Notas:
+  Se o pai deste "helper" é destruído (por exemplo, se o pai é um "helper" e 
+executa o controle "DestroySelf"), então o efeito de "BindToParent" é terminado.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+BindToRoot		Fix na versão 31/07
+------------------------------------------------------------
+
+Se o personagem é um "helper", liga esse personagem a uma posição específica em 
+relação à raiz (primeiro dos personagens que chamou os outros "helpers"; pode ser 
+o personagem principal). Se o personagem não é um "helper", este comando nada faz.
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  time = bind_time (inteiro)
+    Especifica o número de game-ticks que este controle estará ativo. O padrão é 1.
+
+  facing = facing_flag (inteiro)
+    Se facing_flag é -1, faz o personagem ficar com a face em direção oposta à 
+raiz durante o binding_time. Se for igual a 1, faz ficar na mesma direção. O 
+padrão é 0, ou seja, o "helper" não acompanha a raiz ("helper" e raiz se viram 
+juntos apenas quando a virada é automática).
+
+  pos = pos_x (número real), pos_y (número real)
+    pos_x e pos_y especificam a posição ("off-set") em relação aos eixos da raiz, 
+em que eles devem permanecer. O padrão é 0,0.
+
+Notas:
+  Se a raiz deste "helper" é destruído (por exemplo, se a raiz é um "helper" e 
+executa o controle "DestroySelf"), então o efeito de "BindToRoot" é terminado.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+BindToTarget
+------------------------------------------------------------
+
+Liga o personagem a uma posição específica em relação a um alvo ("target") específico.
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  time = bind_time (inteiro)
+    Especifica o número de game-ticks que este controle estará ativo. O padrão é 1.
+
+  ID = bind_id (inteiro)
+    Especifica um número de identificação ("ID number") do alvo. O padrão é -1 
+(qualquer alvo). Versão 27/06+.
+
+  pos = pos_x (número real), pos_y (número real), postype (string)
+    pos_x e pos_y especificam a posição ("off-set") em relação ao ponto de ligação do alvo.
+    O ponto de ligação do alvo é definido por "postype", e pode ser qualquer um dos 
+seguintes valores:
+Foot		o ponto de ligação é o pé (cruzamento dos eixos X e Y do alvo).
+Mid		o ponto de ligação é o ponto intermediário entre Foot e Head.
+Head		o ponto de ligação é a cabeça.
+    Nos dois casos anteriores, o ponto de ligação é determinado pelos parâmetros head.pos 
+e mid.pos do arquivo CNS do adversário. Não é, portanto, garantia que seu personagem irá 
+perseguir corretamente o ponto especificado.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+ChangeAnim
+------------------------------------------------------------
+
+Muda a animação do personagem.
+
+Parâmetros requeridos:
+  value = anim_no
+    É o número (inteiro) da animação (arquivo AIR).
+
+Parâmetros opcionais:
+  elem = elem_no
+    É o número (inteiro) do elemento com que a animação específica deva começar.
+
+Exemplo:
+  [State 400, 1]
+  type = ChangeState
+  trigger1 = AnimTime = 0
+  value = 11
+
+
+------------------------------------------------------------
+ChangeAnim2
+------------------------------------------------------------
+
+Como ChangeAnim, exceto que este controle deve ser utilizado se você colocou o 
+adversário em um estado customizado (ver "HitDef" para maiores detalhes) e deseja 
+que o adversário utilize uma animação do arquivo AIR de seu personagem. Não recomendo 
+muito isto, porque uma animação ("Action") de seu personagem especifica imagens que o 
+adversário pode não possuir.
+
+
+------------------------------------------------------------
+ChangeState
+------------------------------------------------------------
+
+Muda o estado do personagem. A partir da versão 29/11, o personagem vira a 
+face para o adversário sempre que um "ChangeState" é executado.
+
+Parâmetros requeridos:
+  value = state_no
+    É o número (inteiro) do estado ao qual o personagem irá.
+
+Parâmetros opcionais:
+  ctrl = ctrl_flag
+    ctrl_flag (inteiro) é o valor a ser atribuído à flag de controle. 0 para tirar 
+o controle do personagem, não-zero para dar o controle.
+
+  anim = anim_no
+    É o número (inteiro) da animação.
+
+Exemplo:
+  [State 400, 1]
+  type = ChangeState
+  trigger1 = AnimTime = 0
+  value = 11
+  ctrl = 1
+
+
+------------------------------------------------------------
+ClearClipboard	(versão 27/06 ou superior)
+------------------------------------------------------------
+
+Apaga qualquer texto que estiver no "clipboard".
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  Nenhum.
+
+Exemplo:
+  [State 200, 1]
+  type = ClearClipboard
+  trigger1 = Time = 5
+
+
+------------------------------------------------------------
+CtrlSet
+------------------------------------------------------------
+
+Define o estado da flag de controle.
+
+Parâmetros requeridos:
+  value = ctrl_flag
+    ctrl_flag (inteiro) é o valor a ser atribuído à flag de controle. 0 para tirar o 
+controle do personagem, não-zero para dar o controle.
+
+Parâmetros opcionais:
+  Nenhum.
+
+Exemplo:
+  [State 400, 1]
+  type = CtrlSet
+  trigger1 = Time = 4
+  value = 1
+
+
+------------------------------------------------------------
+DefenceMulSet
+------------------------------------------------------------
+
+Define um multiplicador de defesa para seu personagem. Todos os danos que seu 
+personagem sofrer será dividido por este fator.
+
+Parâmetros requeridos:
+  value = defense_mul (número real)
+    Especifica o multiplicador de defesa. Por exemplo, um defense_mul de 2 faz seu 
+personagem receber apenas metade do dano.
+
+Parâmetros opcionais:
+  Nenhum.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+DestroySelf
+------------------------------------------------------------
+
+Se chamado em um estado "Helper", DestroySelf remove o Helper do campo de luta. 
+Não é válido para objetos não-helpers.
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  Nenhum.
+
+Exemplo:
+  ; Apaga o helper (tem que estar no State do helper)
+  [State 1305, done]
+  type = DestroySelf
+  trigger1 = AnimElem = 24
+
+
+------------------------------------------------------------
+DisplayToClipboard	(versão 27/06 ou superior)
+------------------------------------------------------------
+
+Este controle é apenas útil para procura de erros de programação ("bugs"). 
+"DisplayToClipboard" limpa o "clipboard", e coloca um mensagem específica nele. 
+Para mostrar o "clipboard" do seu personagem, entre no modo "debug" do MUGEN 
+(pressione Ctrl+D).
+Veja também "AppendToClipboard" e "ClearClipboard".
+
+Parâmetros requeridos:
+  text = "format_string"
+    format_string deve estar entre aspas. Se você conhece a linguagem C, este 
+parâmetro é como um printf. Pode conter qualquer texto que você quiser. Você pode 
+utilizar \n para mudar de linha, e \t para gerar tabulação (tecla TAB). Para mostrar 
+o valor de uma expressão, você pode por um %d (para inteiros) ou um %f (para reais), 
+e então especificar a expressão (ver "params"). Para mostrar um caracter 
+porcentagem (%), você deve por %%.
+
+Parâmetros opcionais:
+  params = exp_1, exp_2, exp_3, exp_4, exp_5
+    Mais de 5 argumentos numéricos podem ser especificados. Devem ser separados por 
+vírgulas, ordenadamente. O tipo de cada argumento deve bater com o especificado em 
+"format_string". Você não pode especificar mais ou menos argumentos do que aqueles que 
+foram chamados por "format_string".
+
+Exemplo:
+  type = DisplayToClipboard
+  text="The value of var(17) is %d, which is %f%% of 23.\n\t--Kiwi."
+  params = var(17):=1,var(17)/.230
+
+   Isto vai mostrar na tela o seguinte:
+The value of var(17) is 1, which is 4.347826% of 23.
+	--Kiwi.
+  
+A partir da versão 29/11, a barra invertida (\) torna-se um caracter especial:
+  \" - aspas
+  \n - nova linha
+  \\ - retorno
+
+
+------------------------------------------------------------
+EnvColor
+------------------------------------------------------------
+
+Altera toda a tela para uma cor sólida, com exceção de animações como "sparks" e 
+aquelas que o controle "Explod" colocou por cima. O primeiro plano do estágio não 
+será visível.
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  value = col_r, col_g, col_b (inteiro)
+    Especifica as componentes RGB da cor. Cada componente deve ser um inteiro 
+entre 0 e 255. O padrão é 255, 255, 255 (branco).
+
+  time = effective_time (inteiro)
+    Especifica por quantos game-ticks a cor será mostrada. O padrão é 1 game-tick. 
+Definir como -1 é mostrar a cor por tempo indefinido.
+
+  under = under_flag (inteiro)
+    Define a "flag under" como 1 faz a cor ser desenhada por baixo de personagens e 
+projéteis. Em outras palavras, os personagens e projéteis serão visíveis em cima da cor. 
+O padrão é 0.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+EnvShake
+------------------------------------------------------------
+
+Causa tremulação na tela.
+
+Parâmetros requeridos:
+  time = shake_time (inteiro)
+    Especifica o número tempo (game-ticks) em que a tela irá tremer.
+
+Parâmetros opcionais:
+  freq = shake_speed (número real)
+    É um real entre 0 (lento) até 180 (rápido) O padrão é 60.
+
+  ampl = shake_amplitude (inteiro)
+    A amplitude (maior oscilação) que a tela irá sentir. Valores negativos irão 
+fazer a tela tremer para baixo primeiro. Padrão é -4.
+
+  phase = phase_offset (inteiro)
+    Especifica a fase inicial da oscilação. O padrão é 0, a não ser que o multiplicador 
+da freqüência seja 90 ou superior. Neste caso, o padrão é 90.
+
+Exemplo:
+  ; Rayden soltando seu hyper level 3
+  [State 3300, 1]
+  type = envshake
+  trigger1 = AnimElem = 3
+  time = 60
+
+  [State 3300, 1]
+  type = envshake
+  trigger1 = AnimElem = 4
+  time = 100
+  ampl = 20
+
+  [State 3300, 1]
+  type = envshake
+  trigger1 = AnimElem = 5
+  time = 154
+  ampl = 20
+
+
+------------------------------------------------------------
+Explod
+------------------------------------------------------------
+
+O controle "Explod" é uma ferramenta flexível para mostrar animações como "sparks". 
+Ele praticamente substituiu o controle "GameMakeAnim".
+Quando a versão 01/01/2000 chegou, os chars tiveram que substituir o controle "MakeExplod"
+pelo controle "Explod". Essa adaptação parece que já atingiu todos os chars da rede.
+
+Parâmetros requeridos:
+  anim = [F]anim_no (inteiro)
+    anim_no especifica o número da animação (Action, arquivo AIR) a ser executada. 
+O prefixo 'F' é opcional:  se incluído, então a animação é mostrada atrás do fight.def 
+(barras de energia ...).
+
+Parâmetros opcionais:
+  ID = id_no (inteiro)
+    id_no especifica um número de identificação ("ID number") para este "Explod". Muito 
+utilizado em conjunto com o trigger "NumExplod" e o controle "RemoveExplod".
+  
+  pos = xpos, ypos (inteiro)
+    xpos e ypos especificam a posição ("off set") para criar a animação. A exata posição 
+depende do parâmetro "postype". Se estes parâmetros são omitidos, o padrão é 0.
+
+  postype = arg1 (string)
+    arg1 especifica a referência com relação ao posicionamento. Em todos os casos, 
+um positivo valor de Y significa uma posição mais baixa. Os valores válidos para "postype" 
+são os seguintes:
+
+Lembrando que P1 é o seu personagem e P2 é o adversário.
+- p1
+    Interpreta pos relativo à posição de P1. Valores positivos de x está na frente de P1. 
+Este é o valor padrão para postype.
+- p2
+    Interpreta pos relativo à posição de P2. Valores positivos de x está na frente de P2.
+- front
+    Interpreta a posição relativa à parede a qual P1 está olhando. Valores positivos de x 
+se aproximam do centro da câmera, e y relativo aos eixos de P1.
+- back
+    Interpreta a posição relativa à parede a qual P1 está de costas. Valores positivos de x 
+se aproximam do centro da câmera, e y relativo aos eixos de P1.
+- left
+    Interpreta xpos e ypos relativo ao córner superior esquerdo.Valores positivos de x 
+levam para a direita da tela.
+- right
+    Interpreta xpos e ypos relativo ao córner superior direito.Valores positivos de x 
+levam para a direita da tela.
+
+  facing = arg1 (inteiro)
+    Definir como 1 faz a animação ter a mesma direção do sentido positivo de X 
+(como determinado por "postype"), e como -1 para sentido contrário. O padrão é 1.
+    
+  vfacing = arg1 (inteiro)
+    Definir como -1 faz a animação ficar de cabeça para baixo (inversão vertical). 
+O padrão é 1 (sem inversão).
+
+  bindtime = arg1 (inteiro)
+    Define o número de game-ticks para segurar a animação. Por exemplo, se  postype = p1, 
+pos = 30,-40, e bindtime = 5, então a animação irá ser desenhada na posição 30,-40 
+relativa aos eixos de p1 por 5 game-ticks. Após esse tempo ter expirado, a animação será 
+afetada pelos parâmetros vel e accel. Se bindtime = -1, então a animação ficará presa 
+indefinidamente.
+
+  vel = xvel, yvel (número real)
+    Especifica a velocidade inicial para a animação. É relativa à direção da animação 
+("facing"). O padrão é 0, se omitido.
+
+  accel = xaccel, yaccel (número real)
+    Especifica a aceleração para a animação. O padrão é 0, se omitido.
+
+  random = arg1, arg2 (inteiro)
+    Provoca uma alteração aleatória na posição em que a animação será criada. arg1 
+especifica o intervalo em X, e arg2 especifica o intervalo em Y. Por exemplo, se pos = 0,0 
+e random = 40,80, então a localização em que a animação será criada no eixo X será um número 
+aleatório entre -20 e 19, e no eixo Y será um número aleatório entre -40 e 39. Ambos arg1 
+e arg2 são 0 se omitido.
+
+  removetime = arg1 (inteiro)
+    Define quantos game-ticks a animação será mostrada. Se removetime = -1, então a 
+animação será mostrada indefinidamente. Se removetime = -2, a animação será removida 
+quando chegar ao fim dela (quando "AnimTime for 0). O padrão é -2.
+
+  supermove = bvalue (boolean)
+    Definir como 1 faz a animação persistir até o fim do SuperPause, à regalia do valor 
+de removetime. O padrão é 0. Este parâmetro foi praticamente substituído pelo supermovetime, 
+e deve ser retirado em versões futuras.
+
+  supermovetime = move_time (inteiro)
+    Determina o número de game-ticks que a animação deva estar descongelada durante o 
+SuperPause. Às vezes utilizado quando se quer "super sparks" durante o SuperPause. 
+Versão 27/06+.
+
+  pausemovetime = move_time (inteiro)
+    Determina o número de game-ticks que a animação deva estar descongelada durante o 
+Pause. O padrão é 0. Versão 27/06+.
+
+  scale = xscale [,yscale] (número real)
+    xscale e yscale especificam o fator de escala a ser aplicada na animação nas direções 
+horizontal e vertical. O padrão de ambos é 1 (sem reescalonamento) se omitido.
+
+  sprpriority = arg1 (inteiro)
+    arg1 especifica a prioridade da animação. Animações com alta prioridade serão 
+desenhadas por cima de animações com prioridades menor. Por exemplo, sprpriority = -3 será 
+desenhada por baixo da maioria dos personagens e outros "Explods", os quais tem, em geral, 
+sprpriority >= -2. O padrão é 0, se omitido.
+
+  ontop = bvalue (boolean)
+    Definir como 1 faz a animação ser desenhada sobre todos as imagens e níveis do 
+estágio ("background"). Este parâmetro leva precedência sobre sprpriority. O padrão é 0.
+
+  shadow = shad_r, shad_g, shad_b (inteiro)
+    Especifica um valor RGB para a sombra da animação. Valores válidos são números 
+inteiros entre 0 e 255. Para desabilitar mostrar sobras, especifique shad_r para -1. 
+O padrão é 0,0,0.
+
+  ownpal = bvalue (boolean)
+    Definir como 1 cria uma cópia da paleta para utilizar nesta animação "Explod". 
+É desejável se você quiser alterar temporariamente a paleta do seu personagem, como 
+recuperação de queda ou utilização do controle "PalFX", sem afetar a cor desta animação 
+"Explod". O padrão é 0.
+
+  removeongethit = bvalue (boolean)
+    Definir como 1 irá remover o "Explod" se o personagem sofrer Hit. O padrão é 0. 
+Versão 31/07+.
+
+Exemplo:  Flawless Victory do Scorpion
+  [State 181, 4]
+  type = Explod
+  trigger1 = time = 130
+  trigger1 = life = 1000
+  anim = 7010
+  id = 7010
+  pos = 161, 77
+  postype = left
+  facing = 1
+  sprpriority = 2
+  ownpal = 0
+
+
+------------------------------------------------------------
+ExplodBindTime	(versão 27/06 ou superior)
+------------------------------------------------------------
+
+Muda a posição da animação presa por bindtime do controle "Explod".
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  ID = id_no (inteiro)
+    Para especifica um "Explod" de número de identificação ("ID number") específico. 
+O padrão é -1, ou seja, afetar a todas as animações do tipo "Explod".
+
+  time = binding_time (inteiro)
+    Especifica o número de game-ticks para os quais a animação deva ficar pres. 
+Definir como -1 faz a animação ficar presa indefinidamente. O padrão é 1.
+
+Sintaxe alternativa:
+  value = binding_time pode ser utilizada ao invés de time = binding_time.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+FallEnvShake		(versão 29/11 ou superior)
+------------------------------------------------------------
+
+Balança a tela utilizando o parâmetro fall.envshake do controle HitDef. Este controle 
+só funciona se GetHitVar(fall.envshake.time) não é zero, e ele seta GetHitVar
+(fall.envshake.time) a zero após ser executado. Este controle é utilizado no arquivo 
+common1.cns para balançar a tela quando o personagem cai, e não é normalmente utilizado 
+em outro caso.
+
+Parâmetros requiridos
+  Nenhum.
+
+Parâmetros opcionais
+  Nenhum.
+
+Exemplo
+  Veja o arquivo common1.cns.
+
+
+------------------------------------------------------------
+ForceFeedback
+------------------------------------------------------------
+
+Cria uma tremulação para joysticks. Atualmente, apenas joysticks Playstation Dual 
+Shock utilizam este tipo de tecnologia.
+Parâmetros para "ForceFeedback" não devem ser especificados através de uma expressão 
+aritmética. Esta é uma exceção à regra.
+De uma maneira em geral, a partir da versão 27/06 todos os controles podem ser 
+especificados utilizando uma expressão.
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  waveform = wave_type (string)
+    Formas de onda válidas são "sine", "square", "sinesquare", e "off". 
+Para o controle Dual Shock, uma forma de onda senoidal ("sine") corresponde a um largo 
+tremor de motor, uma forma quadrada ("square") corresponde a batidas tipo britadeira, 
+e a forma intermediária ("sinesquare") esta entre os dois tipos. Utilize "off" para parar 
+qualquer efeito no seu joystick que esteja sendo executado. O valor padrão é "sine".
+
+  time = duration (integer constant)
+    Especifica quanto dura o tremor, em game-ticks. O padrão é 60, ou seja, 1 segundo.
+
+  freq = start (integer constant), d1, d2, d3 (float constants)
+    Frequência do tremor. Varia entre 0 e 255. A fórmula utilizada para determinar a 
+frequência é
+    start + d1*t + d2*t**2 + d3*t**3
+    onde t representa o número de game-ticks passados desde que o tremor teve início. 
+O padrão é 128,0,0,0. Atualmente, este parâmetro é completamente ignorado.
+
+  ampl = start (integer constant), d1, d2, d3 (float constants)
+    A amplitude do tremor. Varia entre 0 e 255. A fórmula utilizada para determinar a 
+frequência é
+    start + d1*t + d2*t**2 + d3*t**3
+    onde t representa o número de game-ticks passados desde que o tremor teve início. 
+O padrão é 128,0,0,0.
+
+  self = self_flag (boolean constant)
+    Definir como 1 faz o joystick de P1 vibrar. Se for 0, então o joystick de P2 
+irá vibrar. O padrão é 1.
+   
+Exemplo:
+  Veja common1.cns.
+
+
+------------------------------------------------------------
+GameMakeAnim
+------------------------------------------------------------
+
+Cria uma animação, como um "spark" ou efeito para o golpe "Hyper". Este controle está 
+sendo substituído pela utilização do controle "Explod" e é considerado obsoleto. Ele 
+deverá ser substituído em versões futuras.
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  value = anim_no (inteiro)
+    Especifica o número da animação (do staticfx.sff) da animação a executar. O padrão é 0.
+  
+  under = under_flag (inteiro)
+    Se está "flag" for 1, a animação será desenhada por baixo do personagem. O padrão é 0 
+(desenha sobre os personagens).
+
+  pos = x_pos, y_pos (número real)
+    Especifica a posição que será desenhada a animação, relativa aos eixos do seu 
+personagem. O padrão é 0,0.
+
+  random = rand_amt (inteiro)
+    Provoca uma alteração aleatória na posição em que a animação será criada. O 
+intervalo pode ser tão largo quanto metade de rand_amt. O padrão é 0.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+Gravity
+------------------------------------------------------------
+
+Acelera o personagem para baixo, utilizando o valor da constante "yaccel" (arquivo CNS).
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  Nenhum.
+
+Exemplo:
+  ; Aplica "gravidade"
+  trigger1 = Time >= 0
+  type = Gravity
+
+
+------------------------------------------------------------
+Helper
+------------------------------------------------------------
+
+Cria outro personagem, como um personagem "helper".
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  helpertype = type_string
+    Se helpertype = normal, então o "helper" estará apto a se mover fora da tela 
+(além de suas paredes). Desta forma, a câmera não irá se mover para tentar acompanhar o 
+"helper" na tela. Se helpertype = player, então o helper ficará restrito a se mover dentro 
+da tela e será seguido pela câmera, como um personagem normal. O padrão é helpertype = normal. Se você planeja utilizar um "helper" para manipular a câmera, não use personagens tipo "helpers" (isto será depreciado). Use "ScreenBound" com parâmetro "movecamera" se necessário.
+  
+  name = "name_string"
+    Especifica um nome para esta "helper", que deve estar entre aspas. Se omitido, 
+o nome padrão será "<pai>'s helper", onde <pai> representa o nome do personagem que criou 
+o "helper".
+
+  ID = id_no (inteiro)
+    Define um número de identificação ("ID number") para o "helper". O padrão é 0 (sem ID).
+ 
+  pos = x_off, y_off (inteiro)
+    Determina a posição ("off set") para criar o "helper". A posição precisa depende do 
+parâmetro "postype". O padrão é 0,0.
+
+  postype = postype_string
+    Trabalha como o "postype" do controle "Explod". Lembrando que  P1  é  o  seu  personagem 
+e P2 é o adversário.
+- p1
+    Interpreta pos relativo à posição de P1. Valores positivos de x está na frente de P1. 
+Este é o valor padrão para postype.
+- p2
+    Interpreta pos relativo à posição de P2. Valores positivos de x está na frente de P2.
+- front
+    Interpreta a posição relativa à parede a qual P1 está olhando. Valores positivos de x se 
+aproximam do centro da câmera, e y relativo aos eixos de P1.
+- back
+    Interpreta a posição relativa à parede a qual P1 está de costas. Valores positivos de x 
+se aproximam do centro da câmera, e y relativo aos eixos de P1.
+- left
+    Interpreta xpos e ypos relativo ao córner superior esquerdo.Valores positivos de x levam 
+para a direita da tela.
+- right
+    Interpreta xpos e ypos relativo ao córner superior direito.Valores positivos de x levam 
+para a direita da tela.
+
+  facing = facing (int)
+    Se postype é "left" ou "rifht", definir facing = 1 faz o "Helper" virar a face para 
+a direita, e -1 para a esquerda.
+    Para todos os outros valores de postype com exceção de P2, se facing = 1 o "Helper" 
+irá virar a face na mesma direção do personagem principal. Se facing é -1, o "Helper" 
+vira a face na direção oposta.
+    No caso de postype = p2, facing se comporta da mesma maneira acima descrita, mas 
+se orienta de acordo com p2. O padrão é 1. Versão 31/07+.
+
+  stateno = start_state (inteiro)
+    Determina o número de estado que o "helper" irá ser iniciado. O padrão é 0 (em pé, parado).
+
+  keyctrl = ctrl_flag (inteiro)
+    Se keyctrl = 1, então o "helper" estará apto a ser comando pelo jogador 
+(teclado ou joystick). Então, o "helper" irá herdar os State -1 do arquivo CMD de sua raiz 
+(personagem principal). Se for definido como 0, então o "helper" não pode ser controlado. 
+O padrão é 0.
+
+  ownpal = pal_flag (inteiro)
+    Se ownpal = 0, então o "helper" irá utilizar da mesma paleta que seu pai. Então, 
+se ele ou seu pai tiverem a paleta modificada, então ambos serão afetados. Se for definido 
+como 1, o "helper" terá uma cópia da paleta, que será independente de seu pai. O padrão é 0.
+
+  supermovetime = value (inteiro)
+    Determina o número de game-ticks que o "helper" estará descongelado durante o 
+SuperPause. Às vezes é útil quando se quer que o "helper" apareça durante o SuperPause. 
+O padrão é 0.
+
+  pausemovetime = move_time (inteiro)
+    Determina o número de game-ticks deva estar descongelado durante o Pause. O padrão é 0. 
+Versão 27/06+.
+
+  size.xscale (número real)
+  size.yscale (número real)
+  size.ground.back (inteiro)
+  size.ground.front (inteiro)
+  size.air.back (inteiro)
+  size.air.front (inteiro)
+  size.height (inteiro)
+  size.proj.doscale (inteiro)
+  size.head.pos (int,int)
+  size.mid.pos (int,int)
+  size.shadowoffset (inteiro)
+    Estes parâmetros têm o mesmo propósito aos de sua raiz, no arquivo CNS. Você pode 
+mudar um ou mais destes parâmetros. Quando omitidos, os parâmetros são iguais ao do seu pai. 
+Adicionado a partir da versão 27/06.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+HitAdd
+------------------------------------------------------------
+
+Adiciona golpes bem sucedidos (Hits) ao combo atual.
+
+Parâmetros requeridos:
+  value = add_count (inteiro)
+    add_count especifica o número de Hits a ser adicionado.
+
+Parâmetros opcionais:
+  Nenhum.
+
+Exemplo:
+  ; Goro bate
+  [State 271, 4]
+  type = HitAdd
+  Trigger1 = Time = 38
+  Trigger2 = Time = 52
+  Trigger3 = Time = 66
+  Trigger4 = Time = 80
+  Trigger5 = Time = 94
+  Trigger6 = Time = 108
+  value = 1
+
+
+------------------------------------------------------------
+HitBy
+------------------------------------------------------------
+
+Temporariamente especifica que tipos de golpes podem atingir seu personagem.
+
+Parâmetros requeridos:
+  value = attr_string  OR  value2 = attr_string
+    Apenas um dos parâmetros pode ser especificado. attr_string deve uma "string" (letra) 
+de atributo.
+
+Parâmetros opcionais:
+  time = effective_time (inteiro)
+    Especifica um número de game-ticks que HitBy deva ficar ativo. O padrão é 1.
+
+Details:
+  O personagem têm dois "slots" (gavetas) de atributos, os quais podem ser setados 
+utilizando os parâmetros value ou value2 do controle HitBy. Estes "slots" podem ser setados 
+também pelo controle NotHitBy. Quando um "slot" é setado, ele têm um relógio que conta 
+até zero. Se o relógio ainda não chegou em zero, o "slot" é considerado ativo. O personagem 
+pode ser golpeado por um "HitDef" apenas se o atributo deste "HitDef" em todos os "slots" 
+ativos.
+
+Exemplo:
+  ; Pode acertar apenas por ataques "normal" e "standing" (em pé).
+  trigger1 = 1
+  type = HitBy
+  value = S, NA
+
+
+------------------------------------------------------------
+HitDef
+------------------------------------------------------------
+
+Define um "Hit" (golpe bem sucedido). Se a caixa de colisão Clsn1 do seu personagem 
+(caixa de ataque, vermelha no AirView) entra em contato com a caixa Clsn2 (caixa de "Hit", 
+azul no AirView) do adversário, e um HitDef foi definido no instante, ou antes, então o 
+efeito específico será aplicado. Este é um dos controles mais complexos, e também o mais 
+utilizado.
+Um HitDef é válido apenas para um "Hit". Para fazer um movimento ter vários "Hits", você 
+deve colocar mais de um trigger no HitDef durante o ataque.
+
+Parâmetros requeridos:
+  attr = hit_attribute
+    Este é o atributo de ataque. Ele é usado para determinar se o ataque pode acertar o P2. 
+Por enquanto, você apenas menciona o atributo, dizendo qual o tipo de ataque é. Deve ser do 
+formato:
+      attr = arg1, arg2
+
+- arg1		"S"  -  ataque em pé
+"C"  -  ataque agachado
+"A"  -  ataque no ar
+
+- arg2 é composto por duas letras.
+1a 	"N" -  para "normal"			2 a 	"A"  -  para "ataque"
+"S" -   para "especial"				"T"  -  para "agarrão" (throw)
+"H" -  para "hyper" (ou super)		"P"  -  para "projétil"
+
+  hitflag = hit_flags
+    Isto determina que tipo de estado P2 deve estar para P1 acertá-lo. hit_flags é 
+uma variável "string" (que guarda letras) que contém uma combinação dos seguintes caracteres: 
+
+"H"  -	para "high" (alto)
+"L"   -	para "low" (baixo)
+"A"  -	para "air" (aéreo)
+"M"  -	para "mid" (equivalente a dizer HL)
+"F"   -	para "fall" (em queda, incluindo o efeito de juggle)
+"D"  -	para "lying Down" (adversário caído)
+
+Dois opcionais caracteres são "+" e "-". Se "+" for adicionado, então o "Hit" apenas 
+afeta o adversário em um estado de "gethit". Isto pode ser muito útil em combos, 
+chain-moves, ... onde este Hitdef não irá afetar o adversário, a menos que ele já tenha 
+sido atingido pelo ataque inicial do combo. Se "-" for adicionado, então o Hitdef apenas 
+afeta adversários que não estão em um estado de "Hit". Você pode usar "-" para agarrões, e 
+outros movimentos que você não queira adicionar em um combo. "+" e "-" não podem ser 
+utilizados ao mesmo tempo.
+Se omitido, o padrão é MAF.
+
+  guardflag = hit_flags
+    Isto determina como P2 pode defender o ataque. No Goro, eu não coloquei esta linha, 
+e nem caixas de Hit na animação principal do agarrão, e o resultado é que o adversário não 
+consegue se defender ou atacar (anular movimento). hit_flags é a "string" que contém uma 
+combinação dos seguintes caracteres: 
+"H"  -	para "high" (alto)
+"L"   -	para "low" (baixo)
+"A"  -	para "air" (aéreo)
+"M"  -	para "mid" (equivalente a dizer HL)
+
+Parâmetros opcionais:
+  affectteam = team_type
+    team_type especifica que time será afetado pelo Hitdef. O padrão é "E".
+"B"  -	para "both" (Hitdef afetará todos os lutadores atingidos)
+"E"   -	para "enemy" (afeta apenas o time inimigo)
+"F"  -	para "friendly" (afeta apenas seus companheiros)
+
+
+  animtype = anim_type
+    Este se refere ao tipo de animação que o adversário irá ter quando for acertado.
+"light"        -	acerto leve
+"medium"  -	acerto médio
+"hard"        -	acerto forte
+"back"       -	derrubar
+"up"           -	com queda tipo "uppercut" (de MK).
+"diagup"    -	acerto com queda no ar, com queda de cabeça.
+    O padrão é "Light".
+
+  air.animtype = anim_type
+    Similar ao parâmetro "animtype", este seta a animação quando o adversário está no ar. 
+O padrão é utilizar a mesma animação do "animtype".
+
+  fall.animtype = anim_type
+    Similar ao parâmetro "animtype", este seta a animação quando o adversário está caindo. 
+O padrão é utilizar a mesma animação do "animtype". O padrão é "Up" se o air.animtype é "Up", 
+e "Back" caso contrário.
+
+  priority = hit_prior (inteiro), hit_type (string)
+    Especifica a prioridade para este "Hit". Prioridade alta leva precedência sobre "Hits" 
+de menor prioridade. Valores válidos para hit_prior são de 1 a 7. O padrão é 4.
+    Hit_type, quando especificado, dá a classe da prioridade do "Hit". Valores válidos 
+são "Hit" (padrão), "Dodge" e "Miss". A classe da prioridade determina quando P1 e 
+P2 se acertam simultaneamente com HitDefs com igual prioridade. Veja o que acontece:
+    Hit vs. Hit: P1 e P2 sofrem "hit"
+    Hit vs. Miss: Hit acerta, Miss erra
+    Hit vs. Dodge: nenhum "hit"
+    Dodge vs. Dodge: nenhum "hit"
+    Dodge vs. Miss: nenhum "hit"
+    Miss vs. Miss: nenhum "hit"
+
+  damage = hit_damage, guard_damage (inteiro)
+    hit_damage é o dano que o adversário leva.
+    guard_damage é opcional, e é o dano que o adversário leva quando defende.
+    O padrão para ambos é zero.
+
+  pausetime = p1_pausetime, p2_shaketime (inteiro)
+    Este é o tempo que cada lutador irá parar durante o "Hit".
+    p1_pausetime é o tempo a parar P1, medidos em game-ticks.
+    p2_pausetime é o tempo que o aversário balança antes de ser recuado devido ao golpe.
+    O padrão é 0,0 se omitido.
+
+  guard.pausetime = p1_pausetime, p2_shaketime (inteiro)
+    Similar ao "pausetime", há um tempo de pausa para cada jogador se o golpe for defendido. 
+Quando omitido, o padrão são os mesmos valores de "pausetime".
+
+  sparkno = action_no (inteiro)
+    Isto define o número da animação (Action) do "Hit" ("sparks", sangue, luzes, ...). 
+Para utilizar uma animação fora do arquivo AIR do seu personagem, preceda o número da 
+animação por um S (isso só vale para versão 27/06+). O padrão é definido pelas variáveis 
+do personagem. Na versão antiga (01/01) era necessário colocar sparkno = 0,6; a partir da 
+versão 27/06, basta sparkno = 6.
+
+  guard.sparkno = action_no (inteiro)
+    Isto define o número da animação (Action) do golpe quando defendido ("sparks", ...). 
+Para utilizar uma animação fora do arquivo AIR do seu personagem, preceda o número da 
+animação por um S. O padrão é definido pelas variáveis do personagem.
+
+  sparkxy = spark_x, spark_y (inteiro)
+    Isto define onde colocar o "spark".
+    spark_x é a coordenada relativa a frente de P2.
+    spark_y é relativo ao P1. Valores negativos fazem o "spark" subir.
+    Você pode utilizar o AirView para determinar que valor da posição do cursor lendo 
+o valor em y-position. O padrão é 0,0 se omitido.
+
+  hitsound = snd_grp, snd_item (inteiro)
+    Este é o som a ser tocado no "Hit" (do arquivo common.snd). A inclusão do arquivo 
+fight.snd permite você escolher 5,0 ("Hit" leve) até 5,4 ("Hit" forte). Para tocar um som 
+do arquivo SND do seu personagem, preceda o número por S. Por exemplo, 
+    "hitsound = S1,0".
+    O padrão é definido pelas variáveis do seu personagem.
+
+  guardsound = snd_grp, snd_item (inteiro)
+    Este é o som para tocar quando o adversário defende (do arquivo common.snd). Apenas 
+o som 6,0 está disponível. Para tocar um som do arquivo SND do seu personagem, preceda o 
+número por S. Não se pode tocar um som do adversário. O padrão é definido pelas variáveis 
+do seu personagem.
+
+  ground.type = attack_type
+    Este é o grupo de ataque se o adversário está no chão. Escolha "High" para ataques que 
+façam o adversário jogar a cabeça para trás, "Low" para ataques que o façam sentir no 
+estômago, "Trip" para rasteiras, ou "None" para não fazer nada ao adversário. Se você 
+escolher "High" ou "Low" é a mesma coisa, se AnimType estiver em "Back". O padrão é "High" 
+se omitido.
+
+  air.type = attack_type
+    Este é o grupo de ataque para o adversário no ar. O padrão é o mesmo valor de 
+"ground.type" se omitido.
+
+  ground.slidetime = slide_time (inteiro)
+    Este é o tempo em game-ticks que o adversário escorrega para trás após ser atingido 
+pelo "Hit" (não está incluso o tempo de pausetime para P2). Aplicável apenas para golpes 
+que mantém o adversário no chão. O padrão é zero, se omitido.
+
+  guard.slidetime = slide_time (inteiro)
+    O mesmo que "ground.slidetime", mas isto serve para quando o adversário defende. 
+O padrão é o mesmo valor de "guard.hittime".
+
+  ground.hittime = hit_time (inteiro)
+    Tempo que o adversário leva para se recuperar de um estado de "Hit". Incrementar 
+este valor mantém o adversário num estado de "Hit" por tempo maior, talvez para tornar 
+o combo mais fácil. Aplicável apenas em "Hits" que mantenham o adversário no chão. O 
+padrão é 0, se omitido.
+
+  guard.hittime = hit_time (inteiro)
+    O mesmo que "ground.hittime", mas serve quando o adversário defende o golpe. O padrão 
+é o mesmo valor de "ground.hittime".
+
+  air.hittime = hit_time (inteiro)
+    Tempo que o adversário fica em estado de "Hit" após receber o golpe, no ou indo 
+para o ar, antes de ir para o estado de "air recover". Este parâmetro não têm efeito 
+se o parâmetro "fall" é setado para 1. O padrão é 20 (ou seja, se fall = 0, ele se 
+auto-recupera no ar após 20 game-ticks).
+
+  guard.ctrltime = ctrl_time (inteiro)
+    Este é tempo antes que o adversário recupere o controle, e saia do estado de 
+defesa no chão. O padrão é o mesmo valor de "guard.slidetime" se omitido.
+
+  guard.dist = x_dist (inteiro)
+    Esta é a distância x de P1 no qual P2 (adversário) irá para um estado de defesa 
+se P2 está segurando o direcional em sentido contrário à posição de P1 (seu personagem). 
+O valor padrão é definido nas variáveis do personagem se omitido. Você normalmente não 
+necessita usar este parâmetro.
+
+  yaccel = accel (número real)
+    Especifica um aceleração y para imprimir ao adversário. O padrão é zero.
+ Versão 27/06+.
+
+  ground.velocity = x_velocity, y_velocity (número real)
+    Velocidade inicial para dar ao P2 depois de ser acertado, se o P2 está no chão. 
+Se a velocidade Y não for zero, P2 vai ser jogado para cima. O valor padrão para os 
+dois é 0 se omitidos. Você pode deixar de fora a velocidade de Y se quiser que o oponente 
+continue no chão.
+
+  guard.velocity = x_velocity (número real)
+    Velocidade a ser dada ao P2 se ele defender o ataque, se o P2 estiver no chão. 
+O valor padrão é a velocidade de X do parâmetro "ground.velocity" se omitido.
+
+  air.velocity = x_velocity, y_velocity (número real)
+    Velocidade inicial a ser dada para o P2 se ele for acertado pelo ataque no ar. 
+O valor padrão é para 0,0 se omitido.
+
+  airguard.velocity = x_velocity, y_velocity (número real)
+    Velocidade a ser dada ao P2 se ele defender o ataque no ar. O valor padrão é x_
+velocity*1.5, y_velocity/2, onde a velocidade de X e Y são os valores de "air.velocity".
+
+  ground.cornerpush.veloff = x_velocity (número real)
+    Determina a velocidade adicional ("velocity offset") a ser aplicada ao personagem 
+se ele acerta um "Hit" em pé, junto ao canto da tela. Definir um valor alto irá empurrar 
+seu personagem para trás, afastando-o do adversário (que estava encurralado). Se omitido, 
+o valor padrão dependerá do parâmetro "attr":  se arg1=A, o padrão é 0; caso contrário, o 
+padrão é 1.3*guard.velocity. Versão 27/06+.
+
+  air.cornerpush.veloff = x_velocity (número real)
+    Determina a velocidade adicional ("velocity offset") a ser aplicada ao personagem 
+se ele acerta um "Hit" no ar, junto ao canto da tela. Definir um valor alto irá empurrar 
+seu personagem para trás, afastando-o do adversário (que estava encurralado). Se omitido, 
+o padrão é o valor de ground.cornerpush.veloff se omitido. Versão 27/06+.
+
+  down.cornerpush.veloff = x_velocity (número real)
+    Determina a velocidade adicional ("velocity offset") a ser aplicada ao personagem 
+se ele acerta um "Hit" num adversário caído, junto ao canto da tela. Definir um valor alto 
+irá empurrar seu personagem para trás, afastando-o do adversário (que estava encurralado). 
+Se omitido, o padrão é o valor de ground.cornerpush.veloff se omitido. Versão 27/06+.
+
+  guard.cornerpush.veloff = x_velocity (número real)
+    Determina a velocidade adicional ("velocity offset") a ser aplicada ao personagem se 
+ele acerta um golpe e o adversário defende, junto ao canto da tela. Definir um valor alto 
+irá empurrar seu personagem para trás, afastando-o do adversário (que estava encurralado). 
+Se omitido, o padrão é o valor de ground.cornerpush.veloff se omitido. Versão 27/06+.
+
+  airguard.cornerpush.veloff = x_velocity (número real)
+    Determina a velocidade adicional ("velocity offset") a ser aplicada ao personagem se 
+ele acerta um golpe e o adversário, no ar, defende, junto ao canto da tela. Definir um valor 
+alto irá empurrar seu personagem para trás, afastando-o do adversário (que estava encurralado).
+Se omitido, o padrão é o valor de guard.cornerpush.veloff se omitido. Versão 27/06+.
+
+  airguard.ctrltime = ctrl_time (inteiro)
+    Este é o tempo antes do P2 recuperar o controle do estado de defesa aérea. O valor 
+padrão é para o mesmo valor de "guard.ctrltime" se omitido.
+
+  air.juggle = juggle_points (inteiro)
+    O quanto de pontos de juggle o golpe precisa para acertar. Não confunda isto com o 
+parâmetro "juggle" no StateDef. Você normalmente não precisa deste parâmetro, exceto para 
+o HitDef de projéteis. O padrão é 0, se omitido.
+
+  mindist = x_pos, y_pos (inteiro)
+  maxdist = x_pos, y_pos (inteiro)
+    Este deixa que você controle a distância mínima e máxima do P2 relativo ao P1, 
+depois que o P2 for acertado. Estes parâmetros não são comumente usados. O valor padrão 
+é para não mudar a posição do P2 se omitido.
+
+  snap = x_pos, y_pos (inteiro)
+    Isto movimenta P2 para uma posição específica em relação a P1, quando o ataque é 
+bem sucedido (Hit). Este controle não é normalmente utilizado. Se você quiser colocar o 
+P2 em uma posição em relação a P1, utilize "TargetBind" no estado de agarrão de P1. O 
+padrão é não modificar a posição de P2.
+
+  sprpriority = drawing_priority (inteiro)
+    Este é a prioridade que a imagem de seu personagem têm. Ele controla se o P1 aparece 
+na frente ou atrás do P2. A prioridade do P2 é sempre definida para 0. Prioridade -1 
+significa que a animação vai aparecer atrás do adversário. O valor padrão é 1.
+
+  p1facing = facing (inteiro)
+    Definir como -1 faz com que o seu personagem se vire se o golpe acertar. Comum em 
+golpes do tipo agarrão. O valor padrão é para não mudar a direção do seu personagem.
+
+  p1getp2facing = facing (inteiro)
+    Definir como 1 faz P1 olhar na mesma direção que o adversário está olhando, após o 
+acerto. Definir como -1 faz P1 olhar na direção contrária. O padrão é 0 (não mudar). Se 
+for diferente de 0, este parâmetro leva precedência em relação a "p1facing".
+
+  p2facing = facing (inteiro)
+    Definir como 1 faz o adversário olhar na mesma direção que P1, se o "hit" acertar. 
+Definir como -1 faz com que ele olhe na direção contrária. O padrâo é não mudar a direção 
+para onde o adversário está olhando.
+
+  p1stateno = state_no (inteiro)
+    Este é o número do estado (Statedef) para onde seu personagem será direcionado, se 
+o golpe for bem sucedido ("hit").
+
+  p2stateno = state_no (inteiro)
+    Este é o número do estado (Statedef) para onde o adversário será direcionado. se o 
+golpe for bem sucedido ("hit"). P2 irá utilizar os estados (Statedef) e animações (Action) 
+dos arquivos de seu personagem. Esta é a única maneira de obter o controle do adversário.
+
+  p2getp1state = value (inteiro)
+    Definir como 0 faz com que P2 não seja direcionado para um estado em "p2stateno". O 
+padrão é 1, que define que o parâmetro "p2stateno" será utilizado.
+
+  forcestand = value (inteiro)
+    Definir como 1 força o adversário (P2) se levantar, ou seja, se ele estiver em um 
+estado agachado ("crouch"), ele é forçado ao estado em pé ("stand"). Normalmente seu 
+padrão é 0, mas se a velocidade definida em "ground.velocity" é diferente de zero, o 
+padrão é 1.
+
+  fall = value (inteiro)
+    Definir como 1 faz o adversário cair ("fall"). Use-o para levar seu adversário 
+beijar a lona ("knock down"). Parece que vale apenas para versão 27/06+.
+
+  fall.xvelocity = x_velocity (número real)
+    Este é a velocidade X que o adversário têm quando é rebatido pelo solo após cair. O 
+padrão é não mudar, se omitido.
+
+  fall.yvelocity = y_velocity (número real)
+    Este é a velocidade Y que o adversário têm quando é rebatido pelo solo após cair. O 
+padrão é -4.5, se omitido.
+
+  fall.recover = value (inteiro)
+    Definir como 0 não permite ao adversário se recuperar do estado de queda. O padrão 
+é 1, se omitido, ou seja, ele pode se recuperar ("can recover").
+
+  fall.recovertime = recover_time (inteiro)
+    Este é o tempo que deve passar antes que o adversário esteja apto a se recuperar de 
+um estado de queda. Não inclui o tempo que o adversário perde quando balança 
+(pausetime = p1_pausetime, p2_shaketime). O padrão é 4, se omitido.
+
+  fall.damage = damage_amt (inteiro)
+    Indica o quanto de dano o adversário sofre quando atingir o chão. Pode ser qualquer 
+valor inteiro numérico. O padrão é zero, se omitido.
+
+  air.fall = value (inteiro)
+    Definir como 1 faz com que o adversário entre em estado de queda ("fall") se ele 
+for atingido no ar. O padrão é o mesmo valor definido no parâmetro "fall".
+
+  down.velocity = x_velocity, y_velocity (número real)
+    Esta é a velocidade a atribuir ao adversário, se ele sofrer o golpe enquanto está 
+caído ("lying down"). Se a velocidade de Y é diferente de zero, o adversário irá para o 
+ar. Se ela é zero, o adversário irá deslizar pelo chão. O padrão é o mesmo valor do parâmetro 
+de "air.velocity".
+
+  down.hittime = hit_time (inteiro)
+    Este é o tempo que o adversário irá deslizar, se ele estiver em um estado caído 
+("lying down"). Este parâmetro é ignorado se a velocidade Y é diferente de zero para o 
+parâmetro "down.velocity".
+
+  down.bounce = value (inteiro)
+    Definir como 1 faz o adversário rebater no chão uma vez (usando valores para 
+fall.xvelocity e fall.yvelocity), após cair. Este parâmetro é ignorado se a velocidade 
+de Y é zero no parâmetro "down.velocity". O padrão é 0, se omitido (o adversário atinge 
+o solo e fica).
+
+  id = id_number (inteiro)
+    Principalmente utilizado para combos. Você pode utilizar este número para detectar 
+se o personagem atingiu o adversário com este golpe particular. Valores válidos  são  
+todos  os  valores >=1. Se omitido, o padrão é 0 (sem ID).
+
+  chainID = id_number (inteiro)
+    Principalmente utilizado para combos. Se o adversário for atingido for atingido por 
+um golpe que contenha um ID de mesmo número que este, então ele pode ser atingido por um 
+golpe que contenha este número chainID. Analiticamente, indica qual golpe (com ID) vêm 
+antes deste  (com chainID). Note que combos também são possíveis através de outras 
+alternativas.
+Os valores válidos são todos >=1. Se omitido, o padrão é -1 (chain para qualquer golpe).
+
+  nochainID = nochain_1, nochain_2 (inteiro)
+    Especifica até dois ID de golpes que não podem ser ligados com este golpe. O padrão 
+é -1, ou seja, não desabilita qualquer ID.
+
+  hitonce = hitonce_flag (boolean)
+    Definido como 1, este "Hitdef" afeta apenas um oponente. O padrão é 0, na maioria 
+das vezes. A única exceção é se o parâmetro "attr" é um agarrão ("throw"), o que faz o 
+padrão ser 1. Versão 27/06+.
+
+  kill = kill_flag (inteiro)
+    Definir como 0 se este golpe não pode nocautear o oponente ("KO"). O padrão é 1.
+
+  guard.kill = gkill_flag (int)
+    Definir como 0 se este golpe não pode nocautear o oponente ("KO") quando ele 
+defende o golpe. O padrão é 1. Versão 29/11+.
+
+  fall.kill = fkill_flag (int)
+    Definir como 0 se este golpe não pode nocautear o oponente ("KO") quando ele 
+cai no chão. O padrão é 1. Versão 29/11+.
+
+  numhits = hit_count (inteiro)
+    Define quantos "hits" devem ser adicionados ao contador de combo. O padrão é 1. 
+Este comando não adiciona dano ao adversário.
+
+  getpower = p1power, p1gpower (inteiro)
+    Especifica quanto de energia é adicionada à barra de "power" do seu personagem.
+    p1power é o valor para golpe bem sucedido ("hit"). O padrão é damage * Default.Attack.LifeToPowerMul (data/mugen.cfg).
+    p1gpower é o valor para golpe defendido. O padrão é o mesmo valor de p1power * 1/2.
+
+  givepower = p2power, p2gpower (inteiro)
+    Especifica quanto de energia é adicionada à barra de "power" do adversário.
+    p2power é o valor para golpe bem sucedido ("hit"). O padrão é damage * Default.GetHit.LifeToPowerMul (data/mugen.cfg).
+    p2gpower é o valor para golpe defendido. O padrão é o mesmo valor de p2power * 1/2.
+
+  palfx.time = palfx_time (inteiro)
+  palfx.mul = r1, g1, b1 (inteiro)
+  palfx.add = r2, g2, b2 (inteiro)
+    Se incluído, isto permite afetar a paleta de cores do adversário.
+    palfx_time é o tempo em game-ticks para aplicar a paleta. Os demais parâmetros são 
+idênticos ao controle "PalFX".
+
+  envshake.time = envshake_time (int)
+  envshake.freq = envshake_freq (float)
+  envshake.ampl = envshake_ampl (int)
+  envshake.phase = envshake_phase (float)
+    Se incluído, isto balança a tela se o golpe for bem sucedido.
+envshake_time é o tempo (em ticks) em que a tela balança. O resto dos parâmetros são 
+os mesmo do controle "EnvShake". Versão 29/11+.
+
+  fall.envshake.time = envshake_time (int)
+  fall.envshake.freq = envshake_freq (float)
+  fall.envshake.ampl = envshake_ampl (int)
+  fall.envshake.phase = envshake_phase (float)
+    Similar aos parâmmetros envshake.*, com exceção que é aplicado apenas quando o 
+adversário atinge o solo. Versão 29/11+.
+
+  attack.width = z1, z2 (inteiro)
+    Não é atualmente usado.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+HitFallDamage
+------------------------------------------------------------
+
+Quando o personagem sofreu um golpe e está em um estado de queda, aplica um dano quando 
+ele atingir o solo (especificado no HitDef).
+A partir da versão 01/04/2001, o dano causado é dividido pelo parâmetro "defense" do 
+personagem.
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  Nenhum.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+HitFallSet
+------------------------------------------------------------
+
+Quando o personagem está sofrendo um golpe, define as variáveis de queda ("fall") do 
+personagem.
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  value = fallset_flag (inteiro)
+    Definir -1 não modifica se o personagem entrará em estado de queda ou não. 
+Definir como 0 significa que o personagem não deva cair, e 1 que ele deva. O padrão é -1.
+
+  xvel = x_velocity (número real)
+  yvel = y_velocity (número real)
+    Se especificados, definem os parâmetros fall.xvel e fall.yvel respectivamente. 
+Veja o controle "HitDef" para maiores detalhes.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+HitFallVel
+------------------------------------------------------------
+
+Se o personagem sofreu um golpe e está em estado de queda, define a velocidade de queda 
+(fall.xvel e fall.yvel) especificados por HitDef.
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  Nenhum.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+HitOverride
+------------------------------------------------------------
+
+Define um estado de hit prioritário ("hit override"). Se o personagem está em um ataque 
+de um tipo específico, ele irá para um número de estado específico (um estado de "hit" 
+próprio). Mais de 8 "hit override" podem ser definidos ao mesmo tempo.
+
+Required parameters:
+  attr = attr_string
+    Especifica que tipos de golpes que direcionam para o estado em questão. Veja a 
+descrição do parâmetro "attr" do controle "HitDef".
+
+Parâmetros opcionais:  
+  slot = slot_no (inteiro)
+    Especifica um número de "slot, entre 0 e 7, para colocar seu "hit override". O padrão 
+é 0, se omitido.
+
+  stateno = value (inteiro)
+    Especifica qual estado seu personagem deva ir quando for acertado por um "HitDef" 
+com attr especificado acima. O padrão é -1 (não mudar de estado) se omitido.
+
+  time = effective_time (inteiro)
+    Especifica quanto tempo este "hit override" deva estar ativo. O padrão é 1 game-tick. 
+Se definido como -1, ele se mantém neste estado de "hit" até ser atingido por outro golpe 
+(ou redirecionado).
+
+  forceair = value (boolean)
+    Definir como 1 faz com que o MUGEN encare como se o personagem tivesse sofrido um 
+golpe no ar. Útil se você quer forçar o personagem para um estado de queda. O padrão é 
+0, se omitido. Versão 27/06+.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+HitVelSet
+------------------------------------------------------------
+
+Quando o personagem sofre um golpe, define as velocidades com que ele é lançado.
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  x = x_flag (inteiro)
+  y = y_flag (inteiro)
+    Um valor não nulo significa que a velocidade do personagem será não nula.
+
+Exemplo:
+  Nenhum.
+
+Notas:
+  Obsoleto.
+
+
+------------------------------------------------------------
+LifeAdd
+------------------------------------------------------------
+
+Adiciona uma quantidade específica na barra de vida do personagem, multiplicada pelo 
+multiplicador de defesa se necessário.
+
+Parâmetros requeridos:
+  value = add_amt (inteiro)
+    Especifica quanto de energia a adicionar à barra de vida do personagem.
+
+Parâmetros opcionais:
+  kill = kill_flag (inteiro)
+    Se a flag de morte é 0, então a adição nunca irá matar o personagem, nunca deixará 
+o personagem com menos de 1 ponto de vida. O padrão é 1.
+  
+  absolute = abs_flag (inteiro)
+    Se a flag módulo é 1, então a quantia exata é adicionada à barra de vida, e o 
+multiplicador de defesa é ignorado. O padrão é 0.
+
+Exemplo:
+  ; apocalypse sob ataque (arquivo CMD)
+  [Statedef -1]
+  [State -1]
+  type = LifeAdd
+  trigger1 = NumHelper009 = 1
+  trigger1 = IsHelper = 0
+  value = -30
+
+
+------------------------------------------------------------
+LifeSet
+------------------------------------------------------------
+
+Define um valor de energia para a barra de vida ("lifebar") do seu personagem.
+
+Parâmetros requeridos:
+  value = life_amt (inteiro)
+    Especifica quanto de energia seu personagem irá ter após o controle ser executado.
+
+Parâmetros opcionais:
+  Nenhum.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+MakeDust
+------------------------------------------------------------
+
+Cria o efeito de poeira.
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  pos = x_pos, y_pos (inteiro)
+    Especifica a posição que a poeira irá ser desenhada, relativa aos eixos do 
+personagem. O padrão é 0,0.
+
+  pos2 = x_pos, y_pos (número real)
+    Especifica a posição para desenhar simultaneamente uma segunda nuvem de poeira. 
+Se omitido, a segunda nuvem não é desenhada.
+
+  spacing = value (inteiro)
+    Determina o número de "frames" a esperar entre o desenho da nuvem de poeira. 
+Por exemplo, spacing = 3 (padrão) irá desenhar uma nova nuvem de poeira a cada 3º frame. 
+Deve ser maior ou igual a 1.
+
+Exemplo:
+  ; Tartarugas ninjas dando chute forte agachado
+  [State 400, 1]
+  type = MakeDust
+  trigger1 = AnimElem = 3
+  pos = -25,-2
+  spacing = 1
+
+
+------------------------------------------------------------
+ModifyExplod
+------------------------------------------------------------
+
+Modifica os parâmetros de um "Explod" já existente. A sintaxe é basicamente a 
+mesma de "Explod". Entretanto, este controle está sujeito a futuras modificações. 
+Qualquer código utilizado neste controle não está garantido de funcionar em versões futuras.
+
+
+------------------------------------------------------------
+MoveHitReset
+------------------------------------------------------------
+
+Resseta a flag "movehit" (atribui 0). Após a execução deste controle, os triggers 
+MoveContact, MoveGuarded, e MoveHit irão retornar 0.
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  Nenhum.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+NotHitBy
+------------------------------------------------------------
+
+Temporariamente, especifica que tipo de "Hits" que não irá afetar o personagem.
+
+Parâmetros requeridos:
+  value = attr_string      ou    value2 = attr_string
+    Apenas um dos parâmetros acima deve ser especificado. attr_string deve ser 
+um atributo Hit. Deve ser do formato:
+      attr = arg1, arg2
+
+- arg1 pode ser "S", "C" or "A". Similar ao "statetype", diz se o ataque é em pé (S), 
+agachado(C) ou aéreo(A).
+- arg2 é composto por duas letras. A primeira pode ser "N" para "normal", "S" para 
+especial, ou "H" para hyper (ou super, depende de como você conhece). A segunda letra 
+deve ser "A" para ataque, "T" para agarrão, ou "P" para projétil.
+
+Parâmetros opcionais:
+  time = effective_time (inteiro)
+    Especifica o número de game ticks em que NotHitBy irá efetivamente valer. O padrão é 1.
+
+Detalhes:
+  O personagem têm dois slots de "hit attributes", os quais podem podem ser setados 
+utilizando os parâmetros value e value2 do controle "NotHitBy". Estes slots também 
+podem ser definidos pelo controle "HitBy". Quando um slot é setado, um cronômetro que 
+utiliza o tempo real, começa a contar até zero. Se o cronômetro ainda não chegou a zero, 
+o slot ainda é considerado ativo. O personagem pode ser atingido por um golpe apenas se 
+os atributos do HitDef aparecerem em todos os atuais slots ativos.
+  Utilizando o controle "NotHitBy" você especifica um slot contendo todos os atributos 
+de "hit" exceto aqueles especificados por este controle.
+
+Exemplo:
+  ; apocalypse imune a throw attack (arquivo CMD)
+  [Statedef -1]
+  [State -1]
+  type = NotHitBy
+  trigger1 = life > 0
+  value = C,NT
+
+  ; Não ser atingido por nada
+  trigger1 = 1
+  type = NotHitBy
+  value = SCA
+
+  ; Não ser atingido por ataques "normal" e qualquer "projectile"
+  trigger1 = 1
+  type = NotHitBy
+  value = , NA, AP
+
+
+------------------------------------------------------------
+Null
+------------------------------------------------------------
+
+Nada faz. É muito útil para desabilitar um controlador durante a programação, 
+quando este ainda não funciona direito.
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  Nenhum.
+
+Exemplo:
+  ; Changestate foi trocado por NULL até que esteja pronto (arquivo CMD)
+  [State -1]
+  type = NULL
+  value = 3060
+  triggerall = command = Superkick
+  triggerall = power >= 1000
+  trigger1 = statetype = S
+  trigger1 = ctrl = 1
+
+------------------------------------------------------------
+Offset
+------------------------------------------------------------
+
+Muda o posicionamento ("off set") de seu personagem.
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  x = x_val (número real)
+  y = y_val (número real)
+    Especifica uma posição X e Y. Você pode especificar um ou ambos parâmetros.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+PalFX
+------------------------------------------------------------
+
+Aplica um temporário efeito à paleta do seu personagem. Isto irá afetar a qualquer 
+"Explod" e "helpers" que o personagem tiver, a menos que tenham sido criados com ownpal = 1.
+Veja também "AllPalFX" e "BGPalFX".
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  time = duration (inteiro)
+    Especifica o número de game-ticks que a paleta será modificada. Especificar como -1 
+modifica a paleta indefinidamente.
+
+  add = add_r, add_g, add_b (inteiro)
+  mul = mul_r, mul_g, mul_b (inteiro)
+    Cada componente "add" adiciona um valor à paleta do personagem, sendo em seguida 
+multiplicado pelo fator "mul". O resultado é dividido por 256. Por exemplo, se pal_r é a 
+componente vermelha da paleta, então a nova componente vermelha será 
+    (pal_r + add_r)*mul_r/256.
+    O valor padrão é add = 0,0,0; mul = 256,256,256 (não modifica).
+
+  sinadd = ampl_r, ampl_g, ampl_b, period (inteiro)
+    Cria uma paleta aditiva com variação senoidal. O período é especificado em game-ticks, 
+e a amplitude é separada pelas componentes RGB. Por exemplo, se t representa o tempo que 
+decorreu desde que PalFX foi ativado, e pal_r é a componente da paleta original do personagem, 
+então a componente vermelha da paleta do personagem é dada por:
+    (pal_r + add_r + ampl_r*sin(2*pi*t/period))*mul_r/256.
+
+  invertall = value (inteiro)
+    Definir como não nulo faz as cores da paleta serem invertidas, criando um efeito de 
+negativo de filme. A inversão de cores é aplicada antes de "add" e "mul".
+
+  color = value (int)
+    Este afeta o nível de cor da paleta. Se o valor é 0, a paleta será em tons de cinza. 
+Se o valor é 256, não há mudança na paleta. Valores intermediários terão efeito 
+intermediário. Este parâmetro afeta a paleta antes da aplicação de invertall, add and mul. 
+O padrão é 256. Versão 29/11+.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+ParentVarAdd
+------------------------------------------------------------
+
+Se o personagem é um "helper", adiciona uma quantia a uma das variáveis de trabalho do 
+seu pai. Variáveis do tipo inteiro ou real podem utilizar este controle. Se o personagem 
+não é um "helper", este controle nada faz.
+
+Parâmetros requiridos (variável inteira):
+  v = var_no (inteiro)
+    var_no deve ser um inteiro entre 0 e 59.
+
+  value = int_expr (inteiro)
+    int_expr é o valor a adicionar a adicionar à variável inteira de índice var_no.
+
+Parâmetros requiridos (variável real):
+  fv = var_no (inteiro)
+    var_no deve ser um inteiro entre 0 e 39.
+
+  value = float_expr (número real)
+    float_expr é o valor a adicionar à adicionar na variável real de índice var_no.
+
+Parâmetros opcionais:
+  Nenhum em ambos os casos.
+
+Sintaxe alternativa:
+  var(var_no) = int_expr  (variável inteira)
+  fvar(var_no) = float_expr (variável real)
+
+Notas:
+  A sintaxe apresenta duas versões por razões históricas. Note que a sintaxe alternativa é 
+mais eficaz quando a expressão é aritmética. Se você colocou o adversário num estado 
+customizado (p2stateno do controle "HitDef"), não modifique suas variáveis, porque os 
+resultados são imprevisíveis.
+
+Exemplo:
+  Nenhum.
+
+
+
+------------------------------------------------------------
+ParentVarSet
+------------------------------------------------------------
+
+Se o personagem é um "helper", define o valor de uma das variáveis de seu pai. 
+Variáveis tipo inteira ou real podem utilizar este controle. Se o personagem não é um 
+"helper", nada faz.
+
+Parâmetros requiridos (variável inteira):
+  v = var_no (inteiro)
+    var_no deve ser um inteiro entre 0 e 59.
+
+  value = int_expr (inteiro)
+    int_expr é o valor a adicionar a atribuir à variável inteira de índice var_no.
+
+Parâmetros requiridos (variável real):
+  fv = var_no (inteiro)
+    var_no deve ser um inteiro entre 0 e 39.
+
+  value = float_expr (número real)
+    float_expr é o valor a adicionar a atribuir à variável real de índice var_no.
+
+Parâmetros opcionais:
+  Nenhum em ambos os casos.
+
+Sintaxe alternativa:
+  var(var_no) = int_expr  (variável inteira)
+  fvar(var_no) = float_expr (variável real)
+
+Notas:
+  A sintaxe apresenta duas versões por razões históricas. Note que a sintaxe alternativa 
+é mais eficaz quando a expressão é aritmética. Se você colocou o adversário num estado 
+customizado (p2stateno do controle "HitDef"), não modifique suas variáveis, porque os 
+resultados são imprevisíveis.
+
+Exemplo:
+  Nenhum.
+
+ 
+------------------------------------------------------------
+Pause	(versão 27/06 ou superior)
+------------------------------------------------------------
+
+Pausa o jogo por um período determinado. Lutadores e tela de fundo não são atualizados 
+durante este tempo.
+
+Parâmetros requeridos:
+  time = t (inteiro)
+    Este é o número de game-ticks para pausar. Valores válidos são todos os inteiros 
+positivos, a partir de 1.
+
+Parâmetros opcionais:
+  movetime = mt (inteiro)
+    Este é o número de ticks no começo da pausa onde o lutador está habilitado a se mover. 
+Como o detetor de colisão está ativo durante este tempo, então é possível atingir outros 
+lutadores. Valores válidos são inteiros positivos.
+
+Notas:
+  Execute o controle Pause durante outro Pause irá cancelar o efeito do Pause anterior. 
+Executando o Pause durante o SuperPause irá acrescentar o efeito do Pause ao final do 
+SuperPause.
+
+Exemplo:
+  Nenhum.
+
+ 
+-----------------------------------------------------------
+PlayerPush
+------------------------------------------------------------
+
+Desabilita o empurrão dos personagens por 1 game-tick. Empurrões evitam que os personagens 
+se sobreponham. Desabilitando temporariamente os empurrões, movimentos do tipo esquiva 
+("dodge") podem ser implementados.
+
+Parâmetros requeridos:
+  value = push_flag (inteiro)
+    Se push_flag é não nulo, então o empurrão está habilitado. Se for 0, então o empurrão 
+está desabilitado.
+
+Parâmetros opcionais:
+  Nenhum.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+PlaySnd
+------------------------------------------------------------
+
+Toca um som do arquivo SND.
+
+Parâmetros requeridos:
+  value = group_no, sound_no
+    Corresponde ao par que identifica cada som do arquivo SND do personagem. Para tocar 
+um som do arquivo "common.snd", preceda ao group_no com um "F".
+
+Parâmetros opcionais:
+  volume = volume_level
+    É 0 para volume normal, positivo para mais forte, e negativo para mais fraco.
+  
+  channel = channel_no
+    Especifica em qual canal o som irá ser tocado. Apenas uma voz pode ser tocada em um 
+particular canal no mesmo tempo. Por exemplo, se você tocar um som no canal 2, nenhum outro 
+som pode ser tocado no canal 2 antes que o primeiro tenha terminado. O canal 0 é um canal 
+especial, reservado para tocar a voz dos personagens. Os sons tocados no canl 0 são 
+interrompidos quando o personagem toma um "Hit". É altamente recomendável colocar as vozes 
+do personagem no canal 0. O padrão é -1, ou seja, o som irá tocar em qualquer canal livre. 
+Versão 27/06+.
+
+  lowpriority = pr (inteiro)
+    Válido apenas se channel != -1. Se pr é não nulo, então o som que está tocando no 
+canal no momento (vindo de uma chamada PlaySnd anterior), não pode ser interrompido por 
+este som. Versão 27/06+.
+
+  freqmul = f (número real)
+    A freqüência do som irá ser multiplicada por f. Por exemplo, f = 1.1, irá resultar 
+em um som mais agudo. O padrão é 1.0 (não modifica a freqüência). Versão 27/06+.
+
+  loop = loop_flag (inteiro)
+    Define o flag de repetição. Valores diferentes de zero habilitam a repetição do som 
+indefinidamente. O padrão é zero. Versão 27/06+.
+  
+  pan = p (inteiro)
+    (nunca utilizar junto com abspan)
+    É um posicionamento do som, medido em "pixels".
+    Se  p > 0, então o som está na frente do personagem.
+    Se  p < 0, então o som vem de trás do personagem.
+    O padrão é zero. Versão 27/06+.
+  
+  abspan = p (inteiro)
+    (nunca utilizar junto com pan)
+    Como o pan, exceto que o referencial está no centro da tela, não na posição do 
+personagem. Versão 27/06+.
+
+Exemplo:
+  ; Para aumentar o volume, repita a mesma coisa duas, três ... vezes
+  [State 400, 1]
+  type = PlaySnd
+  trigger1 = Time = 1
+  value = 0, 0
+
+  ; Toca o som 5,2 do arquivo "fight.snd"
+  type = PlaySnd
+  value = F5,2
+
+  ; Toca o som 5,2 do arquivo do personagem. Este é um dos parâmetros do controle HitDef; 
+não tem nada a ver com PlaySnd, mas vale a pena lembrá-lo.
+  hitsound = S5,2
+
+
+------------------------------------------------------------
+PosAdd
+------------------------------------------------------------
+
+Adiciona um valor horizontal (x_value) ou vertical (y_value) à posição do personagem. 
+É relativo aos eixos do personagem.
+
+Parâmetros requeridos:
+  Nenhum.    
+
+Parâmetros opcionais:
+  x = x_value (número real)
+  y = y_value (número real)
+    Você pode especificar apenas um ou ambos dos parâmetros ao mesmo tempo.
+
+Exemplo:
+  ; Fatality do Rayden, utilizado flag noshadows
+  [State 400, 1]
+  type = PosAdd
+  trigger1 = Time = 135
+  y = -300
+
+
+------------------------------------------------------------
+PosFreeze
+------------------------------------------------------------
+
+Permite você a congelar a posição do personagem temporariamente.
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  value = freeze_flag (inteiro)
+    Se freeze_flag é 0, a posição do personagem não irá ser congelada, e se for 
+diferente de 0 será. O padrão é 1 (posição é congelada).
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+PosSet
+------------------------------------------------------------
+
+Define a posição do personagem em uma determinada coordenada. A coordenada x é 
+relativa ao centro do estágio, com valores positivos à direita. A coordenada y é 
+relativa ao centro do estágio, com valores negativos para cima.
+
+Parâmetros requeridos:
+  Nenhum.    
+
+Parâmetros opcionais:
+  x = x_value (número real)
+  y = y_value (número real)
+    Você pode especificar apenas um ou ambos dos parâmetros ao mesmo tempo.
+
+Exemplo:
+  ; Faz o Michellangelo aterrissar de um pulo "stand"
+  [State 400, 1]
+  type = PosSet
+  trigger1 = Velocity Y > 0 
+  trigger1 = Position Y >= 0 
+  y = 0
+
+
+------------------------------------------------------------
+PowerAdd
+------------------------------------------------------------
+
+Adiciona um valor específico à barra de poder do personagem.
+
+Parâmetros requeridos:
+  value = add_amt (inteiro)
+    É a quantidade de energia a adicionar à barra de poder.
+
+Parâmetros opcionais:
+  Nenhum.
+
+Exemplo:
+  ; Ownslaught com poder infinito (arquivo CMD)
+  [Statedef -1]
+  [State -1]
+  type = poweradd
+  trigger1 = life > 0
+  value = 10
+
+  
+------------------------------------------------------------
+PowerSet
+------------------------------------------------------------
+
+Define uma quantia para a barra de poder ("powerbar") que o personagem têm.
+
+Parâmetros requeridos:
+  value = pow_amt (inteiro)
+    pow_amt é a quantia definida para a "powerbar" do personagem.
+
+Parâmetros opcionais:
+  Nenhum.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+Projectile
+------------------------------------------------------------
+
+Cria um projétil para o personagem. "Projectile" toma todos os parâmetros de "HitDef". 
+Em adição, possui os seguintes parâmetros: 
+Até a versão 29/11, os projéteis criados por "helpers" enquanto a raiz estivesse em 
+um estado customizado não utilizavam a animação correta.
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  ProjID = id_no (inteiro)
+    Especifica um nº de ID para referir-se ao projétil. Deve ser positivo, se especificado.
+
+  projanim = anim_no (inteiro)
+    Especifica a animação para usar para o projétil. Se omitido, o padrão é 0.
+
+  projhitanim = anim_no (inteiro)
+    Especifica a animação quando o projétil atinge o oponente. O padrão é -1 
+(não muda de animação) se omitido.
+
+  projremanim = anim_no (inteiro)
+    Especifica a animação quando o projétil é removido (existe um tempo de expiração, 
+quando ele é removido sem ter atingido o oponente, ou quando ele acerta a borda da tela ...). 
+Se omitido, projhitanim é usado.
+
+  projcancelanim = anim_no (inteiro)
+    Especifica a animação quando o projétil é cancelado por outro projétil. Se omitido, 
+projremanim é usado.
+
+  projscale = x_scale, y_scale (número real)
+    Especifica um fator de escala para o projétil. A escala final é afetada por 
+este parâmetro e "proj.doscale" do grupo de constantes [Size]. O padrão é 
+1,1 se omitido. Versão 14/04/2001 +.
+
+  projremove = remove_flag (inteiro)
+    Valores não nulos fazem este comando remover o projétil após o acerto (Hit); utilize 
+0 para desabilitar esta função. O padrão é 1.
+    
+  projremovetime = remove_time (inteiro)
+    Especifica o número de ticks (tempo = 1/60 s) o qual o projétil deva ser removido da 
+tela. O padrão é -1 (nunca remover).
+
+  velocity = x_vel, y_vel (número real)
+    Especifica os valores iniciais para a velocidade x (horizontal) e y (vertical) para 
+o projétil. O padrão é 0,0.
+
+  remvelocity = x_vel, y_vel (número real)
+    Especifica a velocidade do projétil, enquanto ele estiver em processo de remoção. 
+O padrão é 0,0 se omitido.
+
+  accel = x_accel, y_accel (número real)
+    Especifica a aceleração a aplicar no projétil. O padrão é 0,0 se omitido.
+
+  velmul = x_mul, y_mul (número real)
+    Especifica os multiplicadores de velocidade x e y. A velocidade do projétil é 
+multiplicada por estes multiplicadores a cada tick. O padrão é 1.
+
+  projhits = num_hits (inteiro)
+    Especifica o número de hits que projétil deve aplicar se acertar o oponente, antes 
+de ser removido. O padrão é 1.
+  
+  projmisstime = miss_time (inteiro)
+    Se o projétil acerta várias vezes, especifica o menor número de ticks entre cada Hit. 
+O padrão é 0, mas provavelmente você necessita de um valor não nulo.
+
+  projpriority = proj_priority (inteiro)
+    Especifica a prioridade do projétil. Se o projétil colide com outro projétil de igual 
+prioridade, eles se cancelam. Se ele colide com outro de menor prioridade, ele irá cancelar 
+o projétil de menor prioridade, e o de maior prioridade terá sua prioridade decrescida de 1. 
+O padrão é 1.
+
+  projsprpriority = priority (inteiro)
+    Especifica a prioridade da imagem. Imagens com prioridade maior serão desenhadas sobre 
+as imagens de menor prioridade. O padrão é 2 (31/07+) ou 3 (27/06).
+  
+  projedgebound = value (inteiro)
+    Esta é a distância (em pixels) à borda da tela em que ele será apagado. O padrão é 40.
+
+  projstagebound = value (inteiro)
+    Especifica a maior distância que o projétil pode viajar fora do estágio antes de ser 
+deletado. O padrão é 40.
+
+  projheightbound = lowbound, highbound (inteiro)
+    Especifica o menor e o maior valor de altura y que o projétil está habilitado a trafegar. 
+Se o projétil deixa esta fronteira, ele será removido. O padrão é -240,1 se omitido (-240 é 
+a maior altura).
+
+  offset = off_x, off_y (inteiro)
+    Especifica valores x e y de posicionamento ("off-set") de onde o projétil será criado. 
+O padrão é 0,0. A posição exata depende do parâmetro "postype", que define a referência.
+
+   postype = type_string
+    "type_string" especifica o tipo de posição - como interpretar os parâmetros em "pos". 
+Lembrando que P1 é o seu personagem e P2 é o adversário.
+- p1
+    Interpreta pos relativo à posição de P1. Valores positivos de x está na frente de P1. 
+Este é o valor padrão para postype.
+- p2
+    Interpreta pos relativo à posição de P2. Valores positivos de x está na frente de P2.
+- front
+    Interpreta a posição relativa à parede a qual P1 está olhando. Valores positivos de x 
+se aproximam do centro da câmera, e y relativo aos eixos de P1.
+- back
+    Interpreta a posição relativa à parede a qual P1 está de costas. Valores positivos de x 
+se aproximam do centro da câmera, e y relativo aos eixos de P1.
+- left
+    Interpreta xpos e ypos relativo ao córner superior esquerdo.Valores positivos de x levam 
+para a direita da tela.
+- right
+    Interpreta xpos e ypos relativo ao córner superior direito.Valores positivos de x levam 
+para a direita da tela.
+
+  projshadow = shad_r, shad_g, shad_b (inteiro)
+    Especifica os valores RGB para a sombra do projétil. Estes devem ser números inteiros 
+entre 0 e 255, inclusive. Se qualquer componente for igual a -1, então nenhuma sombra é 
+mostrada. Uma sombra perfeitamente negra tem valor 255,255,255.
+
+  supermovetime = move_time (inteiro)
+    Determina o nº de ticks que o projétil não deva ser congelado durante o Superpause. O 
+padrão é 0. Versão 27/06+.
+
+  pausemovetime = move_time (inteiro)
+    Determina o nº de ticks que o projétil não deva ser congelado durante o Pause. O 
+padrão é 0. Versão 27/06+.
+
+Exemplo:  Galactus dá o golpe que congela.
+  [State 220 , 4]
+  type = Projectile
+  trigger1 = AnimElem = 2
+  projanim = 245
+  ;projhitanim = 1020
+  projremove = 0
+  projremovetime = 70
+  postype = P1
+  offset = 60, 10        ;Creation offset from player (x,y)
+  velocity = 0, 0        ;Speed fireball moves (x,y) (optional)
+  remvelocity = 0,0
+  accel = 0
+  velmul = 1
+  projhits = 2
+  projmisstime = 3
+  projpriority = 2
+  projsprpriority = 0
+  projheightbound = -240,1
+  projshadow = 155,155,155
+  supermovetime = 0
+  pausemovetime = 0
+  ; HitDef
+  attr = S, SP
+  damage    = 0,0
+  getpower  = 60
+  givepower = 40
+  guardflag = LA
+  pausetime = 5,160
+  sparkno = 2
+  sparkxy = 10, -40
+  hitsound   = 5,4
+  guardsound = 6,0
+  ground.type = High
+  ground.slidetime = 9
+  ground.hittime  = 10
+  ground.velocity = -4
+  airguard.velocity = -3.5      
+  air.velocity = -4,-1
+  air.juggle = 3
+  palfx.time = 150
+  palfx.add = -100,-100,255
+  palfx.sinadd = 155,155,155,4
+  fall = 0
+  air.fall = 0
+
+
+------------------------------------------------------------
+RemoveExplod
+------------------------------------------------------------
+
+Remove todos os "Explod" do personagem, ou apenas os "Explod" com determinado ID.
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  ID = remove_id (inteiro)
+    remove_id é o número de identificação ("ID number") dos "Explod" a serem removidos. 
+Se omitido, remove todos os "Explod".
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+ReversalDef
+------------------------------------------------------------
+
+Define um reverso. Se uma das caixas de colisão de ataque (caixas vermelhas) do adversário 
+entrarem em contato com uma das caixas de colisão de "hit" (caixas azuis) de seu personagem, 
+e o ReversalDef estiver ativo, então P1 irá reverter o ataque de P2 (adversário). Use com 
+p1stateno (e opcionalmente com p2stateno) para criar ataques reversos.
+
+ReversalDefs possui os parâmetros de HitDef pausetime, sparkno, sparkxy, hitsound, 
+p1stateno, e p2stateno, e mais ainda:
+
+Parâmetros requeridos:
+  reversal.attr = attr_string
+
+    A versão antiga do Mugen (01/01) utiliza esta sintaxe. A partir da versão 27/06, a 
+sintaxe é dada abaixo:
+
+  p2attr = attr_string
+    attr_string especifica a lista de atributos de ataque que podem ser revertidos por 
+ReversalDef. É atributo de "hit". Por exemplo:
+      p2attr = SA,NA,SA
+    Significa que irá reverter os ataques stand+air, normal attack, special attack.
+
+Parâmetros opcionais:
+  Nenhum.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+ScreenBound
+------------------------------------------------------------
+
+Determina se os movimentos do personagem irão ser restritos pelas paredes da tela ou não. 
+Também determina se a câmera deverá seguir o personagem ou não. O resultado deste controle 
+é válido por 1 game-tick.
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  value = bound_flag (inteiro)
+    Se bound_flag é 0, o personagem está apto a mover-se fora da tela.
+
+  movecamera = move_x_flag, move_y_flag (inteiro)
+    Determina se a câmera deve seguir o personagem nas direções X e Y, respectivamente. 
+O padrão é 0, em ambos os casos (não seguir).
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+SelfState
+------------------------------------------------------------
+
+Como ChangeState, exceto que este commando muda o personagem de volta ao State de seu 
+próprio arquivo CNS. Utilize p2stateno = <nº do state> para obter o controle do adversário 
+após um Hit (exemplo: Torpedo do Rayden); ele irá para o State <nº do state>, dentro do 
+arquivo CNS do Rayden. Após obter o comando do personagem adversário, ChangeState joga o 
+adversário em outros States dentro do CNS do Rayden, e você pode definir múltiplos Hits, 
+velocidade, comportamento, etc... Utilize SelfState para que o adversário volte para seu 
+próprio arquivo CNS.
+
+Exemplo:
+; SelfState significa que P2 volta para seu CNS
+[State 1031, HitGround]
+type = SelfState
+trigger1 = time = 2
+;trigger1 = Vel Y > 0
+;trigger1 = Pos Y >= 0
+value = 5100 ;Hit ground
+
+; Essa porcaria joga P2 para o 5100 do Rayden !!!
+;[State 1010, YouBounce]
+;type = ChangeState
+;trigger1 = Time = 0  ;5
+;value = 5100
+;ctrl = 0
+
+
+------------------------------------------------------------
+SndPan	(versão 27/06 ou superior)
+------------------------------------------------------------
+
+Muda o posicionamento do som que está sendo tocado. Este controle pode ser continuamente 
+acionado para mover um som atrás de um jogador.
+
+Parâmetros requeridos:
+  channel = chan_no (inteiro)
+    Especifica o número do canal do som a executar o controle.
+  pan = p OU abspan = p (inteiro)
+    Estes parâmetros não devem ser especificados ao mesmo tempo. p é a posição do som, 
+medida em pixels, em relação ao personagem (pan) ou em relação ao centro da tela (abspan). 
+Veja o controle PlaySnd para maiores detalhes.
+
+Parâmetros opcionais:
+  Nenhum.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+SprPriority
+------------------------------------------------------------
+
+Muda a prioridade com que as imagens do seu personagem serão desenhadas. Prioridades mais 
+altas são desenhadas sobre as imagens de menor prioridade.
+
+Argumentos requeridos:
+  value = priority_level (inteiro)
+    Valores válidos são entre -5 e 5.
+
+Argumentos opcionais:
+  Nenhum.
+
+Exemplo: Faz Galactus ficar em segundo plano (arquivo CMD).
+  [State -1]
+  type = SprPriority
+  trigger1 = Life >= 0
+  value = -5
+
+
+------------------------------------------------------------
+StateTypeSet
+------------------------------------------------------------
+
+Muda o tipo de estado atual e tipo de movimento atual do seu personagem. Útil para 
+estados que vão do chão para o ar, ...
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  statetype = state_type (string)
+  value = state_type (string, depreciado)
+    state_type pode ser A para aéreo, C para agachado ("crouch"), S para em pé ("stand") 
+ou L para caído ("liedown"). O padrão é não mudar. A partir da versão 01/04/2001, o 
+parâmetro "value" foi renomeado para "statetype"; o MUGEN ainda reconhece value, mas 
+isto será removido em versões futuras.
+
+  value2 = move_type (string)
+    move_type pode ser I para neutro ("idle"), A para ataque ("attack"), ou H para sofreu 
+um ataque ("gethit"). O padrão é não mudar.
+
+  physics = physics (string)
+    physics pode ser A para aéreo, C para agachado ("crouch"), S para em pé ("stand"),
+ou N para nenhum. O padrão é não mudar. Versão 14/04/2001 +.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+StopSnd	(versão 27/06 ou superior)
+------------------------------------------------------------
+
+Pára de tocar o som (WAV) de um canal específico.
+
+Parâmetros requeridos:
+  channel = chan_no (inteiro)
+    Pára de tocar o som canal chan_no. Se chan_no é -1, então todos os sons são 
+interrompidos, inclusive os do outro lutador. Não abuse deste comando.
+
+Parâmetros opcionais:
+  Nenhum.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+SuperPause
+------------------------------------------------------------
+
+Congela a ação e escurece a tela, enquanto o personagem se prepara para o hyper. 
+Enquanto os personagens estiverem congelados, o tempo também está.
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  time = pause_time (inteiro)
+    Determina o número de ticks em que o jogo permanecerá congelado. O padrão é 30 ticks 
+(meio segundo).
+
+  anim = anim_no (inteiro)
+    Define a animação (do staticfx, ou de fightfx.air) a ser acionada durante o SuperPause. 
+O padrão é 30, no qual está uma animação de carregar energia. Se anim = -1, nenhuma animação 
+é mostrada. Se for prefixada por S (a partir da versão 31/07) você poderá utilizar uma 
+animação do arquivo AIR de seu personagem. Por exemplo, anim = S10.
+
+  sound = snd_grp, snd_no (int, int)
+    Toca um som (de common.snd) durante o Superpause. O padrão é -1, ou seja, não 
+toca som. Se tiver um prefixo S, o som usado será do arquivo SND do personagem. Por 
+exemplo, sound = S10,0. Versão 31/07+.
+
+  pos = x_pos, y_pos (número real)
+    Determina a posição (eixos do personagem) no qual a animação deva ser mostrada. O 
+padrão é 0,0.
+
+  movetime = value (inteiro)
+    Este é o número de ticks em que o personagem deve esperar para estar apto a mover-se, 
+a partir do começo do SuperPause. O padrão é 0.
+
+  darken = bvalue (boolean)
+    Se for igual a 1, a tela escurece. Para desabilitar, utilize o valor 0. O padrão é 1. 
+Versão 27/06+.
+
+  p2defmul = def_mul (número real)
+    Define qual quanto o P2 pode se defender. É utilizado para diminuir o dano no Hyper. 
+Definir como 1 não modifica o dano. Definir como 0 irá modificar a definição no 
+Super.TargetDefenceMul na seção [Rules] do arquivo "mugen.cfg". O padrão é 0. Versão 27/06+.
+
+  poweradd = value (inteiro)
+    Indica quanto adicionar na barra de poder do personagem. O padrão é 0. Versão 27/06+.
+
+  unhittable = bvalue (boolean)
+    Se definir como 1 o personagem não pode ser acertado durante o SuperPause. Definir 
+como 0 desabilita isso. O padrão é 1. Versão 31/07+.
+
+Exemplo:
+  ; pára a animacao
+  [State 1300, 0]
+  type = SuperPause
+  trigger1 = Time = 0
+  Time = 20
+  Anim = -1
+
+
+------------------------------------------------------------
+TargetBind
+------------------------------------------------------------
+
+Movimenta o alvo do personagem (P2) para uma posição específica do eixo do personagem P1.
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  time = bind_time (inteiro)
+    Especifica o número de ticks que este comando terá efeito. O padrão é 1.
+  
+  ID = bind_id (inteiro)
+    Especifica o ID alvo resejado. Apenas alvos com este ID serão movidos. O padrão é -1 
+(move todos os alvos). Versão 27/06+.
+
+  pos = x_pos, y_pos (número real)
+    Especifica o offset do eixo do personagem para mpver o alvo. O padrão é 0,0 se omitido.
+
+Exemplo:
+  ; Goro agarra e prepara para bater
+  [State 1300, 0]
+  type = TargetBind
+  trigger1 = Time = 0
+  time = 20
+  pos = 40,-40
+
+
+------------------------------------------------------------
+TargetDrop
+------------------------------------------------------------
+
+Coloca todos os alvos na lista de alvos do personagem, com exceção daqueles com um 
+número ID especificado. Útil para aplicar efeitos apenas em alguns alvos.
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  excludeID = id_no (inteiro)
+    Qualquer alvo ("target") com número ID diferente de id_no irá permanecer na lista 
+de alvos do personagem. O padrão é -1 (deixa todos os alvos).
+
+  keepone = value (inteiro)
+    Definir como não nulo deixa apenas um alvo na lista de alvos do personagem. Se 
+muitos alvos existirem com o mesmo número ID, então um alvo será escolhido aleatoriamente. 
+Isto é muito útil em agarrões ("throws"). Se for 0, então todos os alvos deste determinado 
+ID serão mantidos. O padrão é 1.
+    
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+TargetFacing
+------------------------------------------------------------
+
+Vira todos os alvos para uma direção relativa ao personagem.
+
+Parâmetros requeridos:
+  value = facing_val (inteiro)
+    Se facing_val é positivo, todos os alvos irão virar a face na mesma direção do seu 
+personagem. Se for negativo, vão virar em direção oposta.
+
+Parâmetros opcionais:
+  ID = target_id (int)
+    Especifica um alvo desejado para atingir. Apenas alvos com este ID serão afetados.
+O padrão é -1 (afetar todos os alvos). Versão 01/04/2001 +.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+TargetLifeAdd
+------------------------------------------------------------
+
+Adiciona uma quantidade de energia à barra de vida de todos os alvos (P2), em escala de 
+acordo com a constante "targets' defense multipliers" se necessário.
+
+Parâmetros requeridos:
+  value = add_amt (inteiro)
+    add_amt é a adição a ser efetuada.
+
+Parâmetros opcionais:
+  ID = target_id (int)
+    Especifica um alvo desejado para atingir. Apenas alvos com este ID serão afetados.
+O padrão é -1 (afetar todos os alvos). Versão 01/04/2001 +.
+
+  kill = kill_flag (inteiro)
+    Se kill_flag é 0, então a adição não deixará os alvos (P2) com menos de 1 ponto. O 
+padrão é 1 (P2 pode perder).
+  
+  absolute = abs_flag (inteiro)
+    Se abs_flag é 1, então add_amt não estará em escala ("attack" e "defense multipliers" 
+irão ser ignorados). O padrão é 0.
+
+Exemplo:
+  ; Goro bate
+  [State 271, 4]
+  type = TargetLifeAdd
+  Trigger1 = Time = 38
+  Trigger2 = Time = 52
+  Trigger3 = Time = 66
+  Trigger4 = Time = 80
+  Trigger5 = Time = 94
+  Trigger6 = Time = 108
+  value = -40
+  
+
+------------------------------------------------------------
+TargetPowerAdd
+------------------------------------------------------------
+
+Adiciona uma quantidade de energia à barra de "power" dos alvos (P2).
+
+Parâmetros requeridos:
+  value = add_amt (inteiro)
+    add_amt é adicionado para cada alvo.
+
+Parâmetros opcionais:
+  ID = target_id (int)
+    Especifica um alvo desejado para atingir. Apenas alvos com este ID serão afetados.
+O padrão é -1 (afetar todos os alvos). Versão 01/04/2001 +.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+TargetState
+------------------------------------------------------------
+
+Muda todos os alvos (P2) para um "State" específico.
+
+Parâmetros requeridos:
+  value = state_no (inteiro)
+    Especifica o número de estado para onde o alvo irá.
+
+Parâmetros opcionais:
+  ID = target_id (int)
+    Especifica um alvo desejado para atingir. Apenas alvos com este ID serão afetados.
+O padrão é -1 (afetar todos os alvos). Versão 01/04/2001 +.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+TargetVelAdd
+------------------------------------------------------------
+
+Adiciona uma quantidade à velocidade de todos os alvos. Um valor de x positivo vai na 
+direção para onde o alvo está olhando, enquanto que y positivo leva o alvo para baixo.
+
+Parâmetros requeridos:
+  Nenhum.    
+
+Parâmetros opcionais:
+  x = x_value (número real)
+  y = y_value (número real)
+    Você pode especificar um ou ambos os parâmetros ao mesmo tempo.
+
+  ID = target_id (int)
+    Especifica um alvo desejado para atingir. Apenas alvos com este ID serão afetados.
+O padrão é -1 (afetar todos os alvos). Versão 01/04/2001 +.
+
+Exemplo:
+  ; Applies "gravity" to all targets
+  type = TargetVelAdd
+  y = 0.45
+  
+
+
+------------------------------------------------------------
+TargetVelSet
+------------------------------------------------------------
+
+Define a velocidade de todos os alvos (adversário) a um valor específico.Um valor positivo 
+de x está na direção que o alvo está virado, enquanto que um valor positivo de y é para 
+baixo.
+
+Parâmetros requeridos:
+  Nenhum.    
+
+Parâmetros opcionais:
+  x = x_value (número real)
+  y = y_value (número real)
+    Você pode especificar um ou ambos os parâmetros ao mesmo tempo.
+
+Parâmetros opcionais:
+  ID = target_id (int)
+    Especifica um alvo desejado para atingir. Apenas alvos com este ID serão afetados.
+O padrão é -1 (afetar todos os alvos). Versão 01/04/2001 +.
+
+Exemplo:
+  ; Fatality do Rayden:  pára o adversário quando atinge as estalactites.
+  [State 9403, StopTarget]
+  type = TargetVelSet
+  trigger1 = MoveHit = 1
+  X = 0
+  Y = 0
+
+
+------------------------------------------------------------
+Turn
+------------------------------------------------------------
+
+Instantaneamente, vira o personagem na direção oposta. Não realiza a animação de mudar de 
+direção (alguns grupos necessários no arquivo AIR são responsáveis pela animação do personagem 
+se virando).
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  Nenhum.
+
+Exemplo:
+  ; Tartarugas ninjas aplicam o cowabonga, e viram se P2 ficou para trás
+  [State 220, 1]
+  type = turn
+  trigger1 = AnimElem = 5
+  trigger1 = P2Dist X < 0
+
+
+------------------------------------------------------------
+VarAdd
+------------------------------------------------------------
+
+Adiciona um valor a uma das variáveis do seu personagem. Valores inteiros e reais podem ser 
+adicionados com este controle.
+
+Parâmetros requiridos (variável inteira):
+  v = var_no (inteiro)
+    var_no pode ser um inteiro entre 0 e 59. É o índice da variável inteira.
+
+  value = int_expr (inteiro)
+    int_expr é o valor inteiro a ser adicionado à variável indicada por var_no.
+
+Parâmetros requiridos (variável real):
+  fv = var_no (inteiro)
+    var_no pode ser um inteiro entre 0 e 39. É o índice da variável real.
+
+  value = float_expr (número real)
+    int_expr é o valor real a ser adicionado à variável indicada por var_no.
+
+Parâmetros opcionais:
+  Nenhum em ambos os casos.
+
+Sintaxe alternativa:
+  var(var_no) = int_expr  (variável inteira)
+  fvar(var_no) = float_expr (variável real)
+
+Notas:
+  As sintaxes são duas, por razões históricas. A versão do mugen 01/01/2000 só comporta a 
+primeira sintaxe. A segunda sintaxe surgiu para que expressões matemáticas mais complexas 
+fossem compatíveis.
+  Se você colocou o adversário em um estado customizado através de HitDef, não manipule 
+variáveis dentro dele. Você pode alterar variáveis do personagem, com consequências 
+imprevisíveis. Utilizar P2name, P4name podem ser alternativas, se você conhece bem o arquivo 
+CNS do adversário.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+VarRandom
+------------------------------------------------------------
+
+Define uma variável inteira com um valor randômico. Variáveis reais não podem ser utilizadas 
+com este comando.
+
+Parâmetros requeridos:
+  v = var_no (inteiro)
+    var_no é o índice da variável inteira a ser modificada. Pode ser um número inteiro entre 
+0 e 59, ou seja, há sessenta variáveis disponíveis.
+
+Parâmetros opcionais:
+  range = least_val,greatest_val (inteiro)
+    least_val e greatest_val especificam o menor e o maior valor que a variável pode assumir. 
+O padrão é 0,1000. Se apenas um argumento for especificado, então é considerado o intervalo 
+0,(argumento).
+
+Notas:
+  Se você tiver definido para o P2 (personagem adversário) um estado (por exemplo, queda 
+acelerada com explosão) após um "Hit" bem sucedido, não utilize atribuimento de variáveis 
+nestes estados ("custom states"). Se for utilizado, você pode influenciar influenciar as 
+variáveis do P2, e isso pode levar a erro durante a luta.
+
+Exemplo:
+    ; Define um número entre 0 e 500 para var(5).
+    type = VarRandom
+    v = 5
+    range = 500
+
+    ; Apocalypse fala uma frase entre três possíveis
+    [State 180, 1]
+    type = VarRandom
+    trigger1 = Time = 0
+    v = 19
+    range = 30
+
+    [State 410, 2]
+    type = PlaySnd
+    trigger1 = var19 = [0,9]
+    trigger1 = time = 35
+    value = 0,4
+
+    [State 410, 2]
+    type = PlaySnd
+    trigger1 = var19 = [10,19]
+    trigger1 = time = 35
+    value = 0,7
+
+    [State 410, 2]
+    type = PlaySnd
+    trigger1 = var19 = [20,30]
+    trigger1 = time = 35
+    value = 0,8
+
+
+------------------------------------------------------------
+VarRangeSet	(versão 27/06 ou superior)
+------------------------------------------------------------
+
+Atribui um valor para uma gama de variáveis do seu personagem. Tanto variáveis inteiras 
+como reais são aceitas.
+
+Parâmetros requiridos (variável inteira):
+  value = int_expr (inteiro)
+  int_expr é o valor atribuído a todas as variáveis inteiras da faixa.
+
+Parâmetros requiridos (variável real):
+  fvalue = float_expr (número real)
+  float_expr é o valor atribuído a todas as variáveis reais da faixa.
+
+Optional parameters (variáveis inteiras ou reais):
+  first = first_idx (inteiro)
+    Especifica o menor índice de variáveis. O padrão é 0.
+
+  last = last_idx (inteiro)
+    Especifica o maior índice das variáveis. Todas as variáveis dentro desta faixa de 
+índices ("range") serão modificadas. O padrão é 59 para variáveis inteiras, ou 39 para 
+reais.
+
+Notas:
+Se você colocou o adversário em um estado "custom", não utilize atribuição de variáveis 
+nos estados do adversário. Isto irá alterar as variáveis do adversário, com conseqüências 
+imprevisíveis.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+VarSet
+------------------------------------------------------------
+
+Atribui um valor a uma das variáveis de trabalho do personagem. Variáveis inteiras ou 
+reais podem ser utilizadas por este comando.
+
+Parâmetros requiridos (variável inteira):
+  v = var_no (inteiro)
+    var_no deve ser um inteiro entre 0 e 59, e é o índice da variável (var22, var31...).
+
+  value = int_expr (inteiro)
+    int_expr é o valor que a variável irá assumir.
+
+Parâmetros requiridos (variável real):
+  fv = var_no (inteiro)
+    var_no deve ser um inteiro entre 0 e 39, e é o índice da variável.
+
+  value = float_expr (número real)
+    float_expr é o valor que a variável irá assumir.
+
+Parâmetros opcionais:
+  Nenhum em ambos os casos.
+
+Sintaxe alternativa:
+  var(var_no) = int_expr  (variável inteira)
+  fvar(var_no) = float_expr (variável real)
+
+Notas:
+  Se você tiver definido para o P2 (personagem adversário) um estado (por exemplo, queda 
+acelerada com explosão) após um "Hit" bem sucedido, não utilize atribuimento de variáveis 
+nestes estados ("custom states"). Se for utilizado, você pode influenciar influenciar as 
+variáveis do P2, e isso pode levar a erro durante a luta.
+  A partir da versão 31/07, as variáveis podem agora armazenar valores para o round 
+seguinte. O "State" 5900 do arquivo common1.cns agora é o responsável por ressetar todas as 
+variáveis ao término do round, então, basta sobrepor ("override") esse estado para você 
+obter variáveis persistentes. O controle VarRangeSet será muito útil.
+  A partir da versão 27/06, as referências a var(9) no arquivo common1.cns foram 
+mudadas para SysVar(0), para prevenir erros.
+
+
+Exemplo:
+  ; Apocalypse muda de estado de acordo com a atribuição a variáveis
+  [State 1031, 7]
+  type = VarSet
+  trigger1 = Time = 100
+  V = 22
+  Value = 170
+
+  [State 1041, 7]
+  type = ChangeState
+  trigger1 = root, Var22 = 0
+  trigger2 = MoveContact = 1
+  value = 606
+
+
+
+------------------------------------------------------------
+VelAdd
+------------------------------------------------------------
+
+Adiciona uma quantia à velocidade do personagem. Um valor x positivo impulsiona o 
+personagem para a frente (direção na qual ele está voltado). Um valor y positivo impulsiona 
+o personagem para baixo.
+
+Parâmetros requeridos:
+  Nenhum.    
+
+Parâmetros opcionais:
+  x = x_value (número real)
+  y = y_value (número real)
+    Você pode especificar um ou ambos os parâmetros.
+
+Exemplo:
+  ; Aplica "gravidade" ao personagem.
+  type = VelAdd
+  y = 0.45
+
+
+------------------------------------------------------------
+VelMul
+------------------------------------------------------------
+
+Multiplica a velocidade do personagem por um valor. Um valor positivo está na direção do 
+movimento.
+
+Parâmetros requeridos:
+  Nenhum.    
+
+Parâmetros opcionais:
+  x = x_multiplier (número real)
+  y = y_multiplier (número real)
+    Você pode especificar um ou ambos os parâmetros.
+
+Exemplo:
+  ; Aplica "fricção" ao personagem.
+  type = VelMul
+  x = 0.8
+
+
+------------------------------------------------------------
+VelSet
+------------------------------------------------------------
+
+Define a velocidade a um valor específico. Um valor x positivo impulsiona o personagem 
+para a frente (direção na qual ele está voltado). Um valor y positivo impulsiona o 
+personagem para baixo.
+
+Parâmetros requeridos:
+  Nenhum.    
+
+Parâmetros opcionais:
+  x = x_value (número real)
+  y = y_value (número real)
+    Você pode especificar um ou ambos os parâmetros.
+
+Exemplo:
+  ; pára o personagem em uma determinada figura da animação corrente
+  [State 400, 1]
+  type = VelSet
+  trigger1 = AnimElem = 6
+  x = 0
+
+
+------------------------------------------------------------
+Width
+------------------------------------------------------------
+
+Muda o tamanho do seu personagem ("width bar") por 1 game-tick. Útil para controlar o 
+empurrão que acontece, quando seu personagem faz contato com outro.
+Lembre-se: quando você construiu o arquivo SFF, é recomendado que o personagem esteja 
+centrado com relação ao eixo X.
+
+Parâmetros requeridos:
+  Nenhum. A versão 01/01 exigia o parâmetro "value".
+
+Parâmetros opcionais:
+  edge = edgewidth_front, edgewidth_back (inteiro)
+    Este parâmetro determina o quão perto da parede seu personagem pode estar.
+O padrão é 0,0.
+
+  player = playwidth_front, playwidth_back (inteiro)
+    Define a largura de seu personagem na frente ("front") e atrás ("back"). Este parâmetro 
+determina o quão perto seu personagem pode ficar de outros personagens. O padrão é 0,0.
+
+Sintaxe alternativa:
+  value = width_front, width_back (inteiro)
+    Esta é uma sintaxe mais curta que define os dois parâmetros ao mesmo tempo. Isto pode 
+ser usado se as paredes ("edgewidth") e a largura ("playwidth") não forem especificadas.
+
+Notas:
+  Quando as caixas de colisão forem habilitadas durante o jogo (Ctrl+C), as paredes 
+("edgewidth") ^são mostradas em laranja, e a largura do personagem ("playwidth") são 
+mostradas em amarelo. Se estiverem sobrepostas, a região é mostrada em amarelo brilhante.
+
+Exemplo:
+  Nenhum.
+
+
+
+
+
+
+
+
+

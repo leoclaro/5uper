@@ -1,0 +1,78 @@
+attr
+NA, SA, HA = normal, special e hyper attacks
+NP, SP, HP = normal, special e hyper projectiles
+NT, ST, HT = normal, special e hyper throws
+
+
+HITFLAG E GUARDFLAG
+M = Meio (mesma coisa q dizer HL)
+A = Ar
+F = Caindo
+H = naum lembro
+L = Agaichado
+D = deitado, caido no chão
+
+
+
+
+
+ownpal = 0 
+
+significa que vai usar paletra propria
+
+paleta própria
+[c=1][b]Roberto[/b][/c] diz:
+tipo
+[c=1][b]Roberto[/b][/c] diz:
+alguns ataques
+[c=1][b]Roberto[/b][/c] diz:
+modificam a paleta do adversário
+[c=1][b]Roberto[/b][/c] diz:
+tipo o Final Smash do meu Mario
+[c=1][b]Roberto[/b][/c] diz:
+deixa o inimigo piscando vermelho
+Leo & Fá - Te Amo Amorzinho diz:
+hum
+[c=1][b]Roberto[/b][/c] diz:
+se deixar ownpal de algum helper ou explod = 0, o helper ou explod vai piscar junto com o char
+[c=1][b]Roberto[/b][/c] diz:
+se deixar = 1, o char pisca mas o helper ou explod naum
+
+
+
+
+
+
+
+[State 0, BindToRoot]
+type = BindToRoot
+trigger1 = 1
+time = 1
+pos = 0,0
+
+oq faz o bindToRoot
+Leo & Fá - Te Amo Amorzinho diz:
+ficar sempre na posiçao?
+[c=1][b]Roberto[/b][/c] diz:
+o BindToRoot faz o helper se mover em relação a raiz dele
+[c=1][b]Roberto[/b][/c] diz:
+a raiz seria o char
+Leo & Fá - Te Amo Amorzinho diz:
+hammm!
+[c=1][b]Roberto[/b][/c] diz:
+então
+[c=1][b]Roberto[/b][/c] diz:
+eu coloquei pro helper ficar sempre indo pra posição 0, 0 do char
+q foi a posição onde nasceu
+
+
+
+
+
+
+
+
+
+
+S = Stand
+C = Cruch

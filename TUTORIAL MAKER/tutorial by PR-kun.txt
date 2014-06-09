@@ -1,0 +1,1068 @@
+tutorial by PR-kun
+
+
+nesse tutorial irei ensinar como se faz um char pelo programa fighter factory, portanto 
+trate de baixar esse programa senão não vai entender nada desse tutorial!
+
+
+
+bem primeiro vamos criar uma pasta, no meu exemplo irei usar o char do rock lee.
+faça uma pasta com o nome do seu char ( no meu caso rock lee ).
+dentro dessa pasta faça mais 4 pastas
+- uma com o nome do char.
+- uma com o nome "bitmap"
+- uma com o nome "pcx"
+- e uma com o nome "sons"
+
+coloque os sons do seu char na pasta "sons". nota: tem que ser wav.
+
+agora faça os sprites do seu rock lee ( char usado como exemplo ).
+faça os sprites e salve na pasta "bitmap".
+
+
+---------------------------------------------------------------------------------------------------
+
+agora usaremos o fighter factory:
+
+abra o seu fighter factory e vá no menu.
+agora vá em "arquivo" e vá depois em "templates".
+escolha o template "elecbyte player"
+veja a diferença...apareceu uma tela branca no meio da tela do fighter factory.
+agora clique em salvar.
+coloque o nome do seu char de "rock lee" e salve na pasta do seu char ( "rock lee" )
+veja que apareceu duas opções para marcar....paleta global e paleta individual
+escolha "paleta global" e clique em OK.
+vá salvando os arquivos na pasta do seu char com o mesmo nome que voce colocou anteriormente (rock lee)
+
+agora vá onde está escrito "nome do char" e coloque "rock lee", faça o mesmo onde está escrito
+"nome do char para mostrar no jogo"
+
+coloque a data do char e o nome do autor, não é obrigatório, mas servirá para identificar seu char.
+onde está "padrão de ordem das paletas" coloque "1,2" ( o tanto que iremos usar nesse tutorial )
+agora vá lá para baixo onde está escrito: "paleta ACT: uma por linha " e coloque "rock lee.act"
+perceba que voce não preencheu a caixa que está escrito: "nome do arquivo snd"... depois voce saberá porque.
+
+agora vamos criar a paleta:
+
+vá no menu...e clique em "editor de paletas"
+agora clique em "abrir imagem" 
+va na pasta "bitmap" do seu char e abra uma imagem...
+LEMBRANDO!! essa imagem deve ter todas as cores que vai ter nas proximas imagens, senão vai dar
+loucura na paleta
+mas é claro...voce vai querer fazer especiais que terão cores diferentes não é ? acalme-se, 
+voce não terá que que deletar as imagens desse especial!
+
+mas voltando ao assunto...abra a imagem e ,lá embaixo, clique em "otimizar"
+as vezes dá bug nessa hora....mas é só fechar e abrir de novo...
+vá tentando que uma hora voce consegue
+quando conseguir veja que apareceu todas as cores que tem no seu char naqueles quadradinhos 
+pretos da tabela da direita
+clique na primeira cor e apertando "shift" clique na ultima, agora voce selecionou todas as cores
+agora descelecione a cor de fundo, a cor que voce deixou no fundo do char
+para desceleciona-la clique com o botão direito nela.
+veja agora que todas as cores estão selecionadas menos a cor do fundo
+
+agora veja o tanto de cores que voce selecionou na tabela da direita e selecione esse 
+mesmo tanto na tabela da esquerda.
+clique em "transferir cor" e veja que as cores do seu char apareceram na tabela da esquerda
+agora, na tabela da direita selecione a cor de fundo 
+selecione o ultimo quadradinho da tabela da esquerda e clique em transferir cor.
+quando voce coloca uma cor no ultimo quadradinho quer dizer que essa cor ficará transparente 
+no jogo...no caso é a cor de fundo, ou seja, a cor de fundo ficará transparente no jogo.
+
+agora finalmente, sabe aquele especial que tem cores diferentes? clique em "abrir imagem", 
+na tabela da direita, e adicione as cores do especial
+faça o mesmo que voce fez com a outra imagem
+lembrando!! se o especial tiver as mesmas cores voce não precisará fazer isso tudo...apenas deixe
+adicione de novo todos os desenhos que tiveram cores diferentes do desenho anterior
+não deixe nenhuma cor sobrando!! se tiver uma cor diferente tasca na paleta!!
+
+agora salve a paleta:
+clique em "salvar"...acima da tabela da esquerda, e salve com o nome "rock lee" na 
+pasta do char ( onde voce salvou os outros )
+
+pronto a paleta está feita!!!
+
+agora do lado esquerdo clique em "adicionar" e adicione TODAS as imagens da pasta "bitmap"
+selecione a opção "usar mesmo nome das imagens" e clique em "inserir paleta nas imagens"
+salve com o nome "0" na pasta "pcx" do seu char...
+agora veja que estão todas as imagens do seu char na pasta "pcx", mas no formato pcx.  
+
+o formato pcx é o formato que o fighter factory aceita...
+
+vá no painel SFF:
+
+clique em "adicionar" e adicione as imagens do stand...pra quem não sabe o stand é
+a animação do char parado, aquele movimento do char respirando
+adicione as imagens do stand no formato pcx
+lá onde está "grupo:" deixe grupo 0
+
+os grupos são o que indentificam cada tipo de animação, o tipo do stand é o grupo 0
+
+agora selecione a opção "centro,base" e "paleta compartilhada"  
+
+clique em OK. 
+
+a animação do stand já está feita!!
+
+agora vá no painel AIR:
+
+lá onde está: "begin action (No):" deixe como 0
+
+vá lá embaixo e selecione o grupo 0 em uma listinha...lá vão estar todas as imagens do 
+stand que voce adicionou
+clique na setinha azul do lado direito e depois em "adicionar grupo ao AIR"
+vá em cima, clique em "tocar" e veja como ficou sua animação
+
+se quiser transformar sua animação em gif, vá no lado de "tocar" e clique onde tem a imagem
+de um cacto ( converter em gif animado )
+
+agora o mais importante, o clsn de colisão, o clsn azul!
+vá na parte inferior esquerda e selecione o clsn azul ( de colisão )
+agora mapeie a parte que voce quer que seu char seja afetado quando for golpeado
+caso queira que essa parte mapeada seja a mesma em todas as imagens do stand, selecione a
+opção "CLSN padrão", mas caso não queira mapeie as partes em cada um dos frames
+
+o clsn de colisão é muito importante no char, pois sem ele o char não é afetado quando batido,
+ou seja, seu char fica "fantasma" sem o clsn de colisão
+
+agora adicione mais imagens:
+
+volte ao painel SFF e clique em "adicionar" mas agora adicione as imagens do char se abaixando
+nota: é do char se abaixando e não do char já abaixado
+selecione "centro,base" e "paleta compartilhada", mas onde está "grupo:" coloque grupo 10!
+o grupo 10 é o grupo correspondente do char se abaixando
+
+vá no painel AIR e lá onde está: "begin action (No):" coloque "10"
+
+vá lá embaixo e selecione o grupo 10 em uma listinha...lá vão estar todas as imagens do 
+grupo 10 que voce adicionou
+clique na setinha azul do lado direito e depois em "adicionar grupo ao AIR"
+vá em cima, clique em "tocar" e veja como ficou sua animação.
+
+sempre que adicionar um grupo delete a primeira imagem do grupo, selecionando
+a primeira imagem e clicando no sinal -
+repare que a primeira imagem sempre vai ser a primeira imagem do stand por isso voce terá que 
+deleta-la
+
+agora faça o mesmo procedimento anterior, mas adicione as imagens do char já abaixado
+e agora adicione no grupo 11
+
+o grupo 11 é o grupo correspondente do char já abaixado
+
+adicione no grupo e pronto!!
+
+se voce quiser faça o mesmo com as imagens do char levantando, mas adicione no grupo 12! 
+
+o grupo 12 é o grupo correspondente do char se levantando
+
+
+
+agora faça a animação do char andando!!
+
+é o mesmo procedimento de anteriormente mas voce tem que adicionar no grupo 20!
+
+lembrando: o grupo 20 é o grupo do char andando para frente, o grupo do char andando 
+pra trás é o 21!!
+
+
+todos esses grupos são chamados de begin actions!!
+
+cada begin action é pra cada tipo de animação
+existem begins actions mais complicados de lidar, os mais faceis são os que só precisam adicionar
+aqui vão os begins actions mais faceis
+
+0 - stand ( char parado )
+10 - char abaixando
+11 - char abaixado
+12 - char levantando
+20 - char andando pra frente
+21 - char andando pra tras
+40 - char se preparando pra pular ( pegando impulso )
+41 - char pulando pra cima
+42 - char pulando pra frente
+43 - char pulando pra trás
+44 - char caindo no pulo pra cima
+45 - char caindo no pulo pra frente
+46 - char caindo no pulo pra tras
+47 - char quando cai do pulo.
+100 - correndo pra frente
+105 - correndo pra tras
+120 - animação do começo do guard em pé
+121 - animação do começo do guard abaixado
+122 - animação do começo do guard no alto
+130 - animação do guard em pé
+131 - animação do guard abaixado
+132 - animação do guard no alto
+140 - animação do fim do guard em pé
+141 - animação do fim do guard abaixado
+142 - animação do fim do guard no alto
+170 - derrota
+181 - vitoria
+190 - introdução
+5000 - apanhando fraco
+5001 - apanhando médio
+5002 - apanhando forte 
+5005 - char se recobrando do "apanhando fraco" ( grupo 5000 )
+5006 - char se recobrando do "apanhando medio" ( grupo 5001 )
+5007 - char se recobrando do "apanhando forte" ( grupo 5002 )
+5010 - apanhando de chute fraco
+5011 - apanhando de chute medio
+5012 - apanhando de chute forte
+5015 - char se recobrando do "apanhando de chute fraco" ( grupo 5010 )
+5016 - char se recobrando do "apanhando de chute medio" ( grupo 5011 )
+5017 - char se recobrando do "apanhando de chute forte" ( grupo 5012 )
+5020 - apanhando abaixado fraco
+5021 - apanhando abaixado medio
+5022 - apanhando abaixado forte
+5025 - char se recobrando do "apanhando abaixado fraco" ( grupo 5020 )
+5026 - char se recobrando do "apanhando abaixado medio" ( grupo 5021 )
+5027 - char se recobrando do "apanhando abaixado forte" ( grupo 5022 )
+5030 - apanhando de cima
+5035 - char se recobrando do "apanhando de cima" ( grupo 5030 )
+5040 - char se recobrando e caindo no chão depois do "apanhando de cima" ( grupo 5030 )
+5050 - caindo depois de perder
+5051 - char indo pra cima
+5070 - tripped
+5100 - char quando bate no chão ao perder
+5101 - char quando bate no chão pela segunda vez ao perder
+5110 - char já morto
+5120 - char levantando depois de morto
+5150 - char morto definitivamente
+5160 - caindo no chão para morrer
+5170 - char quando bate no chão ao morrer
+
+para testar o seu char voce deve ir no painel opções, e onde está:"executável do winmugen"
+clique em localizar e selecione o link do seu mugen!!
+no lado do painel opções existe a opção: "executar no winmugen"
+para testar o char voce deverá clicar nela!!
+
+
+agora voce fez o basico
+ficou cansado por fazer todos esses grupos??? pois daqui pra 
+frente é muito mais dificil...agora vamos aprender a......
+
+
+---------------------------------------------------------------------------------------------------
+
+fazer golpes:
+
+vá no painel SFF e adicione as imagens do soco.
+salve as imagens como grupo 200.
+selecione "centro,base" e "paleta compartilhada" 
+clique em OK
+adicione o grupo no painel air.
+
+agora conheceremos outro tipo de clsn, o clsn vermelho!!!!
+
+ao contrario do clsn azul ele é o responsavel pela area que vai atingir
+o oponente, ou seja, é ideal para socos.
+pegue o clsn vermelho e mapeie a parte que quer que atinja o oponente no golpe.
+é importante ver o numero da ordem do desenho que voce mapeou, pois ele será importante.
+
+teste o char
+veja que mesmo adicionando o grupo, o soco não sai no jogo quando voce vai testar.
+aí que entra em cena o......
+
+painel cns:
+
+vá no painel cns e, do lado esquerdo, clique em states. 
+clique duas vezes no state 200.
+
+vai aparecer o seguinte:
+
+
+
+
+
+;---------------------------------------------------------------------------
+; Standing Light Punch
+; CNS difficulty: easy
+[Statedef 200]
+type    = S				;State-type: S-stand, C-crouch, A-air, L-liedown
+movetype= A				;Move-type: A-attack, I-idle, H-gethit
+physics = S				;Physics: S-stand, C-crouch, A-air
+juggle  = 1				;Number of air juggle points move takes
+;Commonly-used controllers:
+velset = 0,0			;Set velocity (x,y) (Def: no change)
+ctrl = 0				;Set ctrl (Def: no change)
+anim = 200				;Change animation (Def: no change)
+poweradd = 20			;Power to add (Def: 0)
+sprpriority = 2			;Set layering priority to 2 (in front)
+
+[State 200, 1]
+type = HitDef
+trigger1 = Time = 0
+attr = S, NA			;Attribute: Standing, Normal Attack
+damage = 23, 0			;Damage that move inflicts, guard damage
+animtype = Light			;Animation type: Light, Medium, Heavy, Back (def: Light)
+guardflag = MA			;Flags on how move is to be guarded against
+hitflag = MAF			;Flags of conditions that move can hit
+priority = 3, Hit			;Attack priority: 0 (least) to 7 (most), 4 default
+					;Hit/Miss/Dodge type (Def: Hit)
+pausetime = 8, 8			;Time attacker pauses, time opponent shakes
+sparkno = 0				;Spark anim no (Def: set above)
+sparkxy = -10, -76		;X-offset for the "hit spark" rel. to p2,
+					;Y-offset for the spark rel. to p1
+hitsound = 5, 0			;Sound to play on hit
+guardsound = 6, 0			;Sound to play on guard
+ground.type = High		;Type: High, Low, Trip (def: Normal)
+ground.slidetime = 5		;Time that the opponent slides back
+ground.hittime  = 12		;Time opponent is in hit state
+ground.velocity = -4		;Velocity at which opponent is pushed
+airguard.velocity = -1.9,-.8	;Guard velocity in air (def: (air.xvel*1.5, air.yvel/2))
+air.type = High			;Type: High, Low, Trip (def: same as ground.type)
+air.velocity = -1.4,-3		;X-velocity at which opponent is pushed,
+					;Y-velocity at which opponent is pushed
+air.hittime = 12			;Time before opponent regains control in air
+
+[State 200, 5]
+type = ChangeState
+trigger1 = AnimTime = 0
+value = 0
+ctrl = 1
+
+;---------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+selecione isso tudo e clique em "adicionar"
+vai ter uma listinha em que terá várias opções para escolher
+são as seguintes:
+
+intro
+win
+lose
+soco 
+chute
+projeteis
+correr/frente
+correr/tras
+teletransporte
+ações do helper 
+chamar helper
+
+escolha a opção soco.
+
+vai aparecer o seguinte:
+
+número do StateDef
+número da animação
+número da animação de HIT
+dano
+tipo
+
+lá em número do StateDef coloque "200"
+
+em número da animação coloque "200" também ( lembra que 200 é 
+o grupo que foi salvo a animação? )
+
+agora lembra que eu disse pra ver o numero da ordem do 
+desenho que voce mapeou com o clsn vermelho? pois é esse numero
+que voce vai colocar na opção "numero da animação de HIT"
+
+em "dano", coloque o dano que voce quiser pra seu soco sugar do
+oponente
+
+em "tipo", coloque "em pé".
+
+clique em inserir.
+
+
+veja que os códigos do soco foram adicionados.
+
+teste o char e veja como o soco está lá!!! 
+
+no meu mugen o botão do grupo 200 é "A", mas talvez no seu seja "Z"
+vai tentando cada botão que voce consegue
+
+faça a mesma coisa com os outros golpes mas adicione nos grupos:
+
+210 - botão S
+220 - botão D
+230 - botão Q
+240 - botão W
+250 - botão E
+
+
+
+pronto, os golpes "em pé" já foram feitos, mas existem mais 
+tipos de golpes...os golpes "abaixado" e "no alto"
+
+os "abaixado" são os golpes que atacam quando se está pressionando
+o botão baixo
+ex : baixo ( pressiona ) + A
+
+alguns exemplos de golpes abaixados são as rasteiras...
+
+primeiro desenhe os sprites da rasteira, converta para pcx
+e adicione no SFF.
+selecione "centro,base" e "paleta compartilhada"
+salve como grupo 400...
+adicione no AIR
+mapeie com o clsn vermelho a imagem do HIT
+
+agora vá no CNS e  selecione o grupo "400"
+no lado esquerdo selecione a opção "chute"
+
+em "numero do stateDef" coloque 400
+
+o mesmo vale para "numero da animação"
+
+em "numero da animação de HIT" coloque o numero de ordem da 
+imagem que voce mapeou.
+
+em "dano" coloque o tanto que voce quiser que afete o oponente
+
+em "tipo" coloque "abaixado"
+
+
+
+agora teste e veja que quando voce fica abaixado e aperta "A" 
+o seu char dá uma rasteira
+
+faça o mesmo com os grupos:
+
+410 - baixo + "S"
+420 - baixo + "D"
+430 - baixo + "Q"
+440 - baixo + "W"
+450 - baixo + "E"
+
+
+
+para as animações "no alto" faça  a mesma coisa...mas salve nos grupos:
+
+600 - cima + "A"
+610 - cima + "S"
+620 - cima + "D"
+630 - cima + "Q"
+640 - cima + "W"
+650 - cima + "E"
+
+e não se esqueça de selecionar a opção "no alto" quando for 
+adicionar no cns.
+
+
+---------------------------------------------------------------------------------------------------
+
+agora vamos ver projéteis
+
+os projéteis são lançamentos que os chars fazem, pro exemplo: kunais..
+( pra quem não assiste Naruto, kunais são armas que os caras jogam no 
+outro ) 
+
+pra isso voces tem que fazer os sprites do char lançando o projetil e
+os sprites do projetil...
+
+depois salve a animação do "char lançando o projetil" no grupo 111
+( é o grupo que eu mais uso, mas pode ser qualquer grupo que 
+ainda não exista )  
+salve a animação do projetil no grupo 112...
+agora vá no AIR e naquela listinha que fica embaixo selecione o grupo
+111 e clique na seta azul...depois clique em 
+"novo begin action com tudo"
+
+essa opção cria seu próprio begin action...lá voce escolhe o nome que
+que voce vai dar para o begin action...no meu caso usarei o nome 
+"kunai1"
+escolha a velocidade que voce quiser e em "begin action(no)" deixe 111
+
+o begin action "kunai1" está criado
+
+agora faça novamente...mas com o grupo 112
+dê o nome do grupo 112 como "kunai2"
+
+coloque "clsn vermelho" nos desenhos do grupo 112 ( para afetar o 
+inimigo )
+
+se voce quiser coloque explosão no seu projétil...a animação a explosão 
+salve como grupo 113 com o nome "kunai3"
+
+agora vá no painel cns
+
+vá no grupo que voce quiser e depois desse grupo encreva: ";kunai1"
+
+vá para a outra linha
+
+agora no lado esquerdo clique em "adicionar"
+
+agora naquela listinha ( bem familiar a propósito ) escolha a opção
+projéteis...
+
+- em "stateDef" coloque "111"
+- em "animação" coloque "111"
+- em "animação de saída do projétil" coloque o numero de ordem do 
+desenho do grupo 111 em que voce quer que saia o projetil
+- em "animação do projetil" coloque "112"
+- em "animação da explosão" coloque "113"
+- em "dano" coloque o dano que voce quer que seja retirado do 
+oponente quando o projetil triscar nele
+
+clique em "inserir"
+
+voce criou o state 111 do tipo projetil...agora vamos configurar
+
+clique, do lado esquerdo, em "visualizador de offset"
+
+sem ele voce não saberia por onde o projetil irá sair...faça o 
+seguinte:
+
+vá do lado esquerdo na parte "personagem" e em "begin action (no)"
+escolha 111
+
+em frames escolha o que voce quiser ( imagens do grupo 111 )
+
+vá do lado direito na parte "imagem" e em "begin action (no)"
+escolha 112
+
+em frames escolha o que voce quiser ( imagens do grupo 112 )
+
+veja que a segunda cópia do seu char virou o projetil...
+
+clique no projetil e arraste ele para o lugar que voce quer 
+que saia ele no jogo
+
+veja que as partes "X" e "Y" mudaram
+
+esse é o offset...decore os numeros que apareceram nos X e Y
+
+agora vá no state do seu projetil no cns e na linha que diz
+"offset" troque os numeros que estão pelos numeros do X e Y
+no painel de offset
+
+isso definirá de onde sairá o projetil na hora de lançar ele
+
+pronto! agora só falta os comandos...e para isso conheçeremos
+um novo painel: o painel CMD
+
+o painel CMD é o responsável pelos comandos...as combinações
+de botões que devemos apertar para realizarmos os especiais
+
+no lado esquerdo, clique em um simbolo de uma seta verde 
+apontando para 5 botões de teclado
+
+agora clique nos botões que voce quer que sejam apertados
+para realizar o projetil...nesse caso usaremos o 
+"baixo + x" 
+
+em "nome do golpe" coloque "112"
+
+em "tempo" coloque "time = 25"
+
+clique em: "adicionar/atualizar"
+
+no painel CMD desça um pouco e veja o novo comando adicionado:
+vai aparecer assim:
+
+[command]
+name = "kunai2"
+command = D,x
+time = 25
+
+selecione essa parte e, no lado esquerdo do painel, clique no 
+"editor de comandos"
+
+- em "nome do golpe" coloque "kunai2"
+- em "nome do state" coloque "kunai2"
+- em "valor" coloque "111"
+- clique em "adicionar/atualizar"
+
+aewww!!!!o projetil está feito!!!
+
+teste o char e realize o comando...
+
+se houver algum erro na hora de testar é só voce ir no 
+"organizador" e clicar em "organizar automaticamente"
+
+aí não vai mas dar erro
+
+se voce quiser pra o projétil não sumir quando triscar no 
+oponente é só voce botar assim no cns do grupo:
+
+projhits=20
+removetime=10
+
+
+
+---------------------------------------------------------------------------------------------------
+
+agora vamos colocar sons nesse projétil!!!
+
+pra isso precisará do painel SND ( responsável pelos sons)
+
+vá no painel SND e do lado esquerdo clique em "adicionar"
+
+adicione o som da pasta "sons" do seu char
+
+esse som deverá ser o som do char lançando o projetil
+
+o primeiro som é neutro então delete ele ( clicando em "
+excluir")
+
+agora sim aparecerá o som que voce adicionou
+
+clique em "tocar" para ver o som
+
+em "grupo" coloque o grupo "111"
+
+em "som" deixe "0"
+
+agora clique em "salvar como"
+
+salve com o nome do seu char na pasta onde voce salvou os def,
+sff,air e cns
+
+agora vá no painel CNS
+
+escolha o grupo que voce quer que fique o som
+
+vá embaixo dos códigos de hit do grupo e vá do lado direito
+
+voce vai ver vários nomes lá...clique 2 vezes no nome "playSnd"
+
+vai aparecer isso:
+
+[State 0, PlaySnd]
+type = PlaySnd
+trigger1 =
+value = S0,0
+volume = 0
+channel = -1
+;lowpriority = -1
+freqmul = 1.0
+loop = 0
+pan = 0
+;abspan =
+;ignorehitpause =
+;persistent =
+
+-na linha : "[State 0, PlaySnd]", substitua o "0" por 111 (numero 
+do grupo que voce está botando o som )
+-na linha:"type = PlaySnd" não mude nada...deixe assim mesmo
+-na linha:"trigger1 =" acrescente "animelem=1"depois 
+do "trigger1 ="
+-na linha:"value = S0,0" substitua o "s0,0" por "111,0"
+-na linha:"volume = 0" substitua o 0 pelo volume que voce quer 
+que tenha esse som ( eu aconselho 800 )
+
+apague todo o resto ( pois eu não sei pra que serve, mas não
+vai fazer diferença )
+
+agora vá no painel "def" e onde tá: "nome do arquivo SND" coloque
+o nome do seu arquivo SND ( se ja não estiver lá )
+
+salve o char e feche...agora abra de novo e veja que o som funcionou
+(aewwwwww!!!)
+
+
+---------------------------------------------------------------------------------------------------
+
+
+a partir de agora conheçeremos os sub-states...cada sub-state serve
+para uma coisa...
+
+primeiro vamos conheçer o sub-state "SuperPause":
+
+SuperPause é aquele momento no especial em que a tela fica congelada
+(para simbolizar o especial)
+
+fazer SuperPause é muito fácil...
+
+vai no cns no grupo que ce quiser e vai na linha que tá embaixo da 
+animação de hit
+
+vai agora do lado direito e clica 2 vezes em "SuperPause"
+
+vai aparecer assim:
+
+[State 0, SuperPause]
+type = SuperPause
+trigger1 =
+time =
+anim =
+sound =
+pos =
+move =
+darken = 1
+p2defmul = 0
+poweradd = 0
+unhittable = 1
+;endcmdbuftime = (winmugen only)
+;pausebg =  (winmugen only)
+;ignorehitpause =
+;persistent =
+
+
+agora:
+
+na linha:"[State 0, SuperPause]" substitua o "0" pelo numero do 
+grupo que voce vai botar o SuperPause
+
+na linha:"type = SuperPause" deixa assim mesmo
+
+na linha:"trigger1 =" acrescenta "animelem=1" depois do
+"trigger1 ="
+
+na linha:"time =" acrescenta "20"
+
+na linha:"anim =" acrescenta o numero do grupo da animação.
+
+na linha:"sound =" acrescenta o numero do som ou deleta a linha
+( ela não faz diferença )
+
+na linha:"pos =" acrescenta a posição que voce quer que fique a 
+centelha do especial
+
+delete a linha:"move =" que eu ainda não sei pra que serve ¬¬
+
+em:"darken = 1" deixe assim mesmo
+
+delete a linha:"p2defmul = 0" ta,bém não sei pra que serve
+em :"poweradd = 0" substitua "0" por "-3000"
+
+delete tudo esse resto:
+unhittable = 1
+;endcmdbuftime = (winmugen only)
+;pausebg =  (winmugen only)
+;ignorehitpause =
+;persistent =
+
+veja que agora quando voce faz o ataque a tela fica congelada 
+e escura...esse é o Superpause
+
+
+--------------------------------------------------------------------------------------------
+
+conheça o envShake:
+
+o envshake é bem util para especiais de super força...ele 
+serve para tremer a tela quando se dá o soco desejado...
+
+vou explicar do modo mais fácil...
+
+vá no cns do grupo que voce quer que trema a tela e,
+embaixo da animação do hit, coloque:
+
+[State 0, EnvShake]
+type = EnvShake
+trigger1 =animelem=1
+time = 10
+freq = 60
+ampl = -4
+phase = 90
+
+desse jeito fará com que a tela trema desde o começo
+
+pra fazer a tela começar a tremer da parte que voce 
+quiser é só alterar a linha:"trigger1 =animelem=1"
+e substituir o "1" pelo numero de ordem do desenho
+que voce quer que começe a tremer a tela
+
+
+essa foi a forma fácil de fazer...a forma dificil 
+é clicar 2 vezes no nome "envShake" do lado direito
+no painel cns e configurar...
+
+
+-------------------------------------------------------------------------------------------
+
+
+PalFX:
+
+o PalFX é bem util para expeciais, tipo o byakungan 
+do neji...pois inverte as cores do char...
+
+novamente eu vou explicar do modo simples...
+
+copie isso no cns do grupo que voce quer fazer o 
+PalFX
+
+[State 0, PalFX]
+type = PalFX
+trigger1 =animelem=1
+time = 200
+add = 0,0,0
+mul = 256,256,256
+invertall = 10
+color = 256
+
+bem, se voces quiserem podem configurar:
+
+na linha :"trigger1 =animelem=1" altere o "1"
+pelo numero da ordem do desenho que voce quer 
+que começe a inverter...
+
+na linha:"time = 200" altere "200' para o
+tempo que voce quer que fique invertido
+
+o resto pode deixar desse jeito mesmo...que 
+não vai fazer muita diferença XD
+
+
+----------------------------------------------------------------------------------------------
+
+
+envColor...
+
+isso aqui também é bem util...faz a tela de fundo
+ficar da cor desejada enquanto se dá o golpe...
+
+modo simples:
+
+bota isso no cns do grupo:
+
+[State 0, EnvColor]
+type = EnvColor
+trigger1 = animelem=1
+value = 255,260,270
+time = 100
+under = 2
+
+
+configurando...
+
+desse jeito aí a tela de fundo vai ficar vermelha
+pra fazer ficar de outras cores voce tem que alterar
+essa linha:"value = 255,260,270"
+é só alterar os numeros...(pra ficar branco é 255
+,255,255 e etc...)
+
+em:"time=100" mude o 100 para o tempo que voce
+quer que fique com o fundo alterado...
+
+o resto não precisa alterar...
+
+
+--------------------------------------------------------------------------------------------------
+
+
+velAdd...
+
+o velAdd serve para definir uma mudança de lugar 
+no golpe...ele é bem util para, por exemplo, fazer 
+o char ir para trás depois de um golpe...ou ir pra 
+frente...
+
+modo simples de fazer:
+
+coloque isso no cns do grupo que voce quer botar
+
+[State 0, VelAdd]
+type = VelAdd
+trigger1 =animelem=1
+x = -10
+y = 0
+
+
+agora para configurar:
+
+
+desse jeito o char vai pra trás depois do desenho 1...
+para fazer ele ir pra trás depois do desenho que quiser 
+é só ir na linha:"trigger1 =animelem=1" e alterar o "1"
+pelo numero de ordem do desenho em que voce quer que o 
+char vá pra trás
+
+o char pode ir pra qualquer lugar e não só para trás...
+para isso altere as linhas "x = -10" e "y = 0"
+alterando o "-10" e o "0"
+
+bem fácil né?
+
+
+-------------------------------------------------------------------------------------------
+
+
+como fazer para tirar life em um especial:
+
+vai no cmd do char e onde tá o value coloca isso embaixo 
+dele:
+
+triggerall = power >= 300
+
+isso fará com que precise do valor 300 para fazer o 
+especial...se quiser aumente o numero
+
+agora se voce quiser que se perca esse mesmo tanto na hora
+de fazero especial é só botar isso no cns do char:
+
+[State 200, 0]
+type = powerAdd
+trigger1 = time = 1
+trigger2 = var(12) = 20
+value = -300
+
+de novo se voce quiser alterar o tanto que vai tirar é só 
+alterar o -300 ( tem que ser numero negativo )
+
+é até fácil pra uma coisa importante em um char....XD
+
+
+---------------------------------------------------------------------------------------
+
+criando teletransporte:
+
+adicione as imagens do teletransporte no grupo 430
+
+lembre-se!! tem que ser a imagem do char desaparecendo
+e reaparecendo de novo no mesmo grupo (430)!!!!!
+
+não deixe ser muito rápido pois vai dar erro...deixe 
+no maximo velocidade 6...
+
+agora vá no cns do grupo 430 e troque o grupo por isso:
+
+
+[Statedef 430]
+type    = C
+movetype= A
+physics = C
+juggle  = 5
+poweradd= 22
+ctrl = 0
+anim = 430
+
+[State 0, PosAdd]
+type = PosAdd
+trigger1 = time = 23
+x = ifelse(prevstateno != 940, p2dist x + 40, -199)
+
+[State 0, Turn]
+type = Turn
+triggerall = prevstateno != 940
+trigger1 = time = 24
+
+[State 430, 5]
+type = ChangeState
+trigger1 = AnimTime = 0
+value = 11
+ctrl = 1
+
+agora vá no char e clique "baixo + Q" que vai ter 
+teletransporte
+
+se voce quiser adicione um sonzinho também XD
+pra ficar melhor \o/
+
+
+-------------------------------------------------------------------------
+
+agora criando helper:
+
+helper é quando um char chama alguem...como nesse
+caso é o lee, voce pode fazer ele chamando o gai
+sensei
+
+primeiro voce tem que criar um state para o char
+chamando o helper e um state para o helper...
+
+no caso criem os seguintes states:
+
+state 1122 para a pose do char chamando o helper
+
+state 1123 para o helper fazendo o ataque ( eu
+aconselho colocar sprites de teletransporte antes e
+depois do ataque...para simbolizar a chegada dele...
+senão vai ficar estranho )
+
+certo...coloque os clsn
+
+agora vá no painel cns e vá no grupo que voce quiser,
+e embaixo do grupo coloque isto:
+
+;1122
+[StateDef 1122]
+type = S
+movetype= A
+physics = S
+juggle  = 1
+velset = 0,0
+ctrl = 0
+anim = 1122
+poweradd = 20
+sprpriority = 2
+
+[State 0, Helper]
+type = Helper
+trigger1 =animelem=1
+helpertype = player ;player
+name ="XD"
+ID =1123
+stateno =1123
+pos = 55,0
+postype = p1
+facing = 1
+keyctrl = 0
+ownpal = 0
+supermove
+pausemove
+
+[State 1122, end]
+type = ChangeState
+trigger1 = AnimTime = 0
+value = 0
+ctrl = 1
+
+clique, do lado esquerdo, em "atualizar lista" e veja
+que o grupo 1122 foi criado embaixo do que voce escolheu
+
+agora vá embaixo disso e, do lado esquerdo, adicione "soco"
+faça as configurações com o grupo 1123...escolhendo imagem 
+de hit, etc...
+
+clique em "inserir" e depois clique novamente em 
+"atualizar lista"
+
+veja que o statedef 1123 foi criado embaixo do 1122
+
+mas voce tem que adicionar mais uma coisa...e essa coisa 
+será essencial
+
+vá no cns do statedef 1123 e, do lado direito, clique 2 
+vezes em "destroySelf"
+
+veja o que foi adicionado:
+
+[State 0, DestroySelf]
+type = DestroySelf
+;trigger1 =
+;ignorehitpause =
+;persistent =
+
+tire o ponto e virgula da frente do "trigger1 =" e depois 
+coloque "animelem=" e depois do "animelem=" coloque 
+o tanto de imagens que tem o seu helper
+
+se voce não adicionar isso o helper ficará ali para sempre
+por isso é essencial
+
+bem, essa parte já foi feita em "projetil" por isso eu
+vou simplificar ao máximo
+
+vá no painel cmd e adicione o comando que voce quer que 
+fique o helper ( e o nome também )
+
+selecione o comando e clique em "editor de comandos"
+
+coloque o nome do comando, nome do comando de novo e 
+em "valor" coloque 1122 ( usaremos o do char chamando o
+helper e não do helper ), e lá embaixo na linha 
+triggerall = command = "" 
+coloque o nome do comando entre as aspas
+
+clique em "adicionar/atualizar" e pronto! seu helper 
+está feito
+
+vá no jogo e faça o comando...veja que voce chamou 
+o helper e depois ele foi embora ( coisa que não 
+aconteceria se voce não tivesse adicionado o 
+"DestroySelf")
+
+por enquanto é só...mas depois eu continuo o tutorial 
+com outra lição...flw
