@@ -1,0 +1,19 @@
+###########################
+#Portrait
+###########################
+-- Paleta --
+PNG 8 + 256 + adaptive + alpha transparent + e por o fundo da cor do seu fundo
+-- Scala --
+tamanho legal para portrait de char com scala pela metade 240x280
+
+###########################
+#Scale no mugen 1 para sprite antigo
+###########################
+p1.face.scale .5
+usar o localcoord 640x480 no def do personagem
+
+###########################
+#Cor paleta char - Mugen 1.0
+###########################
+salvar como bmp8, clicar em imagem / paleta, carregar a imagem, la mover as cores para as ultimas posições da paleta do personagem ao lado, e desmarcar a cor que será transparente, depois colocar a cor que vai ser transparente na primeira posição da paleta do personagem.
+
