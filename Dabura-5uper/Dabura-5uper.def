@@ -4,31 +4,31 @@
 ;***************************************************************************;
 
 [Info]
-name ="Dabura"
+name ="Dabura-5uper"
 displayname ="Dabura"
-versiondate = 
+versiondate = 09/06/2014
 mugenversion = 1.0
 author ="5uper"
-localcoord = 640,480
+localcoord = 320,240
 
 [Files]
 sprite =Dabura-5uper.sff
 anim =Dabura-5uper.air 
 cmd =Dabura-5uper.cmd
-cns =Dabura-5uper.cns
-stcommon =Dabura-5uper.cns
-st =Dabura-5uper.cns
+cns =Dabura-5uper-Const.cns
+stcommon =Dabura-5uper-Common.cns
+st =Dabura-5uper-ST.cns
 
 [Palette Keymap]
 x = 1
-y = 1
+y = 2
 z = 1
 a = 1
-b = 1
+b = 2
 c = 1
 x2 = 1
-y2 = 1
+y2 = 2
 z2 = 1
 a2 = 1
-b2 = 1
+b2 = 2
 c2 = 1

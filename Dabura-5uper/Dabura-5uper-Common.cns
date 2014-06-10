@@ -1,72 +1,37 @@
-; Common state file
+;+-----------------------------------------------------+
+;¦-----Common States-----------------------------------¦
+;¦Template by 5uper com base no template do Thunderbert¦
+;+-----------------------------------------------------+
 ;
-; System variables usage
+; Uso das variáveis do sistema
 ; ----------------------
-; Var name    Type   Purpose
-; --------    ----   -------
-; sysvar(0)   Temp   Set by state 5081 (HITL_SLIDE) to 1 to prevent
-;                    showing ground hit frame in state 5110 (HIT_LIEDOWN).
-;                    Used by guarding states.
-; sysvar(1)   Temp   Used by state 40 (Jump Start) amd 45 (Air Jump Start)
-;                    to keep track of which way to jump.
-;                    Used by state 5100 and 5110 to remember downward
-;                    velocity of player just before hitting the ground.
-;                    Used in state 5080 for storing the anim # to display.
+; Nome da Var	Tipo	Propósito
+; -----------	----	---------
+; sysvar(0)	Temp	Definido no State 5081 para 1 para prevenir que seja mostrado o frame de porrada no chão no state 5110.
+;                   	Usado em states de defesa.
+; sysvar(1)	Temp	Usado pelos states 40 e 45 para manter a direção do pulo.
+;                   	Usado pelos states 5100 e 5110 para lembrar a velocidade de queda antes do char atingir o chão.
+;                   	Usado no state 5080 para armazenar a animação que o char irá usar.
 
-[Data]
-life = 1000
-power = 1000
-attack = 100
-defence = 100
-fall.defence_up = 50
-liedown.time = 60
-airjuggle = 15
-sparkno = 2
-guard.sparkno = 40
-KO.echo = 0
-volume = 0
-IntPersistIndex = 60
-FloatPersistIndex = 40
+; Os seguintes states possuem atributos especiais e devem ser editados com cuidado:
+; Jump Start (40): airjumping bookkeeping at time = 0
+; All guard states (120-155): guard handling throughout state
+; Hit_trip, shaking (5070): defense increases at time = 0
+; Downed get-hit (hit ground from fall) (5100):
+;   defense increases at time = 0, player becomes invincible if within 10
+;   ticks of getting up
+; Hit_liedown (5110): player changes to get-up state (5120) when ready
+; Hit_getup (5120): player's defence is restored to normal at time = 0
+; Hitfall_recover (5200): player's defence is restored at time = 0
+; Hitfall_airrecover (5210): player's defence is restored at time = 0
 
-[Size]
-xscale = 1
-yscale = 1
-ground.back = 10
-ground.front = 10
-air.back = 10
-air.front = 10
-height = 30
-attack.dist = 160
-proj.attack.dist = 90
-proj.doscale = 0
-head.pos = 0, -22
-mid.pos = -1, -11
-shadowoffset = 0
-draw.offset = 0,0
-
-[Velocity]
-walk.fwd  = 3
-walk.back = -3
-run.fwd  = 5, 0
-run.back = -5,-4
-jump.neu = 0,-8.4
-jump.back = -2.55
-jump.fwd = 2.5
-runjump.back = -2.55,-8.1
-runjump.fwd = 4,-8.1
-airjump.neu = 0,-8.1
-airjump.back = -2.55
-airjump.fwd = 2.5
-
-[Movement]
-airjump.num = 1
-airjump.height = 10
-yaccel = .44
-stand.friction = .85
-crouch.friction = .82
+;+------------------------+
+;¦Legenda-----------------¦
+;¦P. = Personagem ( Char )¦
+;+------------------------+
 
 ;---------------------------------------------------------------------------
-; Stand
+; P. parado ( Stand )
 [Statedef 0]
 type = S
 physics = S
@@ -90,7 +55,7 @@ trigger2 = Time = 4
 x = 0
 
 ;---------------------------------------------------------------------------
-; Stand to Crouch
+; P. abaixando ( Stand to Crouch )
 [Statedef 10]
 type    = C
 physics = C
@@ -107,7 +72,7 @@ trigger1 = AnimTime = 0
 value = 11
 
 ;---------------------------------------------------------------------------
-; Crouching
+; P. abaixado ( Crouching )
 [Statedef 11]
 type    = C
 physics = C
@@ -120,7 +85,7 @@ trigger1 = Anim = 6 && AnimTime = 0
 value = 11
 
 ;---------------------------------------------------------------------------
-; Crouch to Stand
+; P. levantando ( Crouch to Stand )
 [Statedef 12]
 type    = S
 physics = S
@@ -132,7 +97,7 @@ trigger1 = AnimTime = 0
 value = 0
 
 ;---------------------------------------------------------------------------
-; Walk
+; P. andando pra frente ( Walk )
 [Statedef 20]
 type    = S
 physics = S
@@ -163,7 +128,7 @@ trigger2 = Anim = 5 && AnimTime = 0
 value = 21
 
 ;---------------------------------------------------------------------------
-; Jump Start
+; P. se preparando pra pular ( pegando impulso ) ( Jump Start )
 [Statedef 40]
 type    = S
 physics = S
@@ -218,7 +183,7 @@ value = 50
 ctrl = 1
 
 ;---------------------------------------------------------------------------
-; AirJump Start
+; P. caindo no pulo pra frente ( AirJump Start )
 [Statedef 45]
 type    = A
 physics = N

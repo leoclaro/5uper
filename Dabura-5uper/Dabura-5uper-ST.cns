@@ -1,0 +1,105 @@
+;+-----------------------------------------------------+
+;¦---------States--------------------------------------¦
+;¦Template by 5uper com base no template do Thunderbert¦
+;+-----------------------------------------------------+
+
+;---------------------------------------------------------------------------
+; Formato básico
+; [StateDef STATENO]
+; Type = ?      S/C/A/L  Em pé/Agaichado/No ar/Caído
+; MoveType = ?  I/A/H    Parado/Atacando/Levando porrada
+; Physics = ?   S/C/A/N  Em pé (aplica atrito)/Agaichado (aplica atrito)/No ar (aplica gravidade)/Nada
+; Juggle = ?             Quantidade de pontos "Juggle" removidos ao realizar o movimento
+; Ctrl = ?	0/1	 Não controla o char/Controla o char
+; Anim = ?		 Animação que o char vai usar no state
+; VelSet = ?,?		 Velocidade inicial aplicada no char (X,Y)
+; PowerAdd = ?		 Power que será adicionado ao char
+; SprPriority = ?	 Prioridade das sprites, quanto maior, mais na frente o char fica
+;
+; [State STATENO, ?]     ? = Qualquer número ou texto para identificação
+; Type = ?
+; ...
+
+;----------------------------------------------------------------------------------------------
+; Guard Crush State (see statedef -3 for coding details)
+;----------------------------------------------------------------------------------------------
+
+[Statedef 9000]
+type    = S
+physics = S
+anim = 9000 ; Character being guard crushed
+ctrl = 0
+
+[State 9000, Freeze]
+type = Pause
+trigger1 = Time = 0
+time = 3
+movetime = 3
+ignorehitpause = 1
+
+[State 9000, Flash]
+type = Envcolor
+trigger1 = Time = 2
+value = 248,248,248
+time = 3
+under = 1
+ignorehitpause = 1
+
+[State 9000, Screen Shake]
+type = EnvShake
+trigger1 = Time = 5
+time = 15
+amp = -3
+
+[State 9000, Guard Crush Explod if P1] ; "Guard Crush !" sprite
+type = Explod
+triggerall = numexplod(7250) <= 0 && teamside = 1 
+trigger1 = time = 0
+anim = 7250
+id   = 7250
+pos = 0,110
+postype = left
+bindtime = -1
+sprpriority = 2
+supermove = 1
+facing = 1
+ontop = 0
+ownpal = 1
+ignorehitpause = 1 
+persistent = 0
+
+[State 9000, Guard Crush Explod if P2]
+type = Explod
+triggerall = numexplod(7251) <= 0 && teamside = 2
+trigger1 = time = 0
+anim = 7251
+id   = 7251
+pos = -97,110
+postype = right
+bindtime = -1
+sprpriority = 2
+supermove = 1
+facing = 1
+ontop = 0
+ownpal = 1
+ignorehitpause = 1 
+persistent = 0
+
+[State 9000, Guard Crush Var Reset]
+type = VarSet
+trigger1 = time = 0
+var(11) = 0
+ignorehitpause = 1
+
+[State 9000, Get back]
+type = Velset
+trigger1 = time = [3,10]
+x = -5
+ignorehitpause = 1
+
+[State 9000, End]
+type = ChangeState
+trigger1 = AnimTime = 0
+value = 0
+ctrl = 1
+ignorehitpause = 1
