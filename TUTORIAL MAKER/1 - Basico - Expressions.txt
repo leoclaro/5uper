@@ -1,0 +1,244 @@
+http://raphael-r2.ucoz.com/index/0-16
+ Expressions
+                ===========
+M.U.G.E.N, (c) Elecbyte 2000
+Documentation for version 2000.06.27
+
+
+;-----------------------------------------------------------------------------------------------
+I.    Data types
+    Ints    número inteiro
+    Floats    número real
+
+;-----------------------------------------------------------------------------------------------
+II.   Arithmetic operators
+    Se uma das parcelas for do tipo float, então o resultado será float.
+    +, -, *, /    operadores básicos
+    %        Mod. Se x e y são do tipo int, x%y retorna o resto da divisão
+    **        Exponenciação. x**y  =  x^y
+
+    !    NOT
+    &&    AND
+    ||    OR
+    ^^    XOR
+    ~    NOT
+    &    AND
+    |    OR
+    ^    XOR (The nth bit of x^y is set if and only if the nth bit of exactly one of x,y)
+    =    igualdade
+    :=    Define valor da variável. Se à esquerda houver um inteiro ao invés de uma letra, o lado direito será truncado.
+    !=    inequaldade
+    <    menor que
+    <=    menor ou igual
+    >    maior que
+    >=    maior ou igual
+
+    = [,]        != [,]
+    = [,)        != [,)
+    = (,)        != (,)
+    = (,]        != (,]
+    Operadores de intervalo. [] significa que os pontos que definem o intervalo estão contidos.
+                () significa que os pontos que definem o intervalo não estão contidos.
+
+
+;-----------------------------------------------------------------------------------------------
+III.  Precedence and associativity of operators
+
+    Se dois operadores tem a mesma precedência, então a expressão é avaliada da direita para a esquerda. Se estiver dentro de um parênteses, então essa parte será avaliada primeiro.
+
+    3+2*5 = 13
+    (3+2)*5 = 25
+
+
+    Lista completa da precedência, do mais alto ao mais baixo.
+    ! ~ -  (Unary operators)
+    **
+    * / %
+    + -
+    > >= < <=
+    = != intervals
+    :=
+    &
+    ^
+    |
+    &&
+    ^^
+    ||
+
+
+;-----------------------------------------------------------------------------------------------
+IV.   Expression syntax
+
+    1.0 = (2 = (1 > 0) + !(0 < 1))
+  (1 > 0) retorna valor 1, e !(0 < 1) retorna 0. Simplificando, temos:
+    1.0 = (2 = 1 + 1)
+  Como (2 = 1 + 1), retorna 1. A igualdade 1.0 = 1 vale, portanto o resultado final é 1.
+
+
+  Possível
+    (1 = [0,2]) = (0,1)
+
+
+  Errado
+    1 = [0,2] = (0,1)
+    5 > [0,2]
+    4 + [1,4)
+
+
+;-----------------------------------------------------------------------------------------------
+V.    Triggers
+
+    Por razões históricas, duas estruturas distintas são chamadas de "triggers". Uma estrutura é condicional, a outra é uma função.
+
+[Statedef 1234]
+...
+[State 1234, 5]
+type = ChangeState
+trigger1 = time = 5
+value = 0
+
+    Função:  o trigger "time" retorna um valor. Ele retorna o tempo em que o personagem está no estado 1234. Note que a função apenas retorna um valor.
+    Condição:  o comando ChangeState modifica o estado (pulo, soco...) do personagem. Mas isso só irá acontecer quando a condição (trigger1) for verdadeira. Desta forma, o personagem vai para o estado 0 após 5 "times" em que ele entrou no estado 1234.
+
+[State 1234, 5]
+type = VarSet
+trigger1 = 1         ; condição sempre satisfeita
+v = 0
+value = time + 5
+
+
+;-----------------------------------------------------------------------------------------------
+VI.   Trigger redirection
+
+    No exemplo acima, o trigger "time" é direcionado para o personagem. Mas, às vezes, devemos utilizar um trigger para o personagem advesário, helper's ... Isto pode ser feito precedendo por uma palavra chave, indicando qual informação deve ser retornada. Este processo é conhecido como redireção de trigger.
+
+    5 + parent, time
+
+    Retorna 5 + the player's parent's statetime.
+
+parent        Redirects the trigger to the player's parent. (Player must be a helper.)
+root        Redirects the trigger to the root. 
+helper        Redirects the trigger to the first helper found.
+helper(ID)    The trigger is then redirected to a helper with the corresponding ID number.
+target        Redirects the trigger to the first target found.
+target(ID)    The trigger is then redirected to a target with the corresponding targetID.
+
+Versão 14/4/2001+
+partner        Redirects the trigger to the player's partner. See "numpartner" in the trigger documentation.
+enemy        Redirects the trigger to the first opponent found. See "numenemy" in the trigger documentation.
+enemy(n)    n should be a well-formed expression non-negative integer. Redirected to the n'th opponent.
+enemyNear    Redirects the trigger to the nearest opponent.
+enemyNear(n)    n should be a well-formed expression non-negative integer. Redirected to the n'th-nearest opponent.
+playerID(ID)    n should be a well-formed expression non-negative integer. Redirected to the player with ID. See "ID" and "PlayerExistID" triggers.
+
+
+Nota:    Se o trigger é redirecionado para um destino inválido, um erro é retornado.
+    Múltiplas redireções (root, target, time) não é atualmente suportada.
+
+
+;-----------------------------------------------------------------------------------------------
+VII.  SC values
+
+    Ao programar, podem surgir diversos tipos de erros. por exemplo, divisão por zero, raiz quadrada de número negativo, redirecionar um trigger para um destino não existente. Nestas situações, valores SC são utilizados como um caminho para completar essas expressões, e evitar que uma determinada operação incorra em erro. Valores SC admitem apenas dois valores: 1 ou 0, chamados de SC true (STrue) e SC false (SFalse). Se dois SC são dados em um mesmo operador, então aquele que está à esquerda tem a prioridade.
+
+    4 + (1/0)*2
+
+    avaliada em um trigger dá 4 + (SFalse) * 2, avaliada novamente dará SFalse
+
+    A documentação dos triggers-funções explica exatamente quando esses triggers irão retornar SFalse.
+
+
+;-----------------------------------------------------------------------------------------------
+VIII. More on function-type triggers
+
+    Alguns triggers não necessitam de nenhum argumento para ser executado. Outros, entretanto, necessitam de até três argumentos, como é o caso de ifelse:
+
+ifelse(exp1,exp2,exp3)
+
+
+    Pela sintaxe irregular, algumas funções antigas não toleram expressões como argumentos.
+O exemplo da linha abaixo é inválido:
+trigger1 = AnimElem = (1+1)
+
+    Já este exemplo
+trigger1 = AnimElem = 5 + 4
+    será interpretado assim:
+{AnimElem=5} {+} {4}
+
+    A lista de trigger-função antigos, é a seguinte:
+
+AnimElem, superseded by AnimElemTime
+P1Name, P2Name, P3Name, P4Name
+StateType, P2StateType
+Command
+MoveType, P2MoveType
+TimeMod, superseded by the % operator
+ProjHit, ProjContact, ProjGuarded; superseded by ProjHitTime, 
+  ProjContactTime, and ProjGuardedTime
+
+
+;-----------------------------------------------------------------------------------------------
+IX.   Expressions in state and state controller parameters
+
+    Para a maioria dos casos, qualquer parâmetro para um "Statedef" ou "State controler" pode ser uma expressão. As excessões são parâmetros que são dados por strings. Exemplos:
+"hit attributes", "guardflags" ... não podem ser especificados por expressões. os controles ForceFeedback, ignorehitpause e persistent são irregulares pois não permitem expressões.
+
+    Parâmetros "state controler" são avaliados no tempo em que o controle é acionado (triggerado), e não é re-avaliado a menos que o controle seja novamente acionado.
+
+
+;-----------------------------------------------------------------------------------------------
+X.    (Advanced) Optimizing for speed
+
+    Mugen avalia os triggers-condição para um "state controller" na seguinte ordem:
+avalia "triggerall":  se um triggerall for nulo, então os demais não são avaliados.
+avalia "trigger1": como sempre, do topo para baixo.
+avalia "trigger2"
+...
+
+    Por causa deste sistema, ganhos consideráveis de desempenho podem ser conseguidos reorganizando as expressões para um mínimo simples. Por exemplo:
+
+[State -1]
+type = ChangeState
+trigger1 = command = "a"
+trigger1 = power < 1000
+value = 3000
+
+[State -1]
+type = ChangeState
+trigger1 = command = "a"
+trigger1 = power >= 1000
+value = 3001
+
+[State -1]
+type = ChangeState
+trigger1 = command = "a"
+trigger1 = power >= 2000
+value = 3002
+
+
+    Pode ser compactado em
+
+[State -1]
+type = ChangeState
+trigger1 = command = "a"
+value = 3000 + (power >= 1000) + (power >= 2000)
+
+
+    Se tiver uma condição complexa que será usada novamente, você pode salvá-la em uma variável, e então utilizar essa variável para "controllers" subsequentes.
+
+trigger1 = (command="abc" && command!="holddown" && power>=1000) ||       
+           (command="abc" && command!="holddown" && var(5)) || 
+           ((command != "abc" || command = "holddown") && power>=2000)
+
+    Pode ser reescrito como
+
+trigger1 = ((var(0):=(command="abc" && command !="holddown")) && power>=1000) ||
+       (var(0) && var(5)) ||
+       (!var(0) && power>=2000)
+
+
+    Finalmente, a expressão 
+trigger1 = ctrl
+
+    É mais rápida do que
+trigger1 = ctrl = 1

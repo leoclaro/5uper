@@ -1,0 +1,431 @@
+http://mgbr.net/index.php?lang=PTBR&end=multi&id=144&sid=25865
+
+O arquivo CMD é aonde nós definimos os comandos de um personagem, sejam eles quais forem. Exceto ações como abaixar, andar, pular, todas as outras devem estar contidas no CMD, que é separado em duas partes: 
+
+A) A Definição
+
+Aqui definimos (duuuhh) quais golpes existirão no char, que comandos farão isso e qual o tempo de acionamento para tanto. Vamos a um exemplo:
+
+[Command]
+name = 'QCF_x'
+command = ~D, DF, F, x
+time = 20 
+
+Todo comando deve ter [Command] antes dele, indicando que é uma definição de comando (óbvio).
+
+
+A linha 'name' é uma das mais chatas: Aqui, o MUGEN diferencia MAÍSCULAS de minúsculas. Então um golpe chamado 'Hadouken' é diferente de 'HADOUKEN', 'HaDouken', e assim vai.
+
+
+A linha 'Time = 15' indica o tempo em que pode-se fazer o golpe. Caso for omitido, o tempo padrão é 15 ticks.
+
+Eu deixei a linha 'command = ...' por último pq ela tem várias opções:
+
+As oito direções são:
+
+B, DB, D, DF, F, UF, U, UB (MAIUSCULAS)
+
+B - Back (trás)
+DB- DOWN BACK (baixo tras)
+D - Down (baixo)
+DF - Down Foward (baixo frente)
+F - Foward (frente)
+UF - Upper Foward (cima frente)
+U - Up (cima)
+UB - Upper Back (cima trás)
+
+Os seis botões são:
+
+a, b, c, x, y, z (minusculas)
+
+Na configuração padrão, abc estão embaixo no teclado e xyz estão em cima (eu configuro o Mugen nas teclas ASD para os de cima, ZXC para os debaixo e Enter para o start).
+
+Para lutadores com apenas dois botões, recomenda-se usar apenas a e b. Para 6 botões, use abc para chutes e xyz para socos.
+
+A lista de botões ou direções devem ser separadas por vírgulas, e podem ser precedidas por caracteres especiais:
+
+Barra (/) - indica que a tecla deve ser segurada.
+
+exs. command = /D ;segure para baixo
+command = /DB, a ;aperte a enquanto segura baixo-tras.
+
+til (~) - para detectar se as teclas foram soltas
+
+exs. command = ~a ;solte a tecla a
+command = ~D, F, a ;solte o botao para tras, aperte para frente e depois a (o típico comando de hadouken)
+
+Se vc quer fazer golpes que precisem ser 'carregados', vc pode especificar o tempo que a tecla deve ser segurada 
+exs. command = ~30a ;segure a por no mínimo 30 ticks e depois solte
+
+dollar ($;) - apenas para direções: detecta 4 posições
+
+exs. command = $D ; irá detectar se D, DB ou DF está pressionada
+command = $B ; irá detectar se B, DB ou UB está pressionada
+
+Mais (+) - apenas para botões: pressionamento simultâneo
+
+exs. command = a+b ; pressione a+b ao mesmo tempo.
+command = x+y+z ; pressione x+y+z ao mesmo tempo.
+
+Você pode conbinar eles:
+
+command = ~30$D, a+b ; Segure D,DB, ou DF por 30 ticks, solte e aperte a+b (juntos).
+
+É recomendado para a maioria dos movimentos de golpes, como meia lua para tras, quarto de lua, etc, que você comece com um ' ~ ', pois assim é feito na maioria dos jogos de luta.
+
+Se você tiver dois ou mais comandos com o mesmo nome, todos irão funcionar. Exemplos de golpes:
+
+[Command] ; quarto de lua para frente +x (hadouken)
+name = 'QCF_x'
+command = ~D, DF, F, x
+
+[Command] ; meia lua para trás +a (Yoga Flame)
+name = 'HCB_a'
+command = ~F, DF, D, DB, B, a
+
+[Command] ; dois quartos para frete + y (Shinryukken)
+name = '2QCF_y'
+command = ~D, DF, F, D, DF, F, y
+
+[Command] ;apertar b rapidamente
+name = '5b'
+command = b, b, b, b, b
+time = 30
+
+[Command] ; carregar parea trás, depois rente + z (Sonic Boom)
+name = 'charge_B_F_z'
+command = ~60$B, F, z
+time = 10
+
+[Command] ; Carregar baixo, depois cima + c (Sommersault Kick, ou facão)
+name = 'charge_D_U_c'
+command = ~60$D, U, c
+time = 10
+
+
+ATENÇÃO !!!!
+
+
+Um erro comum de alguns criadores é não respeitar a ordem dos comandos no CMD. Pode parecer besteira, mas não é. Se vc tem golpes nesta ordem:
+
+HYPER 1
+HYPER 2
+HADOUKEN
+SHORYUKEN
+GIRATORIA
+FACAO
+AGARRAO
+
+e colocar na 'utilizacão' em ordem difente da que vc usou acima:
+
+HADOUKEN
+SHORYUKEN
+HYPER 2
+FACAO
+HYPER 1
+AGARRAO
+
+Os comandos não vão funcionar. Em alguns casos, onde se tem poucos comandos, isso passa desapercebido. Mas quando começamos a ter vários comandos, notamos que alguns não funcionam...é como se não existissem para o MUGEN, pois na verdade...não existem. Então, antes de sair xingando todo mundo pq seu golpe não esta aparecendo, deixe sempre o Debug ligado (CTRL+D), e troque o 'comando' por outro qualquer, como 'start'. Se passar a funcionar, a ordem dos golpes está errada.
+
+Outra coisa: no CMD, os códigos DEVEM ser DECESCENTES, ou seja, os maiores (com mais comandos e botoes) vêm primeiro. Um golpe de comando ' ~D,DF,F,D,DF,F,a' deve vir primeiro do que ' ~D,DF,F,a'.
+
+No Mugen, muitos comandos são padrão, devem estar presentes e podem ser copiados do KFM. Os comandos são:
+
+;-| Double Tap |-----------------------------------------------------------
+[Command]
+name = 'FF' ;Required (do not remove)
+command = F, F
+time = 10
+
+[Command]
+name = 'BB' ;Required (do not remove)
+command = B, B
+time = 10
+
+;-| 2/3 Button Combination |-----------------------------------------------
+[Command]
+name = 'recovery';Required (do not remove)
+command = x+y
+time = 1
+
+;-| Dir + Button |---------------------------------------------------------
+[Command]
+name = 'down_a'
+command = /$D,a
+time = 1
+
+[Command]
+name = 'down_b'
+command = /$D,b
+time = 1
+
+;-| Single Button |---------------------------------------------------------
+[Command]
+name = 'a'
+command = a
+time = 1
+
+[Command]
+name = 'b'
+command = b
+time = 1
+
+[Command]
+name = 'c'
+command = c
+time = 1
+
+[Command]
+name = 'x'
+command = x
+time = 1
+
+[Command]
+name = 'y'
+command = y
+time = 1
+
+[Command]
+name = 'z'
+command = z
+time = 1
+
+[Command]
+name = 'start'
+command = s
+time = 1
+
+;-| Hold Dir |--------------------------------------------------------------
+[Command]
+name = 'holdfwd';Required (do not remove)
+command = /$F
+time = 1
+
+[Command]
+name = 'holdback';Required (do not remove)
+command = /$B
+time = 1
+
+[Command]
+name = 'holdup' ;Required (do not remove)
+command = /$U
+time = 1
+
+[Command]
+name = 'holddown';Required (do not remove)
+command = /$D
+time = 1
+
+
+Aqui foi a parte fácil, mas como dizia Murphy 'Tudo tende a piorar no final. Se não piorou, é pq não acabou':
+
+B) Utilização
+
+Aqui informamos que comando fará o que no CMD. Para explicar esta parte, temos que apresentar algo vital na programaçao do Mugen: Os Triggers.
+
+Triggers
+
+Triggers vêm do inglês e significa 'gatilho', e pode ser entendido como o gatilho necessário para disparar uma determinada ação. Para uma lista completa de Triggers, olhe na pasta DOCS do Mugen o arquivo triggers.txt, que contém os triggers existentes no Mugen. Mas se você não entende inglês, eu hospedei a tradução dos docs da elecbyte no meu site: http://bmt.mgbr.net/triggers.txt . Esta tradução não foi feita por mim, e eu esqueci o nome do cara que fez.
+
+Uma vez tendo lido o documento em questão, ficará MUITO mais fácil de vc entender como funciona o CMD:
+
+[Statedef -1]
+
+Esta linha é OBRIGATÓRIA e não deve ser apagada, pois ela indica que vamos definir os comandos a partir daqui. Conforme falado acima, devemos respeitar a ordem dos comandos, entao façam 'hypers' antes de 'supers', etc...
+
+[statedef -1, 'nome']
+Type = ChangeState
+Value = número de state existente
+triggerall = ...
+trigger1 = ... 
+
+'Type = ChangeState' informa que o char mudará de state, já que a frase ChangeState é um controlador na programação de Mugen, que realiza a troca de states em um char. Por enquanto, trabalhemos apenas com ChangeState
+Value = a um número de state EXISTENTE (óbvio). Por exemplo: vc quer fazer o char dar um soco fraco, cujo state é de número 200. Então Value = 200.
+
+Lembra do que eu falei sobre triggers? eles podem ser de dois tipos: 
+Triggerall- significa que TODOS os triggers abaixo DEVEM possuir esta condição. Algo como 'QUANDO...' , mas a diferença que quando temos 'trigger1' , 'trigger2', etc algum deles deve ser verdadeiro. No caso de triggerall TODOS devem ser veradeiros. Ex:
+
+triggerall = command = 'SmashKFUpper'
+triggerall = power >= 1000
+triggerall = statetype != A
+trigger1 = ctrl
+trigger2 = hitdefattr = SC, NA, SA, HA
+trigger2 = stateno != [3050,3100)
+trigger2 = movecontact
+
+Significa que deve ter sido excutado o comando SmashKFUpper, o power deve ser maior ou igual a 1000 e o char não pode estar no ar. QUANDO tudo isso for satisfeito (for verdadeiro), daí o Mugen irá ler o resto...
+
+Trigger - Significa 'Se...'. Por ex: 'trigger1 = ctrl' indica que o char deve ter controle (ser controlavel) para executar o golpe, ou seja, nao pode estar fazendo outra coisa. Podemos ter vários triggers com o mesmo número:
+
+trigger1 = statetype = S
+trigger1 = ctrl
+
+ou podemos tê-los num mesmo trigger:
+
+trigger1 = (statetype = S) && ctrl
+
+Quando colocamos vários triggers numa única linha, o Mugen lê ligeiramente mais rápido, o que chamamos de otimização de leitura. 
+
+Podemos ter vários triggers, dispostos em ordem CRESCENTE:
+
+
+Vcs devem ter reparado em alguns comandos e caracteres estranhos, como '&&'. São chamados 'operadores aritiméticos', e são descritos assim:
+
++, -, *, / operadores básicos
+% Mod. Se x e y são do tipo int, x%y retorna o resto da divisão
+** Exponenciação. x**y = x^y
+
+! NOT
+&& AND
+|| OR
+^^ XOR
+~ NOT
+& AND
+| OR
+^ XOR (The nth bit of x^y is set if and only if the nth bit of exactly one of x,y)
+= igualdade
+:= Define valor da variável. Se à esquerda houver um inteiro ao invés de uma letra,
+o lado direito será truncado.
+!= inequaldade (diferente)
+< menor que
+<= menor ou igual
+> maior que
+>= maior ou igual
+
+= [,] != [,]
+= [,) != [,)
+= (,) != (,)
+= (,] != (,]
+Operadores de intervalo. [] significa que os pontos que definem o intervalo estão contidos.
+() significa que os pontos que definem o intervalo não estão contidos.
+
+Para maiores detalhes, veja o arquivo EXP.TXT traduzido que está hospedado no meu site http://bmt.mgbr.net/exp.txt
+
+Alguns comandos muito usados no CMD:
+
+1) CTRL = 1
+
+Isso informa que o char deve ser controlavel para executar este golpe, caso contrário ele mudara de um state para outro assim que vc fizer o comando. Lembrando de otimização, tudo que for = 1 vc pode omitir a ultima parte. Ex: 'Ctrl = 1' é o mesmo que apenas 'Ctrl'
+
+2) statetype = S
+
+Indica em que situação o char deve estar para realizar esta açao: S (Stand, de pé), C (Crouched, abaixado) ou A (AIR, no ar).
+
+3) Movecontact = 1
+
+Indica se o golpe encostou no oponente, tendoa acertado ou nao. 
+
+Bem, vamos explicar alguns golpes. Começaremos pelo soco fraco do KFM:
+
+[State -1, Stand Light Punch]
+type = ChangeState ; obrigatório
+value = 200 ; state do soco fraco
+triggerall = command = 'x' ; se o comando 'x' for utilizado
+triggerall = command != 'holddown' ; Se o comando NAO for segurado
+trigger1 = statetype = S ; Se estiver de pé
+trigger1 = ctrl ; Se tiver controle
+trigger2 = stateno = 200 ; Se estiver no state 200 ( o proprio)
+trigger2 = time > 6 ; se o tempo for maior que 6 ticks.
+
+Conforme falado acima, o triggerall DEVE ser verdadeiro em TODOS os triggers, e um deles (seja trigger1 ou trigger2) também. Não há necessidade de que triggers de diferentes números sejam verdadeiros ( é como se fossem alternativas), mas sim todos que tiverem os mesmos números.
+No caso acima, o char deve estar de pé e com contole para dar o soco. OU estar no próprio state do soco mas o tempo for maior que 6. Aqui mora o perigo: Muitos criadores esquecem que colocar este tempo, ou algo que impeça que de o char entre em loop, ou seja, que vc possa fazer vários socos fracos em sequência e muito rápido, o que acabaria com o inimigo em segundos... É o chamado Combo Infinito, que é o terror dos progamadores.
+
+Agora vamos utilizar o comando MOVECONTACT, usando o Facao do MB-01:
+
+;Somersault Shell fraco
+[State -1]
+type = ChangeState
+value = 930
+triggerall = command = 'fc_x'
+trigger1 = statetype != A
+trigger1 = ctrl = 1
+trigger2 = (stateno = [200,450]) && (stateno !=290) 
+trigger2 = movecontact
+
+Repare nas duas linhas em negrito. Na primeira, eu informo que este golpe pode ser feito enquanto o MB-01 estiver nos states de 200 (soco fraco) até 450 (chute forte agachado), mas NAO pode estar no state 290 (agarrão). Uma dica: é MUITO mais facil vc usar 'stateno = [200,450]' do que 'Stateno = 200 || Stateno = 210 || Stateno= 220 (etc...)'
+na segunda, eu indico que os golpes anteriores (os de state 200 a 450) deve ter encostado no p2, para que possa ser feito em combo.
+
+-=-=-=-=-=-=-==-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-==-=-=-=-=-=-=-=-==-
+
+Após tudo isso, vou explicar uma parte interessante em todo char:
+
+COMBOS - Como progamá-los
+
+Em quase todo char em jogo de luta, vemos que podemos ligar vários comandos em sequencia, geralmente muito desagradáveis para quem os toma (hehe), que são chamado COMBOS. Mas como programá-los no Mugen, para que possam sempre acertar o char oponente em sequencia e sejam indefensáveis? Vamos a um exemplo:
+
+;Soco Fraco Abaixado
+[State -1]
+type = ChangeState
+value = 400
+triggerall = command = 'x'
+triggerall = command = 'holddown'
+trigger1 = statetype = C
+trigger1 = ctrl = 1
+trigger2 = movecontact 
+trigger2 = stateno = 400 
+
+;Soco Médio Abaixado
+[State -1]
+type = ChangeState
+value = 410
+triggerall = command = 'y'
+triggerall = command = 'holddown'
+trigger1 = statetype = C
+trigger1 = ctrl = 1 
+trigger2 = movecontact 
+trigger2 = stateno = 400 || stateno = 430
+
+;Soco Forte Abaixado
+[State -1]
+type = ChangeState
+value = 420
+triggerall = command = 'z'
+triggerall = command = 'holddown'
+trigger1 = statetype = C
+trigger1 = ctrl = 1 
+trigger2 = movecontact 
+trigger2 = stateno = 410 
+
+;Chute Fraco Abaixado
+[State -1]
+type = ChangeState
+value = 430
+triggerall = command = 'a'
+triggerall = command = 'holddown'
+trigger1 = statetype = C
+trigger1 = ctrl = 1 
+trigger2 = movecontact 
+trigger2 = (stateno = 430) && time > 5
+
+;Chute Médio Abaixado
+[State -1]
+type = ChangeState
+value = 440
+triggerall = command = 'b'
+triggerall = command = 'holddown'
+trigger1 = statetype = C
+trigger1 = ctrl = 1 
+trigger2 = movecontact 
+trigger2 = stateno = 410 ||stateno = 430 
+
+;Chute Forte Abaixado
+[State -1]
+type = ChangeState
+value = 450
+triggerall = command = 'c'
+triggerall = command = 'holddown'
+trigger1 = statetype = C
+trigger1 = ctrl = 1 
+trigger2 = movecontact 
+trigger2 = stateno = 420 || stateno = 440
+
+O que interessa para nós são os números dos states e as partes que contém MOVECONTACT e STATENO.
+
+No state do chute fraco (430), ele por ser seguido de outro chute (pode ser ligado) fraco, mas desde que o tempo seja maior que 5. 
+A alma do negócio é este: os states devem ser 'ligáveis' entre si, fazendo um ciclo. Um jeito de fazê-los ligar seria:
+
+soco fraco > soco medio > soco forte (ou chute fraco > chute medio > chute forte)
+
+ou
+
+soco fraco > chute fraco > soco medio > chute medio > soco forte > chute forte.
