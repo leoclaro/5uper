@@ -344,134 +344,7 @@ trigger1 = Pos Y >= 0
 value = 106
 
 ;---------------------------------------------------------------------------
-; RUN_BACK2 (land)
-[Statedef 106]
-type    = S
-physics = S
-ctrl = 0
-anim = 47
-
-[State 106, 1]
-type = VelSet
-trigger1 = Time = 0
-x = 0
-y = 0
-
-[State 106, 2]
-type = PosSet
-trigger1 = Time = 0
-y = 0
-
-[State 106, 3]
-type = MakeDust
-trigger1 = Time = 2
-pos = -5,-2
-spacing = 1
-
-[State 106, 4]
-type = ChangeState
-trigger1 = Time = 7
-value = 0
-ctrl = 1
-
-;---------------------------------------------------------------------------
-; RUN_UP
-[Statedef 110]
-type    = S
-physics = N
-
-[State 110, 0]
-type = CtrlSet
-trigger1 = Time = 0
-value = 0
-
-[State 110, 1]
-type = ChangeAnim
-trigger1 = Time = 0
-value = 110
-
-[State 110, 2]
-type = HitBy
-trigger1 = Time = 0
-value = SCA, NT, ST, HT
-time = 30
-
-[State 110, 3]
-type = VelSet
-trigger1 = Time = 0
-x = 0
-z = -7
-
-[State 110, 4]
-type = VelMul
-trigger1 = 1
-z = 0.8
-
-[State 110, 5]
-type = VelSet
-trigger1 = AnimTime = -8
-z = 0
-
-[State 110, 7]
-type = CtrlSet
-trigger1 = AnimTime = 0
-value = 1
-
-[State 110, 8]
-type = ChangeState
-trigger1 = AnimTime = 0
-value = 0
-
-;---------------------------------------------------------------------------
-; RUN_DOWN
-[Statedef 115]
-type    = S
-physics = N
-
-[State 115, 0]
-type = CtrlSet
-trigger1 = Time = 0
-value = 0
-
-[State 115, 1]
-type = ChangeAnim
-trigger1 = Time = 0
-value = 110
-
-[State 115, 2]
-type = HitBy
-trigger1 = Time = 0
-value = SCA, NT, ST, HT
-time = 30
-
-[State 115, 3]
-type = VelSet
-trigger1 = Time = 0
-x = 0
-z = 7
-
-[State 115, 4]
-type = VelMul
-trigger1 = 1
-z = 0.8
-
-[State 115, 5]
-type = VelSet
-trigger1 = AnimTime = -8
-z = 0
-
-[State 115, 7]
-type = CtrlSet
-trigger1 = AnimTime = 0
-value = 1
-
-[State 115, 8]
-type = ChangeState
-trigger1 = AnimTime = 0
-value = 0
-
-;---------------------------------------------------------------------------
-; GUARD (start)
+; P. iniciando defesa em pé ( GUARD (start) )
 [Statedef 120]
 type = U    ;Leave state type unchanged
 physics = U ;Leave physics unchanged
@@ -502,7 +375,7 @@ trigger1 = AnimTime = 0
 value = 130 + (statetype = C) + (statetype = A)*2
 
 ;---------------------------------------------------------------------------
-; STAND GUARD (guarding)
+; P. defendendo em pé ( STAND GUARD (guarding) )
 [Statedef 130]
 type    = S
 physics = S
@@ -518,7 +391,7 @@ trigger1 = power >= 200
 value = 134
 
 ;---------------------------------------------------------------------------
-; CROUCH GUARD (guarding)
+; P. defendendo abaixado ( CROUCH GUARD (guarding) )
 [Statedef 131]
 type    = C
 physics = C
@@ -529,7 +402,7 @@ trigger1 = Anim != 131
 value = 131
 
 ;---------------------------------------------------------------------------
-; AIR GUARD (guarding)
+; P. defendendo no alto ( AIR GUARD (guarding) )
 [Statedef 132]
 type    = A
 physics = N
@@ -571,15 +444,19 @@ trigger1 = sysvar(0)
 value = 130
 
 ;---------------------------------------------------------------------------
-; Cheese Kill (guarding)
+; P. morre defendendo por causa que o dano é mesmo defendendo é 
+; suficiente para matar mesmo defendendo( Cheese Kill (guarding) )
 [Statedef 133]
 type    = L
 movetype = H
 physics = N
-vel = 0,0
 anim = 5130
 
-[State 130, 1]
+[State 133, 1]
+type = VelSet
+trigger1 = Time = 0
+
+[State 130, 2]
 type = StateTypeSet
 trigger1 = 1
 statetype = S
@@ -1109,7 +986,7 @@ type = StateTypeSet
 trigger1 = Time = 0
 trigger1 = GetHitVar(yvel) != 0 && GetHitVar(fall)
 trigger2 = Pos Y != 0
-type = a
+statetype = a
 
 [State 5000, 6]
 type = ChangeState
@@ -2096,7 +1973,7 @@ value = 0
 ctrl = 1
 
 ;---------------------------------------------------------------------------
-; HIT_LIEDEAD
+; P. caindo morto com o hit ( HIT_LIEDEAD )
 [Statedef 5150]
 type    = L
 movetype= H
@@ -2160,7 +2037,7 @@ value = SCA
 time = 1
 
 ;---------------------------------------------------------------------------
-; HIT_FALLRECOVER (still falling)
+; P. recuperando da queda que foi ocasionada por conta do hit do oponente ( HIT_FALLRECOVER (still falling) )
 [Statedef 5200]
 type    = A
 movetype= H
@@ -2328,188 +2205,6 @@ value = 52 ;JUMP_LAND
 ctrl = 1
 
 ;---------------------------------------------------------------------------
-; DIZZY falling
-[Statedef 5249]
-type    = A
-movetype= H
-anim = 5050
-velset = -4,-6
-physics = N
-
-[State 5249, 1]
-type = hitvelset
-trigger1 = gethitvar(fall)=  1
-trigger1 = time = 0
-value = 1
-
-[State 5249, 1]
-type = nothitby
-trigger1 = 1
-value = SCA
-
-[State 5249, 2]
-type = veladd
-trigger1 = time >=0
-y = .5
-
-[State 5249, 3]
-type = ChangeState
-trigger1 = time > 1
-trigger1 = Vel Y > 0
-trigger1 = Pos Y >= 0
-value = 5250
-
-;---------------------------------------------------------------------------
-; DIZZY(hit ground)
-[Statedef 5250]
-type    = L
-movetype= H
-physics = N
-ctrl = 0
-
-; Play "ouch" when landing on back
-[State 5100, ouch]
-type = PlaySnd
-trigger1 = life > 0
-trigger1 = Time = 0
-value = 1,8
-volume = 70
-
-[State 5100, 1]
-type = VelSet
-trigger1 = Time = 0
-trigger1 = GetHitVar(fall.yvel) = 0
-trigger1 = Vel x > 1
-x = 1
-
-[State 5100, EnvShake]
-type = FallEnvShake
-trigger1 = Time = 0
-
-[State 5100, Var] ;Save fall velocity
-type = VarSet
-trigger1 = Time = 0
-;trigger1 = GetHitVar(fall.yvel) = 0
-sysvar(1) = floor(vel y)
-
-[State 5100, 2] ;Hit ground anim (normal)
-type = ChangeAnim
-triggerall = Time = 0
-trigger1 = (anim != [5051,5059]) && (anim != [5061,5069])
-trigger2 = !SelfAnimExist(5100 + (anim % 10))
-value = 5100
-
-[State 5100, 3] ;Hit ground anim (for hit up)
-type = ChangeAnim
-trigger1 = Time = 0
-trigger1 = (anim = [5051,5059]) || (anim = [5061,5069])
-trigger1 = SelfAnimExist(5100 + (anim % 10))
-value = 5100 + (anim % 10)
-
-[State 5100, 4]
-type = PosSet
-trigger1 = Time = 0
-y = 0
-
-[State 5100, 5]
-type = VelSet
-trigger1 = Time = 0
-y = 0
-
-[State 5100, 6] ;Reduce speed
-type = VelMul
-trigger1 = Time = 0
-x = 0.75
-
-[State 5100, 7]
-type = ChangeState
-trigger1 = Time = 0
-trigger1 = GetHitVar(fall.yvel) = 0
-value = 5110 ;HIT_LIEDOWN
-
-[State 5100, 8]
-type = GameMakeAnim
-trigger1 = Time = 1
-value = 60 + (SysVar(1) > 5) + (SysVar(1) > 14)
-pos = 0, 0
-under = SysVar(1) <= 10
-
-[State 5100, 9]
-type = HitFallDamage
-trigger1 = Time = 3
-
-[State 5100, 10]
-type = PlaySnd
-trigger1 = Time = 1
-;value = F7, 0 ;Hit ground
-value = F7, (SysVar(1) > 5) + (SysVar(1) > 14)
-
-[State 5100, 11]
-type = PosFreeze
-trigger1 = 1
-
-[State 5100, 12]
-type = ChangeState
-trigger1 = AnimTime = 0
-value = 5251;5101
-
-[State 5100, 13]
-type = ForceFeedback
-trigger1 = Time = 0
-waveform = sinesquare
-ampl = 128,-3,-.2,.005
-time = 20
-
-;--------------------------------------------------------------------------------------
-; DIZZY
-[Statedef 5251]
-type = S
-movetype = I;H
-physics = S
-anim = 5300
-ctrl = 0
-
-[State 5250, 2]
-type = ctrlset
-trigger1 = 1
-value = 0
-
-[State 5250, 2]
-type = Hitfallset
-trigger1 = Time = 0
-value = 0
-
-[State 5250, 2]
-type = PlaySnd
-trigger1 = Time = 0
-value = 1,10
-
-[State 5250, reset Dizzy]
-type = VarSet
-trigger1 = StateNo = 5000;time = 0
-ignorehitpause = 1
-var(14) = 1
-
-[State 5250, VA1]
-type = VarSet;add
-trigger1 = 1
-trigger1 = var(13) > 0
-var(13) = 0;-1
-
-[State 5250, VA2]
-type = Varadd
-trigger1 = command = "x" ||command = "y" ||command = "a" || command = "b" 
-trigger1 = time >= 0
-trigger1 = var(13) > 0
-var(13) = -150
-
-[State 5250, END]
-type = ChangeState
-trigger1 = Time = 180;var(13) <= 0
-value = 0
-ctrl = 1
-
-;---------------------------------------------------------------------------
 ; Continue?
 [Statedef 5500]
 type = S
@@ -2554,87 +2249,3 @@ var(14) = 0
 type = ChangeState
 trigger1 = roundno = 1
 value = 190
-
-;----------------------------------------------------------------------------------------------
-; Guard Crush State (see statedef -3 for coding details)
-;----------------------------------------------------------------------------------------------
-
-[Statedef 9000]
-type    = S
-physics = S
-anim = 9000 ; Character being guard crushed
-ctrl = 0
-
-[State 9000, Freeze]
-type = Pause
-trigger1 = Time = 0
-time = 3
-movetime = 3
-ignorehitpause = 1
-
-[State 9000, Flash]
-type = Envcolor
-trigger1 = Time = 2
-value = 248,248,248
-time = 3
-under = 1
-ignorehitpause = 1
-
-[State 9000, Screen Shake]
-type = EnvShake
-trigger1 = Time = 5
-time = 15
-amp = -3
-
-[State 9000, Guard Crush Explod if P1] ; "Guard Crush !" sprite
-type = Explod
-triggerall = numexplod(7250) <= 0 && teamside = 1 
-trigger1 = time = 0
-anim = 7250
-id   = 7250
-pos = 0,110
-postype = left
-bindtime = -1
-sprpriority = 2
-supermove = 1
-facing = 1
-ontop = 0
-ownpal = 1
-ignorehitpause = 1 
-persistent = 0
-
-[State 9000, Guard Crush Explod if P2]
-type = Explod
-triggerall = numexplod(7251) <= 0 && teamside = 2
-trigger1 = time = 0
-anim = 7251
-id   = 7251
-pos = -97,110
-postype = right
-bindtime = -1
-sprpriority = 2
-supermove = 1
-facing = 1
-ontop = 0
-ownpal = 1
-ignorehitpause = 1 
-persistent = 0
-
-[State 9000, Guard Crush Var Reset]
-type = VarSet
-trigger1 = time = 0
-var(11) = 0
-ignorehitpause = 1
-
-[State 9000, Get back]
-type = Velset
-trigger1 = time = [3,10]
-x = -5
-ignorehitpause = 1
-
-[State 9000, End]
-type = ChangeState
-trigger1 = AnimTime = 0
-value = 0
-ctrl = 1
-ignorehitpause = 1
