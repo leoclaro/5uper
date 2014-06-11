@@ -1,0 +1,292 @@
+http://raphael-r2.ucoz.com/index/0-10
+
+
+O formato AIR e o básico
+====================
+M.U.G.E.N, (c) Elecbyte 2001
+Documentação para a versão 2001.04.14
+ 
+versão Beta da documentação (incompleta)Atualizada em 21 de Abril de 2001
+ 
+======================================
+Traduzido para o português em 16 de Julho de 2.003,por John_MacEnroe   fhgz@bol.com.br
+ 
+Procurei ser o mais fiel possível às explicações da Elecbyte. Mantive alguns termos em inglês, pelo motivo de que se trata de comandos usados pelo MUGEN, mas dei a definição em português. Faça o que quiser com esse documento: inclusive hospede em seu site se for o caso. Tá aí, é teu.
+======================================
+ 
+====================================================================
+0. Conteúdo
+====================================================================
+ 
+I. Introdução
+II. O formato
+III. Números de Ação Reservados
+IV. Números de Ação Recomendados
+ 
+====================================================================
+I. Introdução
+====================================================================
+ 
+O AIR é um formato que descreve um conjunto de animações. Você verá o formato AIR sendo usado para animar os personagens, cenários, barras de energia e mais.
+Uma animação (especificamente chamada uma ação de animação no MUGEN) descreve uma única sequência de sprites a ser exibida. O arquivo de animação de um personagem (.air) pode conter tantas ações de animação quanto forem necessárias.
+ 
+====================================================================
+II. O Formato
+====================================================================
+ 
+Aqui está uma entrada típica de um arquivo .air. Nós iremos explicar o formato a seguir.
+ 
+; Standing Animation
+[Begin Action 000]
+Clsn2Default: 2
+ Clsn2[0] = -10,  0, 10,-79
+ Clsn2[1] =  -4,-92,  6,-79
+0,1, 0,0, 7
+0,2, 0,0, 7
+0,3, 0,0, 7
+0,4, 0,0, 50
+0,5, 0,0, 7
+0,6, 0,0, 7
+0,7, 0,0, 7
+0,8, 0,0, 60
+ 
+O ponto e vírgula (;) é usado para comentários. Eles podem ser usados em qualquer lugar e qualquer coisa que vier depois do ponto e vírgula na mesma linha é ignorado.
+ 
+[Begin Action n]
+Isso define uma ação. O número n é chamado o número da ação. Cada açao precisa ter um
+número de ação próprio, de maneira que seja distinto das outras ações. Você pode ter várias ações, mas tenha em mente que existem números de ação reservados. Esses números e suas ações associadas estão listadas abaixo.
+ 
+Clsn2Default: 2
+Isso diz que existem 2 caixas de colisão sendo definidas e que elas serão definidas por todas as entradas abaixo da definição da Clsn (caixa de colisão). Neste caso, para cada sprite desta ação. Se você não quiser ter uma caixa de colisão padrão, então mude de Clsn2Default para Clsn2. Você precisará entrar a definição da Clsn antes de cada entrada de sprites. Cada entrada de sprite pode ter sua própria caixa de colisão. Clsn2 se refere a uma caixa de colisão normal  e a Clsn1 se refere a uma caixa de "ataque". Você usa caixas de ataque quando faz ações de ataque, como socos e chutes ou golpes especiais. Para definir as caixas de colisão, use o AirEdit, um programa incluído no kit para criadores da MUGEN. (nota minha: usem o Zcharcad que é beeeeeeem mais fácil com ele! ;)
+ 
+0,3, 0,0, 7
+Uma entrada que se parece com isso é chamada "um elemento da animação" ou somente
+"elemento" para simplificar.
+O 1º número é o número de grupo do sprite.
+O 2º número é o número de imagem do sprite.
+Você assinala esses números para seus sprites quando faz um arquivo ..sff.
+ 
+Então o grupo nº0 e a imagem nº3 são definidas com o sprmaker (nota minha: existem
+programas muito melhores que o sprmaker para acriação de arquivos ..sff. Eu recomendo o sff9 do Trial Force para a criação de .sff para chars, e o Zcharcad para a criação de .sff para cenários) com uma entrada como essa:
+work/mypic.pcx
+0   (número do grupo)
+3   (número da imagem)
+40  eixo X
+40  eixo Y
+ 
+O 3º e o 4º número do elemento são as definições em X e Y dos eixos do sprite. Se você
+quiser que o sprite apareça 5 pixels à frente, coloque "5" no terceiro número. Para colocar o sprite 15 pixels acima, coloque "-15" no 4º número, e assim por diante. Na maioria dos casos, é bom deixar as definições de eixo em 0,0.
+ 
+O 5º número é a quantidade de tempo que o elemento será exibido antes de passar para o
+próximo, medido em game-ticks. Existem 60 game-ticks em um segundo na velocidade
+normal do jogo. Para o 5º número, você pode especificar "-1" se você quer que aquele
+elemento seja exibido indefinidamente (ou até que você mude para uma ação diferente). Se você escolher fazer isso, faça-o apenas no último elemento da ação.
+ 
+O "looptime" (nota minha: looptime = tempo que demora para que a ação se repita) é a soma de todos os tempos de cada elemento. Basicamente, é a duração total das ações em
+game-ticks. Se o último elemento tem um tempo de "-1", o looptime será considerado infinito. Nós chamamos de ações "no loop" (nota minha: no loop = sem repetição). Ações com um loop time finito retornarão ao primeiro elemento depois que tiver terminado de exibir o último elemento, e continuarão esse ciclo até que você mude para uma outra ação.
+ 
+No exemplo de ação abaixo, o looptime seria:
+7 + 7 + 7 + 50 + 7 + 7 + 7 + 60 = 152 ticks
+ 
+; Standing Animation
+[Begin Action 000]
+Clsn2Default: 2
+ Clsn2[0] = -10,  0, 10,-79
+ Clsn2[1] =  -4,-92,  6,-79
+0,1, 0,0, 7
+0,2, 0,0, 7
+Loopstart
+0,3, 0,0, 7
+0,4, 0,0, 50
+0,5, 0,0, 7
+0,6, 0,0, 7
+0,7, 0,0, 7
+0,8, 0,0, 60
+ 
+Adicionando uma linha com a palavra "Loopstart"fará a animação começar o ciclo do
+elemento da linha seginte. No exemplo acima, quando o elemento como o sprite 0,8 é exibido, o próximo elemento a ser exibido será o que tem o sprite 0,3.
+Quando você for testar suas animações, você pode achar útil a função de pausar e avançar quadro-a-quadro. Para pausar, aperte o botão "Pause". Para avançar no jogo em um gametick, aperte Scroll Lock. A função de avançar quadro-a-quadro somente funciona quando o jogo está pausado.
+ 
+Parâmetros opcionais
+----------------------------
+Aqui está uma entrada:
+15,1, 0,0, 5
+ 
+Se você quiser rotacionar o sprite horizontalmente e/ou verticalmente, você pode usar os parâmetros de rotação (flip): V para um flip vertical, e H para um flip horizontal. Esses parâmetros estarão na 6º linha.
+Por exemplo:
+ 
+15,1, 0,0, 5, H   ;<-- Isso dá um flip horizonal no sprite
+15,2, 0,0, 5, V   ;<-- Isso dá um flip vertical no sprite
+15,3, 0,0, 5, VH  ;<-- Isso dá um flip em ambos os sentidos, isto é, rotaciona 180 graus
+ 
+Fazer o sprite dar flips é especialmente útil para fazer lançamentos (agarrões). O oponente que está sendo jogado utilizará temporariamente as informações de animação do jogador, e entrará a ação de animação de ser jogado. Você pode ter que dar um flip nos sprites para fazer a ação de animação funcionar corretamente.
+ 
+Para certas coisas como hit sparks (hit = porrada, pancada; sparks = efeitos de luzes que tornam mais dramático o golpe), você poderá querer usar a adição de cores para desenhar o sprite, fazendo-o parecer "transparente". Você não precisa usar isso para fazer um char (char = character = personagem), então você não precisa se preocupar com isso se você não quiser. Os parâmetros para a adição e subtração de cores são "A" e "S" respectivamente, e deve ir na 7º linha.
+Por exemplo:
+ 
+15,4, 0,0, 5, ,A   ;<-- Adição de cor (parâmetro de flip omitido)
+15,4, 0,0, 5, H, S ;<-- Dá um flip horizontal e faz subtração de cores
+15,4, 0,0, 5, ,A1  ;<-- Adição de cores em 50% do cenário escurecido
+ 
+====================================================================
+III. Números de ação reservados para os personagens
+====================================================================
+ 
+O state (state = estado, no sentido de uma ação previamente configurada que pode ser
+realizada) comum do MUGEN (data/commom1.cns) requer várias ações de animação que
+precisam estar presentes no seu char (um aviso será exibido se nem todas as animações
+requeridas estiverem presentes). Existem também algumas ações que são opcionais, as
+quais serão usadas se estiverem presentes no seu char.
+Se você não estiver certo de como alguma dessas ações devem aparecer, dê uma olhada
+em chars/kfm/kfm.air.
+Todos os números de ações entre 5000 e 5999 não listadas abaixo são reservadas para uso futuro, então evite usar esses números para ações diferenciadas.
+ 
+(NOTA MINHA: para visualizar corretamente o quadro abaixo, use a resolução de tela em
+1024x768 pixels.)
+ 
+A indicação "opt" ao lado do número indica que a animação é opcional.
+ 
+Número      Descrição         Tradução                     Comentários
+-------     ------------                       ------------                  --------
+0         Stand                     Parado
+5   opt   Turning                         Virando                      Precisa ter um looptime finito
+10        Stand to crouch          de parado para agachado            looptime finito
+11        Crouching                agachado
+12        Crouch to stand          agachado para parado               looptime finito
+20        Walking forwards         andar para frente
+21        Walking backwards        andar para trás
+40        Jump start (on ground)   início do pulo (no chão)           Mostrado imediatamente antes de o jogador deixar o solo
+41        Jump neutral (upwards)   Pulo neutro (subindo)              Mostrado quando o jogador está indo para cima
+42        Jump forwards (upwards) Pulo para frente (subindo)         Mostrado quando o jogador está indo para cima e para frente
+43        Jump back (upwards)      Pulo para trás (subindo)                 Mostrado quando o jogador está indo para cima e para trás
+44  opt   Jump neutral (downwards) Pulo neutro (descendo)             Ativado quando a velocidade Y > -2
+45  opt   Jump fwd (downwards)     Pulo para frente (descendo)        Idem acima
+46  opt   Jump back (downwards)    Pulo para trás (descendo)                Idem acima
+47        Jump landing       Pousando depois do pulo            Mostra como o Jogador pousa no chão
+100       Run fwd/hop forward            Correr para frente/ saltar para frente
+105       Hop back                 Saltar para trás
+120       Start guarding (stand)   Iniciar a defesa (parado)                looptime finito
+121       Start guarding (crouch) Iniciar a defesa (agachado)        looptime finito
+122       Start guarding (air)           Iniciar a defesa (no ar)           looptime finito
+130       Guard (stand)            Defesa (parado)
+131       Guard (crouch)           Defesa (agachado)
+132       Guard (air)              Defesa (no ar)
+140       Stop guarding (stand)    Parar de defender (parado)         looptime finito
+141       Stop guarding (crouch)   Parar de defender (agachado)       looptime finito
+142       Stop guarding (air)            Parar de defender (no ar)          looptime finito
+150       Guarding a hit (stand)   Defendendo um golpe (parado) looptime finito
+151       Guarding a hit (crouch) Defendendo um golpe (agachado)     looptime finito
+152       Guarding a hit (air)           Defendendo um golpe (no ar)              No loop
+170 opt   Lose               Perder                                   (Veja a Nota 1)
+175 opt   Time Over          Perder por Tempo             (Veja a Nota 1)
+180 opt   Win                Vencer                                   No loop (181-189 para múltiplas) (Veja a Nota 1)
+190 opt   Intro                                Intro                   No loop (Veja a Nota 1)
+195 opt   Taunt              Provocação                                           looptime finito (Veja a Nota 1)
+ 
+5000      Stand/Air Hit high (light)     Receber golpe alto parado/ no ar (receber golpe fraco)                  Looptime entre 10-20
+5001      Stand/Air Hit high (medium)    Receber golpe alto parado/ no ar (receber golpe médio)                  "     (Ver Nota2)
+5002      Stand/Air Hit high (hard)      Receber golpe alto parado/ no ar (receber golpe forte)                  "
+5005      Stand Recover high (light)     Recuperar-se depois de receber golpe alto parado (receber golpe fraco)   No loop (Ver Nota 3)
+5006      Stand Recover high (medium)    Recuperar-se depois de receber golpe alto parado (receber golpe médio)        "
+5007      Stand Recover high (hard)      Recuperar-se depois de receber golpe alto parado (receber golpe forte)        "
+5010      Stand/Air Hit low (light)      Receber golpe baixo parado/ no ar (receber golpe fraco)                   Looptime entre 10-20
+5011      Stand/Air Hit low (medium)     Receber golpe baixo parado/ no ar (receber golpe médio)            "
+5012      Stand/Air Hit low (hard) Receber golpe baixo parado/ no ar (receber golpe forte)                        "
+5015      Stand Recover low (light)      Recuperar-se depois de receber golpe baixo parado (receber golpe fraco)        No loop
+5016      Stand Recover low (medium)     Recuperar-se depois de receber golpe baixo parado (receber golpe médio)   "
+5017      Stand Recover low (hard) Recuperar-se depois de receber golpe baixo parado (receber golpe forte)            "
+5020      Crouch Hit (light)       Receber golpe agachado (receber golpe fraco)                          Looptime entre 10-20
+5021      Crouch Hit (medium)      Receber golpe agachado (receber golpe médio)                          "
+5022      Crouch Hit (hard)        Receber golpe agachado (receber golpe médio)                         "
+5025      Crouch Recover (light)   Recuperar-se depois de receber golpe agachado (receber golpe fraco)            No loop
+5026      Crouch Recover (medium) Recuperar-se depois de receber golpe agachado (receber golpe médio)            "
+5027      Crouch Recover (hard)    Recuperar-se depois de receber golpe agachado (receber golpe forte)            "
+5030      Stand/Air Hit back       Receber golpe parado/ no ar pelas costas                               Looptime entre 10-20
+5035 opt  Stand/Air Hit transition Receber golpe de transição parado/ no ar                         Looptime entre 5-15 (Ver Nota 3)
+5040      Air Recover        Recuperar-se depois de receber golpe no ar                                  No loop
+5050      Air Fall                 Ser jogado para cima                                             No loop
+5060 opt  Air Fall (coming down)   Ser jogado para cima (voltando para baixo)                             No loop
+5070      Tripped                  Ser lançado
+5080      LieDown Hit (stay down) Caindo no chão (ficar no chão)                             (Ver Nota 4)
+5090      LieDown Hit (hit up into air) Cair no chão (golpe no ar)
+5100      Hitting ground from fall Acertando o chão quando cair                               Looptime em torno de 3
+5160      Bounce into air          Quicar no ar
+5170      Hit ground from bounce   Atingir o solo depois de quicar                                  Looptime em torno de 3 ou 4
+5110      LieDown                  Deitado
+5120      Get up from LieDown      Levantar depois de ficar deitado
+5140 opt  LieDead (first rounds)   Deitado e morto (primeiros rounds)
+5150 opt  LieDead (final round)    Deitado e morto (útimo round)
+5200      Fall-recovery near ground      Recuperar-se de uma queda perto do solo
+5210      Fall-recovery in mid-air Recuperar-se de uma queda em pleno ar
+5300      Dizzy              Ficar tonto
+5500 opt  "Continue?" screen Tela de "Continue?"          Se omitida, exibe a animação de ficar tonto
+5510 opt  "Yes" to "Continue"            Escolher continuar           Se omitida, exibe a primeira animação de vencer round (ainda não implementada)
+5520 opt  "No" to "Continue"       Escolher não continuar             (ainda não implementada)
+ 
+Animações Opcionais de Hit Up (Hit Up = golpe recebido que lança o personagem para cima) (Ver Nota 5):
+5051 opt  Air fall -- hit up       Ser lançado para cima -- hit up
+5061 opt  Coming down from hit up Voltando para baixo depois do hit up
+5081 opt  LieDown Hit (stay down) Pancada no solo (fica no chão)
+5101 opt  Bounce from ground into air    Quicar do solo para o chão         Looptime em torno de 3
+5161 opt  Bounce into air          Quicar no ar
+5171 opt  Hit ground from bounce   Acertar o solo após quicar         Looptime em torno de 3 ou 4
+5111 opt  LieDown                  Ficar deitado
+5121 opt  Get up from LieDown      Levantar depois de ficar deitado
+5151 opt  LieDead (first rounds)   Morrer (1ºs rounds)
+5156 opt  LieDead (final round)    Morrer (round final)
+ 
+Animações Opcionais de Hit Up-Diagonal (Hit Up-Diagonal = golpe recebido que lança o personagem para cima ma diagonal)  (Ver Nota 6):
+5052 opt  Air fall -- hit up       Ser lançado para cima -- hit up
+5062 opt  Coming down from hit up Voltando para baixo depois do hit up
+5082 opt  LieDown Hit (stay down) Pancada no solo (fica no chão)
+5102 opt  Bounce from ground into air    Quicar do solo para o chão         Looptime em torno de 3
+5162 opt  Bounce into air          Quicar no ar
+5172 opt  Hit ground from bounce   Acertar o solo após quicar         Looptime em torno de 3 ou 4
+5112 opt  LieDown                  Ficar deitado
+5122 opt  Get up from LieDown      Levantar depois de ficar deitado
+5152 opt  LieDead (first rounds)   Morrer (1ºs rounds)
+5157 opt  LieDead (final round)    Morrer (round final)
+ 
+Nota 1: Esses não precisam usar os números dados. É mais um número recomendado
+que um reservado. Se necessário, fique à vontade para usar quaisquer outros números de ação.
+ 
+Nota 2: Se os golpes médio e forte forem omitidos, será exibida a animação do golpe fraco.
+ 
+Nota 3: "No loop" significa que o último quadro tem um tempo de -1. Para animações de
+recuperação, o primeiro quadro de cada recuperação deverá ser o último quadro do golpe correspondente. Ex. Se a ação 5000 tem os quadros 5000,0 e 5000,1, então a ação 5005 deverá iniciar com o quadro 5000,1. Isso se dá porque a animação será travada no primeiro quadro da recuperação depois que a animação terminar, mas antes que o jogador esteja recuperado do golpe. Se você tem uma animação de Stand/Air Hit transition (Receber golpe de transição parado/ no ar), então o primeiro quadro do Air Recovery (Recuperar-se depois de receber golpe no ar) e Air Fall (Ser jogado para cima) deverá ser o último quadro da animação de transição.
+ 
+Nota 3: A animação de Stand/Air Hit transition  é exibida logo depois de cada animação de golpe recebido no ar, mas antes das animações de Air Recover e Air Fall.
+ 
+Nota 4: Você pode dar um loop no LieDown Hit se você quiser que o jogador pareça estar
+tendo um "tique nervoso, se contorcendo ou tendo convulsão" enquanto está sendo atingido.
+ 
+Nota 5: Esse grupo de animações é opcional. É um grupo alternativo de animações de
+queda, os quais serão usados se atingidos por um HitDef (HitDef = parâmetro de
+comando dos golpes) com um "Up" como o animtype (animtype = tipo de animação).
+ 
+Nota 6: Esse grupo de animações é opcional. É um grupo alternativo de animações de
+queda, os quais serão usados se atingidos por um HitDef com um "DiagUp" como o animtype.
+ 
+====================================================================
+IV. Números de Ação Recomendados
+====================================================================
+ 
+Você não precisa seguir isso ao pé da letra, mas deve servir como um guia. Em geral, os states no CNS devem ter os mesmo números que as animações que eles usam, para
+diminuir a confusão.
+Você pode querer espaçar suas animações e números de states. Isso lhe dá os espaços
+livres para você adicionar mais ações se se tornar necessário (alguns ataques podem usar múltiplos states e animações). Exemplificando, um chute fraco em pé e um chute forte em pé poderão usar os números de ação 200 e 210 respectivamente.
+ 
+Número    Descrição
+-------   ------------
+0-199     - reservados -
+          Ataques básicos:
+200-299   Ataques em pé
+300-399   Mais ataques em pé, ataques correndo
+400-499   Ataques agachados
+500-599   Mais ataques agachados
+600-699   Ataques aéreos
+700-799   Mais ataques aéreos
+800-999   Não usados - use se você precisar de mais states
+1000-2999 Todos os ataques especiais
+3000-4999 Todos os hyper ataques
+5000-5999 - reservados -

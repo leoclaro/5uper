@@ -1,0 +1,520 @@
+SCTRL - PARTE II
+http://raphael-r2.ucoz.com/index/0-15
+
+	
+Continuando...
+
+------------------------------------------------------------
+ExplodBindTime    (versão 27/06 ou superior)
+------------------------------------------------------------
+
+Muda a posição da animação presa por bindtime do controle "Explod".
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  ID = id_no (inteiro)
+    Para especifica um "Explod" de número de identificação ("ID number") específico. O padrão é -1, ou seja, afetar a todas as animações do tipo "Explod".
+
+  time = binding_time (inteiro)
+    Especifica o número de game-ticks para os quais a animação deva ficar pres. Definir como -1 faz a animação ficar presa indefinidamente. O padrão é 1.
+
+Sintaxe alternativa:
+  value = binding_time pode ser utilizada ao invés de time = binding_time.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+FallEnvShake        (versão 29/11 ou superior)
+------------------------------------------------------------
+
+Balança a tela utilizando o parâmetro fall.envshake do controle HitDef. Este controle só funciona se GetHitVar(fall.envshake.time) não é zero, e ele seta GetHitVar
+(fall.envshake.time) a zero após ser executado. Este controle é utilizado no arquivo common1.cns para balançar a tela quando o personagem cai, e não é normalmente utilizado em outro caso.
+
+Parâmetros requiridos
+  Nenhum.
+
+Parâmetros opcionais
+  Nenhum.
+
+Exemplo
+  Veja o arquivo common1.cns.
+
+
+------------------------------------------------------------
+ForceFeedback
+------------------------------------------------------------
+
+Cria uma tremulação para joysticks. Atualmente, apenas joysticks Playstation Dual Shock utilizam este tipo de tecnologia. Parâmetros para "ForceFeedback" não devem ser especificados através de uma expressão aritmética. Esta é uma exceção à regra. De uma maneira em geral, a partir da versão 27/06 todos os controles podem ser especificados utilizando uma expressão.
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  waveform = wave_type (string)
+    Formas de onda válidas são "sine", "square", "sinesquare", e "off". 
+Para o controle Dual Shock, uma forma de onda senoidal ("sine") corresponde a um largo tremor de motor, uma forma quadrada ("square") corresponde a batidas tipo britadeira, e a forma intermediária ("sinesquare") esta entre os dois tipos. Utilize "off" para parar qualquer efeito no seu joystick que esteja sendo executado. O valor padrão é "sine".
+
+  time = duration (integer constant)
+    Especifica quanto dura o tremor, em game-ticks. O padrão é 60, ou seja, 1 segundo.
+
+  freq = start (integer constant), d1, d2, d3 (float constants)
+    Frequência do tremor. Varia entre 0 e 255. A fórmula utilizada para determinar a frequência é start + d1*t + d2*t**2 + d3*t**3 onde t representa o número de game-ticks passados desde que o tremor teve início. O padrão é 128,0,0,0. Atualmente, este parâmetro é completamente ignorado.
+
+  ampl = start (integer constant), d1, d2, d3 (float constants)
+    A amplitude do tremor. Varia entre 0 e 255. A fórmula utilizada para determinar a frequência é start + d1*t + d2*t**2 + d3*t**3 onde t representa o número de game-ticks passados desde que o tremor teve início. O padrão é 128,0,0,0.
+
+  self = self_flag (boolean constant)
+    Definir como 1 faz o joystick de P1 vibrar. Se for 0, então o joystick de P2 irá vibrar. O padrão é 1.
+   
+Exemplo:
+  Veja common1.cns.
+
+
+------------------------------------------------------------
+GameMakeAnim
+------------------------------------------------------------
+
+Cria uma animação, como um "spark" ou efeito para o golpe "Hyper". Este controle está sendo substituído pela utilização do controle "Explod" e é considerado obsoleto. Ele deverá ser substituído em versões futuras.
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  value = anim_no (inteiro)
+    Especifica o número da animação (do staticfx.sff) da animação a executar. O padrão é 0.
+  
+  under = under_flag (inteiro)
+    Se está "flag" for 1, a animação será desenhada por baixo do personagem. O padrão é 0 (desenha sobre os personagens).
+
+  pos = x_pos, y_pos (número real)
+    Especifica a posição que será desenhada a animação, relativa aos eixos do seu personagem. O padrão é 0,0.
+
+  random = rand_amt (inteiro)
+    Provoca uma alteração aleatória na posição em que a animação será criada. O intervalo pode ser tão largo quanto metade de rand_amt. O padrão é 0.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+Gravity
+------------------------------------------------------------
+
+Acelera o personagem para baixo, utilizando o valor da constante "yaccel" (arquivo CNS).
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  Nenhum.
+
+Exemplo:
+  ; Aplica "gravidade"
+  trigger1 = Time >= 0
+  type = Gravity
+
+
+------------------------------------------------------------
+Helper
+------------------------------------------------------------
+
+Cria outro personagem, como um personagem "helper".
+
+Parâmetros requeridos:
+  Nenhum.
+
+Parâmetros opcionais:
+  helpertype = type_string
+    Se helpertype = normal, então o "helper" estará apto a se mover fora da tela (além de suas paredes). Desta forma, a câmera não irá se mover para tentar acompanhar o "helper" na tela. Se helpertype = player, então o helper ficará restrito a se mover dentro da tela e será seguido pela câmera, como um personagem normal. O padrão é helpertype = normal.
+  
+  name = "name_string"
+    Especifica um nome para esta "helper", que deve estar entre aspas. Se omitido, o nome padrão será "<pai>'s helper", onde <pai> representa o nome do personagem que criou o "helper".
+
+  ID = id_no (inteiro)
+    Define um número de identificação ("ID number") para o "helper". O padrão é 0 (sem ID).
+ 
+  pos = x_off, y_off (inteiro)
+    Determina a posição ("off set") para criar o "helper". A posição precisa depende do parâmetro "postype". O padrão é 0,0.
+
+  postype = postype_string
+    Trabalha como o "postype" do controle "Explod". Lembrando que  P1  é  o  seu  personagem e P2 é o adversário.
+- p1
+    Interpreta pos relativo à posição de P1. Valores positivos de x está na frente de P1. Este é o valor padrão para postype.
+- p2
+    Interpreta pos relativo à posição de P2. Valores positivos de x está na frente de P2.
+- front
+    Interpreta a posição relativa à parede a qual P1 está olhando. Valores positivos de x se aproximam do centro da câmera, e y relativo aos eixos de P1.
+- back
+    Interpreta a posição relativa à parede a qual P1 está de costas. Valores positivos de x se aproximam do centro da câmera, e y relativo aos eixos de P1.
+- left
+    Interpreta xpos e ypos relativo ao córner superior esquerdo.Valores positivos de x levam para a direita da tela.
+- right
+    Interpreta xpos e ypos relativo ao córner superior direito.Valores positivos de x levam para a direita da tela.
+
+  facing = facing (int)
+    Se postype é "left" ou "rifht", definir facing = 1 faz o "Helper" virar a face para a direita, e -1 para a esquerda. Para todos os outros valores de postype com exceção de P2, se facing = 1 o "Helper" irá virar a face na mesma direção do personagem principal. Se facing é -1, o "Helper" vira a face na direção oposta.
+    No caso de postype = p2, facing se comporta da mesma maneira acima descrita, mas se orienta de acordo com p2. O padrão é 1. Versão 31/07+.
+
+  stateno = start_state (inteiro)
+    Determina o número de estado que o "helper" irá ser iniciado. O padrão é 0 (em pé, parado).
+
+  keyctrl = ctrl_flag (inteiro)
+    Se keyctrl = 1, então o "helper" estará apto a ser comando pelo jogador (teclado ou joystick). Então, o "helper" irá herdar os State -1 do arquivo CMD de sua raiz (personagem principal). Se for definido como 0, então o "helper" não pode ser controlado. O padrão é 0.
+
+  ownpal = pal_flag (inteiro)
+    Se ownpal = 0, então o "helper" irá utilizar da mesma paleta que seu pai. Então, se ele ou seu pai tiverem a paleta modificada, então ambos serão afetados. Se for definido como 1, o "helper" terá uma cópia da paleta, que será independente de seu pai. O padrão é 0.
+
+  supermovetime = value (inteiro)
+    Determina o número de game-ticks que o "helper" estará descongelado durante o SuperPause. Às vezes é útil quando se quer que o "helper" apareça durante o SuperPause. O padrão é 0.
+
+  pausemovetime = move_time (inteiro)
+    Determina o número de game-ticks deva estar descongelado durante o Pause. O padrão é 0. Versão 27/06+.
+
+  size.xscale (número real)
+  size.yscale (número real)
+  size.ground.back (inteiro)
+  size.ground.front (inteiro)
+  size.air.back (inteiro)
+  size.air.front (inteiro)
+  size.height (inteiro)
+  size.proj.doscale (inteiro)
+  size.head.pos (int,int)
+  size.mid.pos (int,int)
+  size.shadowoffset (inteiro)
+    Estes parâmetros têm o mesmo propósito aos de sua raiz, no arquivo CNS. Você pode mudar um ou mais destes parâmetros. Quando omitidos, os parâmetros são iguais ao do seu pai. Adicionado a partir da versão 27/06.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+HitAdd
+------------------------------------------------------------
+
+Adiciona golpes bem sucedidos (Hits) ao combo atual.
+
+Parâmetros requeridos:
+  value = add_count (inteiro)
+    add_count especifica o número de Hits a ser adicionado.
+
+Parâmetros opcionais:
+  Nenhum.
+
+Exemplo:
+  ; Goro bate
+  [State 271, 4]
+  type = HitAdd
+  Trigger1 = Time = 38
+  Trigger2 = Time = 52
+  Trigger3 = Time = 66
+  Trigger4 = Time = 80
+  Trigger5 = Time = 94
+  Trigger6 = Time = 108
+  value = 1
+
+
+------------------------------------------------------------
+HitBy
+------------------------------------------------------------
+
+Temporariamente especifica que tipos de golpes podem atingir seu personagem.
+
+Parâmetros requeridos:
+  value = attr_string  OR  value2 = attr_string
+    Apenas um dos parâmetros pode ser especificado. attr_string deve uma "string" (letra) de atributo.
+
+Parâmetros opcionais:
+  time = effective_time (inteiro)
+    Especifica um número de game-ticks que HitBy deva ficar ativo. O padrão é 1.
+
+Details:
+  O personagem têm dois "slots" (gavetas) de atributos, os quais podem ser setados utilizando os parâmetros value ou value2 do controle HitBy. Estes "slots" podem ser setados também pelo controle NotHitBy. Quando um "slot" é setado, ele têm um relógio que conta até zero. Se o relógio ainda não chegou em zero, o "slot" é considerado ativo. O personagem pode ser golpeado por um "HitDef" apenas se o atributo deste "HitDef" em todos os "slots" ativos.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+HitDef
+------------------------------------------------------------
+
+Define um "Hit" (golpe bem sucedido). Se a caixa de colisão Clsn1 do seu personagem (caixa de ataque, vermelha no AirView) entra em contato com a caixa Clsn2 (caixa de "Hit", azul no AirView) do adversário, e um HitDef foi definido no instante, ou antes, então o efeito específico será aplicado. Este é um dos controles mais complexos, e também o mais utilizado.
+Um HitDef é válido apenas para um "Hit". Para fazer um movimento ter vários "Hits", você deve colocar mais de um trigger no HitDef durante o ataque.
+
+Parâmetros requeridos:
+  attr = hit_attribute
+    Este é o atributo de ataque. Ele é usado para determinar se o ataque pode acertar o P2. Por enquanto, você apenas menciona o atributo, dizendo qual o tipo de ataque é. Deve ser do formato:
+      attr = arg1, arg2
+
+- arg1        "S"  -  ataque em pé
+"C"  -  ataque agachado
+"A"  -  ataque no ar
+
+- arg2 é composto por duas letras.
+1a     "N" -  para "normal"            2 a     "A"  -  para "ataque"
+"S" -   para "especial"                "T"  -  para "agarrão" (throw)
+"H" -  para "hyper" (ou super)        "P"  -  para "projétil"
+
+  hitflag = hit_flags
+    Isto determina que tipo de estado P2 deve estar para P1 acertá-lo. hit_flags é uma variável "string" (que guarda letras) que contém uma combinação dos seguintes caracteres: 
+
+"H"  -    para "high" (alto)
+"L"   -    para "low" (baixo)
+"A"  -    para "air" (aéreo)
+"M"  -    para "mid" (equivalente a dizer HL)
+"F"   -    para "fall" (em queda, incluindo o efeito de juggle)
+"D"  -    para "lying Down" (adversário caído)
+
+Dois opcionais caracteres são "+" e "-". Se "+" for adicionado, então o "Hit" apenas afeta o adversário em um estado de "gethit". Isto pode ser muito útil em combos, chain-moves, ... onde este Hitdef não irá afetar o adversário, a menos que ele já tenha sido atingido pelo ataque inicial do combo. Se "-" for adicionado, então o Hitdef apenas afeta adversários que não estão em um estado de "Hit". Você pode usar "-" para agarrões, e outros movimentos que você não queira adicionar em um combo. "+" e "-" não podem ser utilizados ao mesmo tempo. Se omitido, o padrão é MAF.
+
+  guardflag = hit_flags
+    Isto determina como P2 pode defender o ataque. No Goro, eu não coloquei esta linha, e nem caixas de Hit na animação principal do agarrão, e o resultado é que o adversário não consegue se defender ou atacar (anular movimento). hit_flags é a "string" que contém uma combinação dos seguintes caracteres: 
+"H"  -    para "high" (alto)
+"L"   -    para "low" (baixo)
+"A"  -    para "air" (aéreo)
+"M"  -    para "mid" (equivalente a dizer HL)
+
+Parâmetros opcionais:
+  affectteam = team_type
+    team_type especifica que time será afetado pelo Hitdef. O padrão é "E".
+"B"  -    para "both" (Hitdef afetará todos os lutadores atingidos)
+"E"   -    para "enemy" (afeta apenas o time inimigo)
+"F"  -    para "friendly" (afeta apenas seus companheiros)
+
+
+  animtype = anim_type
+    Este se refere ao tipo de animação que o adversário irá ter quando for acertado.
+"light"        -    acerto leve
+"medium"  -    acerto médio
+"hard"        -    acerto forte
+"back"       -    derrubar
+"up"           -    com queda tipo "uppercut" (de MK).
+"diagup"    -    acerto com queda no ar, com queda de cabeça.
+    O padrão é "Light".
+
+  air.animtype = anim_type
+    Similar ao parâmetro "animtype", este seta a animação quando o adversário está no ar. O padrão é utilizar a mesma animação do "animtype".
+
+  fall.animtype = anim_type
+    Similar ao parâmetro "animtype", este seta a animação quando o adversário está caindo. O padrão é utilizar a mesma animação do "animtype". O padrão é "Up" se o air.animtype é "Up", e "Back" caso contrário.
+
+  priority = hit_prior (inteiro), hit_type (string)
+    Especifica a prioridade para este "Hit". Prioridade alta leva precedência sobre "Hits" de menor prioridade. Valores válidos para hit_prior são de 1 a 7. O padrão é 4.
+    Hit_type, quando especificado, dá a classe da prioridade do "Hit". Classes válidas são: 
+ "Hit"       -    sempre leva precedência sobre a classe Dodge. É o padrão.
+"Dodge"  -    sempre leva precedência sobre a classe Miss.
+ "Miss"     -    
+
+  damage = hit_damage, guard_damage (inteiro)
+    hit_damage é o dano que o adversário leva.
+    guard_damage é opcional, e é o dano que o adversário leva quando defende. O padrão para ambos é zero.
+
+  pausetime = p1_pausetime, p2_shaketime (inteiro)
+    Este é o tempo que cada lutador irá parar durante o "Hit".
+    p1_pausetime é o tempo a parar P1, medidos em game-ticks.
+    p2_pausetime é o tempo que o aversário balança antes de ser recuado devido ao golpe.
+    O padrão é 0,0 se omitido.
+
+  guard.pausetime = p1_pausetime, p2_shaketime (inteiro)
+    Similar ao "pausetime", há um tempo de pausa para cada jogador se o golpe for defendido. Quando omitido, o padrão são os mesmos valores de "pausetime".
+
+  sparkno = action_no (inteiro)
+    Isto define o número da animação (Action) do "Hit" ("sparks", sangue, luzes, ...). 
+Para utilizar uma animação fora do arquivo AIR do seu personagem, preceda o número da animação por um S (isso só vale para versão 27/06+). O padrão é definido pelas variáveis do personagem. Na versão antiga (01/01) era necessário colocar sparkno = 0,6; a partir da versão 27/06, basta sparkno = 6.
+
+  guard.sparkno = action_no (inteiro)
+    Isto define o número da animação (Action) do golpe quando defendido ("sparks", ...). Para utilizar uma animação fora do arquivo AIR do seu personagem, preceda o número da animação por um S. O padrão é definido pelas variáveis do personagem.
+
+  sparkxy = spark_x, spark_y (inteiro)
+    Isto define onde colocar o "spark".
+    spark_x é a coordenada relativa a frente de P2.
+    spark_y é relativo ao P1. Valores negativos fazem o "spark" subir.
+    Você pode utilizar o AirView para determinar que valor da posição do cursor lendo o valor em y-position. O padrão é 0,0 se omitido.
+
+  hitsound = snd_grp, snd_item (inteiro)
+    Este é o som a ser tocado no "Hit" (do arquivo common.snd). A inclusão do arquivo fight.snd permite você escolher 5,0 ("Hit" leve) até 5,4 ("Hit" forte). Para tocar um som do arquivo SND do seu personagem, preceda o número por S. Por exemplo, "hitsound = S1,0". O padrão é definido pelas variáveis do seu personagem.
+
+  guardsound = snd_grp, snd_item (inteiro)
+    Este é o som para tocar quando o adversário defende (do arquivo common.snd). Apenas o som 6,0 está disponível. Para tocar um som do arquivo SND do seu personagem, preceda o número por S. Não se pode tocar um som do adversário. O padrão é definido pelas variáveis do seu personagem.
+
+  ground.type = attack_type
+    Este é o grupo de ataque se o adversário está no chão. Escolha "High" para ataques que façam o adversário jogar a cabeça para trás, "Low" para ataques que o façam sentir no estômago, "Trip" para rasteiras, ou "None" para não fazer nada ao adversário. Se você escolher "High" ou "Low" é a mesma coisa, se AnimType estiver em "Back". O padrão é "High" se omitido.
+
+  air.type = attack_type
+    Este é o grupo de ataque para o adversário no ar. O padrão é o mesmo valor de "ground.type" se omitido.
+
+  ground.slidetime = slide_time (inteiro)
+    Este é o tempo em game-ticks que o adversário escorrega para trás após ser atingido pelo "Hit" (não está incluso o tempo de pausetime para P2). Aplicável apenas para golpes que mantém o adversário no chão. O padrão é zero, se omitido.
+
+  guard.slidetime = slide_time (inteiro)
+    O mesmo que "ground.slidetime", mas isto serve para quando o adversário defende. O padrão é o mesmo valor de "guard.hittime".
+
+  ground.hittime = hit_time (inteiro)
+    Tempo que o adversário leva para se recuperar de um estado de "Hit". Incrementar este valor mantém o adversário num estado de "Hit" por tempo maior, talvez para tornar o combo mais fácil. Aplicável apenas em "Hits" que mantenham o adversário no chão. O padrão é 0, se omitido.
+
+  guard.hittime = hit_time (inteiro)
+    O mesmo que "ground.hittime", mas serve quando o adversário defende o golpe. O padrão é o mesmo valor de "ground.hittime".
+
+  air.hittime = hit_time (inteiro)
+    Tempo que o adversário fica em estado de "Hit" após receber o golpe, no ou indo para o ar, antes de ir para o estado de "air recover". Este parâmetro não têm efeito se o parâmetro "fall" é setado para 1. O padrão é 20 (ou seja, se fall = 0, ele se auto-recupera no ar após 20 game-ticks).
+
+  guard.ctrltime = ctrl_time (inteiro)
+    Este é tempo antes que o adversário recupere o controle, e saia do estado de defesa no chão. O padrão é o mesmo valor de "guard.slidetime" se omitido.
+
+  guard.dist = x_dist (inteiro)
+    Esta é a distância x de P1 no qual P2 (adversário) irá para um estado de defesa se P2 está segurando o direcional em sentido contrário à posição de P1 (seu personagem). O valor padrão é definido nas variáveis do personagem se omitido. Você normalmente não necessita usar este parâmetro.
+
+  yaccel = accel (número real)
+    Especifica um aceleração y para imprimir ao adversário. O padrão é zero. Versão 27/06+.
+
+  ground.velocity = x_velocity, y_velocity (número real)
+    Velocidade inicial para dar ao P2 depois de ser acertado, se o P2 está no chão. Se a velocidade Y não for zero, P2 vai ser jogado para cima. O valor padrão para os dois é 0 se omitidos. Você pode deixar de fora a velocidade de Y se quiser que o oponente continue no chão.
+
+  guard.velocity = x_velocity (número real)
+    Velocidade a ser dada ao P2 se ele defender o ataque, se o P2 estiver no chão. O valor padrão é a velocidade de X do parâmetro "ground.velocity" se omitido.
+
+  air.velocity = x_velocity, y_velocity (número real)
+    Velocidade inicial a ser dada para o P2 se ele for acertado pelo ataque no ar. O valor padrão é para 0,0 se omitido.
+
+  airguard.velocity = x_velocity, y_velocity (número real)
+    Velocidade a ser dada ao P2 se ele defender o ataque no ar. O valor padrão é x_velocity*1.5, y_velocity/2, onde a velocidade de X e Y são os valores de "air.velocity".
+
+  ground.cornerpush.veloff = x_velocity (número real)
+    Determina a velocidade adicional ("velocity offset") a ser aplicada ao personagem se ele acerta um "Hit" em pé, junto ao canto da tela. Definir um valor alto irá empurrar seu personagem para trás, afastando-o do adversário (que estava encurralado). Se omitido, o valor padrão dependerá do parâmetro "attr":  se arg1=A, o padrão é 0; caso contrário, o padrão é 1.3*guard.velocity. Versão 27/06+.
+
+  air.cornerpush.veloff = x_velocity (número real)
+    Determina a velocidade adicional ("velocity offset") a ser aplicada ao personagem se ele acerta um "Hit" no ar, junto ao canto da tela. Definir um valor alto irá empurrar seu personagem para trás, afastando-o do adversário (que estava encurralado). Se omitido, o padrão é o valor de ground.cornerpush.veloff se omitido. Versão 27/06+.
+
+  down.cornerpush.veloff = x_velocity (número real)
+    Determina a velocidade adicional ("velocity offset") a ser aplicada ao personagem se ele acerta um "Hit" num adversário caído, junto ao canto da tela. Definir um valor alto irá empurrar seu personagem para trás, afastando-o do adversário (que estava encurralado). Se omitido, o padrão é o valor de ground.cornerpush.veloff se omitido. Versão 27/06+.
+
+  guard.cornerpush.veloff = x_velocity (número real)
+    Determina a velocidade adicional ("velocity offset") a ser aplicada ao personagem se ele acerta um golpe e o adversário defende, junto ao canto da tela. Definir um valor alto irá empurrar seu personagem para trás, afastando-o do adversário (que estava encurralado). Se omitido, o padrão é o valor de ground.cornerpush.veloff se omitido. Versão 27/06+.
+
+  airguard.cornerpush.veloff = x_velocity (número real)
+    Determina a velocidade adicional ("velocity offset") a ser aplicada ao personagem se ele acerta um golpe e o adversário, no ar, defende, junto ao canto da tela. Definir um valor alto irá empurrar seu personagem para trás, afastando-o do adversário (que estava encurralado). Se omitido, o padrão é o valor de guard.cornerpush.veloff se omitido. Versão 27/06+.
+
+  airguard.ctrltime = ctrl_time (inteiro)
+    Este é o tempo antes do P2 recuperar o controle do estado de defesa aérea. O valor padrão é para o mesmo valor de "guard.ctrltime" se omitido.
+
+  air.juggle = juggle_points (inteiro)
+    O quanto de pontos de juggle o golpe precisa para acertar. Não confunda isto com o parâmetro "juggle" no StateDef. Você normalmente não precisa deste parâmetro, exceto para o HitDef de projéteis. O padrão é 0, se omitido.
+
+  mindist = x_pos, y_pos (inteiro)
+  maxdist = x_pos, y_pos (inteiro)
+    Este deixa que você controle a distância mínima e máxima do P2 relativo ao P1, depois que o P2 for acertado. Estes parâmetros não são comumente usados. O valor padrão é para não mudar a posição do P2 se omitido.
+
+  snap = x_pos, y_pos (inteiro)
+    Isto movimenta P2 para uma posição específica em relação a P1, quando o ataque é bem sucedido (Hit). Este controle não é normalmente utilizado. Se você quiser colocar o P2 em uma posição em relação a P1, utilize "TargetBind" no estado de agarrão de P1. O padrão é não modificar a posição de P2.
+
+  sprpriority = drawing_priority (inteiro)
+    Este é a prioridade que a imagem de seu personagem têm. Ele controla se o P1 aparece na frente ou atrás do P2. A prioridade do P2 é sempre definida para 0. Prioridade -1 significa que a animação vai aparecer atrás do adversário. O valor padrão é 1.
+
+  p1facing = facing (inteiro)
+    Definir como -1 faz com que o seu personagem se vire se o golpe acertar. Comum em golpes do tipo agarrão. O valor padrão é para não mudar a direção do seu personagem.
+
+  p1getp2facing = facing (inteiro)
+    Definir como 1 faz P1 olhar na mesma direção que o adversário está olhando, após o acerto. Definir como -1 faz P1 olhar na direção contrária. O padrão é 0 (não mudar). Se for diferente de 0, este parâmetro leva precedência em relação a "p1facing".
+
+  p2facing = facing (inteiro)
+    Definir como 1 faz o adversário olhar na mesma direção que P1, se o "hit" acertar. Definir como -1 faz com que ele olhe na direção contrária. O padrâo é não mudar a direção para onde o adversário está olhando.
+
+  p1stateno = state_no (inteiro)
+    Este é o número do estado (Statedef) para onde seu personagem será direcionado, se o golpe for bem sucedido ("hit").
+
+  p2stateno = state_no (inteiro)
+    Este é o número do estado (Statedef) para onde o adversário será direcionado. se o golpe for bem sucedido ("hit"). P2 irá utilizar os estados (Statedef) e animações (Action) dos arquivos de seu personagem. Esta é a única maneira de obter o controle do adversário.
+
+  p2getp1state = value (inteiro)
+    Definir como 0 faz com que P2 não seja direcionado para um estado em "p2stateno". O padrão é 1, que define que o parâmetro "p2stateno" será utilizado.
+
+  forcestand = value (inteiro)
+    Definir como 1 força o adversário (P2) se levantar, ou seja, se ele estiver em um estado agachado ("crouch"), ele é forçado ao estado em pé ("stand"). Normalmente seu padrão é 0, mas se a velocidade definida em "ground.velocity" é diferente de zero, o padrão é 1.
+
+  fall = value (inteiro)
+    Definir como 1 faz o adversário cair ("fall"). Use-o para levar seu adversário beijar a lona ("knock down"). Parece que vale apenas para versão 27/06+.
+
+  fall.xvelocity = x_velocity (número real)
+    Este é a velocidade X que o adversário têm quando é rebatido pelo solo após cair. O padrão é não mudar, se omitido.
+
+  fall.yvelocity = y_velocity (número real)
+    Este é a velocidade Y que o adversário têm quando é rebatido pelo solo após cair. O padrão é -4.5, se omitido.
+
+  fall.recover = value (inteiro)
+    Definir como 0 não permite ao adversário se recuperar do estado de queda. O padrão é 1, se omitido, ou seja, ele pode se recuperar ("can recover").
+
+  fall.recovertime = recover_time (inteiro)
+    Este é o tempo que deve passar antes que o adversário esteja apto a se recuperar de um estado de queda. Não inclui o tempo que o adversário perde quando balança (pausetime = p1_pausetime, p2_shaketime). O padrão é 4, se omitido.
+
+  fall.damage = damage_amt (inteiro)
+    Indica o quanto de dano o adversário sofre quando atingir o chão. Pode ser qualquer valor inteiro numérico. O padrão é zero, se omitido.
+
+  air.fall = value (inteiro)
+    Definir como 1 faz com que o adversário entre em estado de queda ("fall") se ele for atingido no ar. O padrão é o mesmo valor definido no parâmetro "fall".
+
+  down.velocity = x_velocity, y_velocity (número real)
+    Esta é a velocidade a atribuir ao adversário, se ele sofrer o golpe enquanto está caído ("lying down"). Se a velocidade de Y é diferente de zero, o adversário irá para o ar. Se ela é zero, o adversário irá deslizar pelo chão. O padrão é o mesmo valor do parâmetro de "air.velocity".
+
+  down.hittime = hit_time (inteiro)
+    Este é o tempo que o adversário irá deslizar, se ele estiver em um estado caído ("lying down"). Este parâmetro é ignorado se a velocidade Y é diferente de zero para o parâmetro "down.velocity".
+
+  down.bounce = value (inteiro)
+    Definir como 1 faz o adversário rebater no chão uma vez (usando valores para fall.xvelocity e fall.yvelocity), após cair. Este parâmetro é ignorado se a velocidade de Y é zero no parâmetro "down.velocity". O padrão é 0, se omitido (o adversário atinge o solo e fica).
+
+  id = id_number (inteiro)
+    Principalmente utilizado para combos. Você pode utilizar este número para detectar se o personagem atingiu o adversário com este golpe particular. Valores válidos são todos  os  valores >=1. Se omitido, o padrão é 0 (sem ID).
+
+  chainID = id_number (inteiro)
+    Principalmente utilizado para combos. Se o adversário for atingido for atingido por um golpe que contenha um ID de mesmo número que este, então ele pode ser atingido por um golpe que contenha este número chainID. Analiticamente, indica qual golpe (com ID) vêm antes deste  (com chainID). Note que combos também são possíveis através de outras alternativas. Os valores válidos são todos >=1. Se omitido, o padrão é -1 (chain para qualquer golpe).
+
+  nochainID = nochain_1, nochain_2 (inteiro)
+    Especifica até dois ID de golpes que não podem ser ligados com este golpe. O padrão é -1, ou seja, não desabilita qualquer ID.
+
+  hitonce = hitonce_flag (boolean)
+    Definido como 1, este "Hitdef" afeta apenas um oponente. O padrão é 0, na maioria das vezes. A única exceção é se o parâmetro "attr" é um agarrão ("throw"), o que faz o padrão ser 1. Versão 27/06+.
+
+  kill = kill_flag (inteiro)
+    Definir como 0 se este golpe não pode nocautear o oponente ("KO"). O padrão é 1.
+
+  guard.kill = gkill_flag (int)
+    Definir como 0 se este golpe não pode nocautear o oponente ("KO") quando ele defende o golpe. O padrão é 1. Versão 29/11+.
+
+  fall.kill = fkill_flag (int)
+    Definir como 0 se este golpe não pode nocautear o oponente ("KO") quando ele cai no chão. O padrão é 1. Versão 29/11+.
+
+  numhits = hit_count (inteiro)
+    Define quantos "hits" devem ser adicionados ao contador de combo. O padrão é 1. Este comando não adiciona dano ao adversário.
+
+  getpower = p1power, p1gpower (inteiro)
+    Especifica quanto de energia é adicionada à barra de "power" do seu personagem. p1power é o valor para golpe bem sucedido ("hit"). O padrão é 0. p1gpower é o valor para golpe defendido. O padrão é o mesmo valor de p1power.
+
+  givepower = p2power, p2gpower (inteiro)
+    Especifica quanto de energia é adicionada à barra de "power" do adversário. p2power é o valor para golpe bem sucedido ("hit"). O padrão é 0. p2gpower é o valor para golpe defendido. O padrão é o mesmo valor de p2power.
+
+  palfx.time = palfx_time (inteiro)
+  palfx.mul = r1, g1, b1 (inteiro)
+  palfx.add = r2, g2, b2 (inteiro)
+    Se incluído, isto permite afetar a paleta de cores do adversário. palfx_time é o tempo em game-ticks para aplicar a paleta. Os demais parâmetros são idênticos ao controle "PalFX".
+
+  envshake.time = envshake_time (int)
+  envshake.freq = envshake_freq (float)
+  envshake.ampl = envshake_ampl (int)
+  envshake.phase = envshake_phase (float)
+    Se incluído, isto balança a tela se o golpe for bem sucedido.
+envshake_time é o tempo (em ticks) em que a tela balança. O resto dos parâmetros são os mesmo do controle "EnvShake". Versão 29/11+.
+
+  fall.envshake.time = envshake_time (int)
+  fall.envshake.freq = envshake_freq (float)
+  fall.envshake.ampl = envshake_ampl (int)
+  fall.envshake.phase = envshake_phase (float)
+    Similar aos parâmmetros envshake.*, com exceção que é aplicado apenas quando o adversário atinge o solo. Versão 29/11+.
+
+  attack.width = z1, z2 (inteiro)
+    Não é atualmente usado.
+
+Exemplo:
+  Nenhum.

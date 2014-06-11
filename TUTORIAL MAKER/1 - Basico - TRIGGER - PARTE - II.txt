@@ -1,0 +1,973 @@
+TRIGGER - PARTE - II
+
+http://raphael-r2.ucoz.com/index/0-18
+
+	Continuando...
+------------------------------------------------------------
+Exp
+------------------------------------------------------------
+
+Calcula o exponencial do argumento (e elevado à potência do argumento). Este trigger calcula mais precisamente que e**(argumento).
+
+Formato:
+  exp(exprn)
+
+Argumentos:
+  exprn
+    Expressão a ser calculado o exponencial. (Nº real).
+
+Tipo de retorno:
+  Nº real.
+
+Condições de erro:
+  Retorna SFalse se exprn avaliado der SFalse.
+
+Exemplo:
+  value = exp(4-var(0))
+    Calcula o número (e) elevado a 4-var(0).
+
+
+------------------------------------------------------------
+Facing
+------------------------------------------------------------
+
+Retorna 1 se o personagem está olhando para a direita, e -1 se ele está olhando para a esquerda.
+
+Formato:
+  Facing
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  Trigger = Facing = -1
+    Aciona se o personagem para a esquerda da tela.
+
+
+------------------------------------------------------------
+Floor
+------------------------------------------------------------
+
+Implementa a função arredondamento. Retorna o maior inteiro menor que ou igual ao argumento. Enquanto o trigger Ceil arredonda para cima, Floor arredonda para baixo.
+
+Formato:
+  floor(exprn)
+
+Argumentos:
+  exprn
+    Expressão a ser arredondada.
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Retorna SFalse se exprn avaliado der SFalse.
+
+Exemplos:
+  1. value=floor(5.5)
+    Retorna 5.
+  2. value=floor(-2)
+    Retorna -2.
+
+
+------------------------------------------------------------
+FrontEdgeBodyDist
+------------------------------------------------------------
+
+FrontEdgeBodyDist dá a distância entre a frente do jogador (como determinado em sua variável width bar) e a parede da tela que está na sua frente.
+
+Formato:
+  FrontEdgeBodyDist
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  Nº real.
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = FrontEdgeBodyDist < 30
+    Aciona se a parede da frente está a menos de 30 pixels da cara do seu personagem.
+
+
+------------------------------------------------------------
+FrontEdgeDist
+------------------------------------------------------------
+
+FrontEdgeDist dá a distância entre o eixo x do seu personagem e a parede da tela em frente ao seu personagem.
+
+Formato:
+  FrontEdgeDist
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  Nº real.
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = FrontEdgeDist < 30
+    Aciona se a parede da frente está a menos de 30 pixels do eixo x do seu personagem.
+
+
+------------------------------------------------------------
+FVar
+------------------------------------------------------------
+
+Retorna o valor armazenado por uma variável real.
+
+Formato:
+  FVar(exprn)
+
+Argumentos:
+  exprn
+    É uma expressão que será utilizada como o índice da variável. Valores válidos são entre 0 e 39, ou seja, o Mugen fornece apenas 40 variáveis reais.
+
+Tipo de retorno:
+  Nº real.
+
+Condições de erro:
+  Retorna SFalse se exprn avaliado der SFalse, ou se exprn resulatar em um índice inválido.
+
+Exemplo:
+  trigger1 = FVar(5) = -1.23
+    Aciona se a variável real 5 contém o valor -1.23.
+
+
+------------------------------------------------------------
+GameTime
+------------------------------------------------------------
+
+Retorna o total número de ticks que passaram desde que o game começou.
+
+Formato:
+  GameTime
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = (GameTime%27)=0
+    Aciona a cada 27 game ticks.
+
+
+------------------------------------------------------------
+GetHitVar(*)
+------------------------------------------------------------
+
+Quando o personagem está em um estado de "hit", retorna o valor de um específico parâmetro de "hit".
+
+Formato:
+  GetHitVar(param_name)
+
+Argumentos:
+  param_name
+    O nome do parâmetro de "hit" a checar. Valores válidos são:
+      xveladd, yveladd, type, animtype, airtype, groundtype, damage,
+      hitcount, fallcount, hitshaketime, hittime, slidetime, ctrltime,
+      recovertime, xoff, yoff, zoff, xvel, yvel, yaccel, hitid, 
+      chainid, guarded, fall, fall.damage, fall.xvel, fall.yvel,
+      fall.recover, fall.time, fall.recovertime (fall.envshake.*, fall.kill somente 
+      disponíveis a partir da versão 29/11).
+
+Tipo de retorno:
+  Depende do tipo do parâmetro. Veja "Detalhes".
+
+Condições de erro:
+  Nenhum.
+
+Detalhes:
+  xveladd: Retorna a velocidade X que é adicionada quando ele é nocauteado. (Nº real)
+  yveladd: Retorna a velocidade Y que é adicionada quando ele é nocauteado. (Nº real)
+  type: Retorna o tipo do "hit":  0 para nenhum, 1 para high, 2 para low, 3 para trip (apenas "hits" ground).
+  animtype: Retorna o tipo de animação (0 para light, 1 para medium, 2 para hard, 3 para back, 4 para up, 5 para diag-up
+  airtype: Retorna o tipo especificado no HitDef para um golpe no ar.
+  groundtype: Retorna o tipo especificado no HitDef para um golpe no chão.
+  damage: Retorna o dano ("damage"). (inteiro)
+  hitcount: Retorna o número de "hits" no atual combo. (inteiro)
+  fallcount: Retorna o número de vezes que o personagem atingiu no solo no atual combo. (inteiro)
+  hitshaketime: Retorna o tempo que o personagem é congelado durante o "hit". Este número conta de forma decrescente até zero.  (inteiro)
+  hittime: Retorna o tempo antes que o personagem retome o controle. (inteiro)
+  slidetime: Retorna o tempo que o personagem é empurrado (no chão) após o "hit". (inteiro)
+  ctrltime: Retorna o tempo antes do personagem retomar o controle após defender. (inteiro)
+  recovertime: Retorna o tempo antes do personagem se levantar de um "liedown state" Este número conta decrescente até 0, e irá contar mais rapidamente se os   botões são pressionados rapidamente. (inteiro)
+  xoff: "Snap" x quando em "hit" (depreciado)
+  yoff: "Snap" y quando em "hit" (depreciado)
+  zoff: "Snap" z quando em "hit" (depreciado)
+  xvel: Velocidade X imprimida pelo golpe  (Nº real)
+  yvel: Velocidade Y imprimida pelo golpe  (Nº real)
+  yaccel: Aceleração Y imprimida pelo golpe (Nº real)
+  chainid: chainID para o último golpe tomado. (inteiro)
+  guarded: Verdadeiro se o último "hit" foi defendido, falso caso contrário.
+  fall: Verdadeiro se estiver caindo, falso caso contrário (inteiro)
+  fall.damage: Dano na queda (inteiro)
+  fall.xvel: Velocidade X após quicar no chão. (Nº real)
+  fall.yvel: Velocidade Y após quicar no chão. (Nº real)
+  fall.recover: Verdadeiro se o personagem pode se recuperar, falso caso contrário (0/1).
+  fall.recovertime: tempo antes do personagem poder se recuperar (inteiro)
+  fall.kill: valor de fall.kill do HitDef. (inteiro)
+  fall.envshake.time: Veja abaixo. (inteiro)
+  fall.envshake.freq: Veja abaixo. (Nº real)
+  fall.envshake.ampl: Veja abaixo. (inteiro)
+  fall.envshake.phase: Retorna o valor do fall.envshake.* do HitDef  (Nº real)
+
+Exemplo:
+  trigger1 = GetHitVar(yvel) < -5.5
+    Aciona se seu personagem têm velocidade menor que -5.5 após ser golpeado, ou seja, depende do HitDef do adversário.
+
+
+------------------------------------------------------------
+HitCount
+------------------------------------------------------------
+
+A paritr da versão 31/07 mudou completamente.
+Retorna o número de vezes que o movimento de ataque atual acertou um ou mais oponentes. Este valor é válido apenas para simples estado; depois de qualquer mudança de estado, ele é resetado (volta a 0). Para prevenir o reset, mude o parâmetro hitcountpersist no StateDef (veja documentação de CNS para maiores detalhes).
+O HitCount e UniqHitCount diferem apenas quando o personagem está atingindo mais de um adversário. No caso do personagem atingir dois adversários com 
+um mesmo ataque, HitCount irá incrementar 1 para cada "hit", enquanto UniqHitCount incrementa 2.
+
+Formato:
+  HitCount
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = HitCount > 8
+    Aciona se mais que 8 "hits" foram impostos ao adversário desde que começou o movimento de ataque.
+
+
+------------------------------------------------------------
+HitDefAttr(*,***)
+------------------------------------------------------------
+
+Gets the attribute parameter of the player's currently-active HitDef. If the player is not in an attack state, then the condition does not trigger. Can be used for simple move-interrupts from weaker to stronger attacks 
+in the CMD file.
+
+Formato:
+  HitDefAttr [operador] value1, value2
+
+Argumentos:
+  (operador)
+    =, !=
+  value1
+    Uma string com ao menos uma das letras "S", "C" e "A", para standing (em pé), crouching (agachado) e ataques aerial (aéreo), respectivamente. Por exemplo, "SA" é para ataques em pé e aéreos.
+  value2
+    Uma combinação de 2 letras ("strings"):
+A 1a é:  "N" para "normal", "S" para "special", ou "H" para "hyper".
+a 2a é:  "A" para "attack", "T" para agarrão ("throw").
+Por exemplo, "NA, ST" é para ataques normais e agarrões especiais.
+
+Assumindo que o atribbuto do Hitdef do seu personagem está na forma:
+      arg1, arg2
+
+Então a condição de trigger é determinada para verdadeira apenas se arg1 está contida em value1, E arg2 está contida em value2. Veja o parâmetro "attr" do controle Hitdef para maiores detalhes.
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = A, HA
+    Aciona se o personagem está em um estado de ataque, onde o atual Hitdef têm os seguintes atributos:
+    1. é um ataque aéreo
+    2. é um ataque hyper (super)
+
+  trigger1 = SC, NA, SA
+    Aciona quando o personagem está em um estado de ataque, onde o atual Hitdef têm os seguintes atributos:
+    1. o ataque pode ser em pé ou agachado
+    2. o movimento é um ataque normal ou especial (não super/hyper)
+
+
+------------------------------------------------------------
+HitFall
+------------------------------------------------------------
+
+Se o personagem está atualmente em um estado de "Hit", este comando retorna a flag de queda ("fall") do personagem. A saída deste trigger não é definida se o personagem não está em um estado de "Hit". Para uma explicação da flag de queda ("fall"), veja o controle "HitDef".
+
+Formato:
+  HitFall
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = !HitFall
+    Aciona se o "Hit" não pôs o personagem em um estado de queda.
+
+
+------------------------------------------------------------
+HitOver
+------------------------------------------------------------
+
+Se o personagem está em um estado de "Hit", retorna verdadeiro quando o "hittime" terminou. Para uma explicação de "hittime", veja o controle "HitDef".
+
+Formato:
+  HitOver
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = HitOver = 1
+    Aciona quando o "hittime" do personagem terminou (quando ele se recuperar de um golpe do adversário).
+
+
+------------------------------------------------------------
+HitPauseTime
+------------------------------------------------------------
+
+Retorna o tempo que falta para o "hitpause" do personagem terminar. O personagem entra em "hitpause" quando seu ataque entra em contato com o adversário. O valor inicial é igual ao primeiro valor do parâmetro "pausetime" do HitDef. Se ignorehitpause não está setado, este trigger irá sempre retornar 0.
+
+Formato:
+  HitPauseTime
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = HitPauseTime = 0
+    Aciona quando o personagem não está em "pause" devido ao golpe.
+
+
+------------------------------------------------------------
+HitShakeOver
+------------------------------------------------------------
+
+Se o personagem está em um estado de "Hit", retorna verdadeiro quando seu personagem recebe um golpe e pára de balançar, e falso caso contrário.
+Para uma explicação sobre o assunto, veja o controle "HitDef" (pausetime = p1_pausetime, p2_shaketime).
+
+Formato:
+  HitShakeOver
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = HitShakeOver = 0
+    Aciona se o personagem ainda está balançando devido a um "Hit".
+
+
+------------------------------------------------------------
+HitVel
+------------------------------------------------------------
+
+Pega o valor da velocidade imprimida ao personagem devido a um "Hit". Você deve especificar a componente que você quer checar, isto é, "HitVel Y" para checar a velocidade vertical.
+
+Formato:
+  HitVel [componente]
+ 
+Argumentos:
+  [componente]
+    X, Y
+
+Tipo de retorno:
+  Nº real.
+
+Condições de erro:
+  Nenhum.
+
+Detalhes:
+  Um positivo valor de Y significa que o personagem está se movendo para cima (?). Um valor de X positivo significa que o personagem está se movendo para trás. Note que "HitVel X" encara de maneira oposta ao trigger "Vel X".
+
+Exemplo:
+  trigger1 = HitVel X > 0.5
+    Aciona quando o personagem têm velocidade, em eestado de "Hit", maior do que 0.5 pixels/game-tick para trás.
+
+
+------------------------------------------------------------
+ID
+------------------------------------------------------------
+
+Retorna o número de identificação ID de alguém. O número ID é único para cada um: qualquer helper criado recebe um ID único. Este trigger pode ser utilizado para pegar o ID do adversário, para ser mais tarde usado com a redireção "playerID". (veja o arquivo sobre expressões).    
+
+Formato:
+  ID
+
+Argumentos:
+  nenhum
+
+Tipo de retorno:
+  Inteiro.
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  value = ID
+    Seta "value" com o ID do personagem atual.
+  value = EnemyNear, ID
+    Seta "value" com o ID do adversário mais próximo.
+
+
+------------------------------------------------------------
+IfElse
+------------------------------------------------------------
+
+Este trigger toma três argumentos:
+. Se o primeiro é não nulo, IfElse retorna o valor do segundo argumento.
+. Se o primeiro argumento é nulo, IfElse retorna o valor do terceiro argumento.
+
+Formato:
+  IfElse(exp_cond,exp_true,exp_false)
+
+Argumentos:
+  exp_cond
+    Expressão a ser checada.
+  exp_true
+    Valor que retornará se exp_cond é não nulo.
+  exp_false
+    Valor que retornará se exp_cond é nulo.
+
+Tipo de retorno:
+  Tipo do exp_true ou exp_false, aquele que for retornado.
+
+Condições de erro:
+  Retorna SFalse se qualquer um dos argumentos der SFalse.
+
+Exemplo:
+  value = ifelse(var(3),1,2)
+    Retorna 1 se var(3) é diferente de zero, e retorna 2 se var(3) é igual a zero.
+
+
+------------------------------------------------------------
+IsHelper
+------------------------------------------------------------
+
+Este trigger pega um opcional número de identificação ("ID number") como sufixo. Se este número de identificação for omitido, IsHelper retorna verdadeiro se o personagem é um personagem tipo "helper". Se o número de ID for incluído, então IsHelper se o personagem é um personagem tipo "helper" com o número ID especificado, e falso caso contrário.
+
+Formato:
+IsHelper
+IsHelper(exprn) 
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Retorna SFalse se exprn avaliado der SFalse.
+
+Exemplos:
+  1. trigger1 = !IsHelper
+    Aciona se o personagem não é um personagem tipo "helper".
+  2. trigger1 = IsHelper1234 = 1
+    Aciona se o personagem é um personagem tipo "helper" com ID 1234.
+
+
+------------------------------------------------------------
+IsHomeTeam
+------------------------------------------------------------
+
+Retorna 1 se o time do personagem é considerado "time da casa". No modo arcade, o computador é sempre considerado o time da casa. No modo versus, o lado esquerdo (tipicamente chamado P1) é considerado o time da casa.
+
+Formato:
+  IsHomeTeam
+
+Argumentos:
+  nenhum
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  nenhum
+
+Exemplo:
+  nenhum
+
+
+------------------------------------------------------------
+Life
+------------------------------------------------------------
+
+Retorna a quantia da barra de "Life".
+
+Formato:
+  Life
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = life <= 10
+    Aciona se o personagem têm 10 ou menos de energia na barra de "Life".
+    
+
+------------------------------------------------------------
+Log
+------------------------------------------------------------
+
+Toma dois argumentos a e b, e calcula o logarítimo de b na base a.
+
+Formato:
+  Log(exp1,exp2)
+
+Argumentos:
+  exp1
+    Expressão que será a base do logarítimo. Deve ser positivo.
+  exp2
+    Expressão que dá o número para ser calculado o logarítimo. Deve ser positivo.
+
+Tipo de retorno:
+  Nº real.
+
+Condições de erro:
+  Retorna SFalse se exp1 ou exp2 der SFalse, ou se eles não são positivos.
+
+Exemplo:
+  value=log(2,64)
+    Calcula o logarítimo de 64 na base 2, que é 6.0.
+
+
+------------------------------------------------------------
+Ln
+------------------------------------------------------------
+
+Calcula o logarítimo natural do argumento. Este trigger têm maior precisão do que log(e,(argument)).
+
+Formato:
+  ln(exprn)
+
+Argumentos:
+  exprn
+    Expressão a ser calculada o logarítimo natural.
+
+Tipo de retorno:
+  Nº real.
+
+Condições de erro:
+  Retorna SFalse se exprn avaliado der SFalse, ou se exprn não é positivo.
+
+Exemplo:
+  value = ln(time)
+    Calcula o logarítimo natural do tempo de estado do personagem.
+
+
+------------------------------------------------------------
+Lose
+------------------------------------------------------------
+
+Retorna verdadeiro se o personagem (ou o time do personagem, no "team mode" perdeu o round, e falso caso contrário. Pode receber o sufixo "KO" ou "Time" para acionar apenas quando o personagem perder o round por KO ou por tempo, respectivamente.
+
+Formato:
+  1. Lose
+  2. LoseKO
+  3. LoseTime
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Nenhum.
+
+Exemplos:
+  1. trigger1 = Lose = 1
+    Aciona se o personagem (ou seu time) perdeu o round.
+  2. trigger1 = LoseKO = 0
+    Aciona se o personagem (ou seu time) não perdeu o round por KO. Por exemplo, este comando aciona se o seu personagem ainda não perdeu o round, ou se perdeu o round por tempo.
+
+
+------------------------------------------------------------
+MatchNo
+------------------------------------------------------------
+
+Retorna o número da atual luta.
+
+Formato:
+  MatchNo
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  inteiro
+
+Detalhes:
+  O atual round é sempre 1 no modo versus. No Arcade e no team mode, MatchNo começa com 1 e incrementa cada vez que um novo adversário surge. Se você terminou o modo Arcade e começou um novo jogo, MatchNo recomeça do 1.
+
+Exemplo:
+  Nenhum.
+
+
+------------------------------------------------------------
+MatchOver
+------------------------------------------------------------
+
+Retorna verdadeiro se a luta acabou. Por exemplo, em caso de melhor de três rounds, este trigger retorna verdadeiro quando um dos dois lutadores tiver ganho dois rounds. Para saber se o seu lutador ganhou ou perdeu, utiliza-se os triggers "Win", "Lose" ou mesmo "Life" em conjunto com "MatchOver".
+
+Formato:
+  MatchOver
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Nenhum.
+
+Detalhes:
+  Atualmente, MatchOver não retorna verdadeiro a menos que o personagem comece com sua posição de vitória (State 180). Isto pode estar sujeito a mudanças nas versões futuras.
+
+Exemplo:
+  trigger1 = matchover
+    Aciona se a luta não (??) terminou. Por exemplo, o round atual pode ainda não ter terminado, ou ter terminado sem que seja o último round da luta.
+
+
+------------------------------------------------------------
+MoveContact
+------------------------------------------------------------
+
+Este trigger é válido apenas quando o personagem está atacando. Movecontact dá 1 se P2 sofreu o Hit, ou está defendendo o ataque de P1. Dá 0 caso contrário (ataque sem contato). Tipicamente, usado com "StateNo" e "Command" para detectar a interrupção do movimento no arquivo CMD.
+
+Formato:
+  MoveContact
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = MoveContact
+    Verdadeiro se o ataque de seu personagem não errar o adversário.
+
+
+------------------------------------------------------------
+MoveGuarded
+------------------------------------------------------------
+
+Este trigger é válido apenas quando o personagem está atacando. Moveguarded dá 1 se o adversário está defendendo, ou defendeu o ataque de seu personagem. Dá 0 se o ataque errou ou se acertou e deu Hit (ataque bem sucedido). Tipicamente, usado com "StateNo" e "Command" para detectar a interrupção do movimento no arquivo CMD.
+
+Formato:
+  MoveGuarded
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = MoveGuarded
+    Verdadeiro se o ataque de seu personagem foi bloqueado pelo adversário.
+
+
+------------------------------------------------------------
+MoveHit
+------------------------------------------------------------
+
+Este trigger é válido apenas quando o personagem está em um estado de ataque (por isso, quando for definir um State, defina-o corretamente !!). MoveHit retorna 1 se o adversário receber o "Hit". Ele retorna 0 se o ataque errou ou foi defendido. Tipicamente, é utilizado com os triggers "StateNo" e "Command" para fazer combos, no arquivo CMD.
+
+Formato:
+  MoveHit
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = MoveHit
+    Verdadeiro se o ataque do seu personagem atingiu o adversário, sem que ele defendesse.
+
+
+------------------------------------------------------------
+MoveType(*,***)
+------------------------------------------------------------
+
+Movetype dá o tipo de movimento que o personagem está realizando. Veja a seção sobre Statedef para maiores detalhes sobre Movetype. Muito usado para interromper movimentos no arquivo CMD, e realizar combos.
+
+Formato:
+  MoveType [operador] move_type
+
+Argumentos:
+  [operador]
+    =, !=   (outros operadores não são válidos)
+  move_type (char)
+    A, I, H
+    Tipos de movimento: Ataque, neutro e sofrendo "Hit".
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = movetype != H
+    Aciona se o personagem não está em um estado de "Hit".
+
+
+------------------------------------------------------------
+Name(*,***)
+------------------------------------------------------------
+
+Retorna o nome do personagem (nome interno especificado no arquivo DEF, que pode não ser o mesmo que é mostrado - display).
+
+Formato:
+  Name [operador] "name"
+
+Argumentos:
+  [operador]
+    =, != (outros operadores não são válidos)
+  "name" (variável "string")
+    Nome a ser comparado. Deve estar entre aspas.
+
+Tipo de retorno:
+  boolean inteiro (1 or 0)
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = Name = "Goro"
+    Retorna verdadeiro se o nome do personagem é Goro.
+
+
+------------------------------------------------------------
+NumEnemy
+------------------------------------------------------------
+
+NumEnemy retorna o número de oponentes que existem. Jogadores neutros e "helpers" normais não são considerados oponentes.
+
+Formato:
+  NumEnemy
+
+Argumentos:
+  nenhum
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = NumEnemy = 2
+  trigger1 = enemynear(1), name = "Squash"
+    Aciona se há dois oponentes, e o mais próximo se chamar Squash.
+
+
+------------------------------------------------------------
+NumExplod
+------------------------------------------------------------
+
+Este trigger pega um número de identificação (ID number) opcional como sufixo. Se o número de ID for omitido, "NumExplod" de "Explod" mantidas pelo personagem. Se o número de ID for incluído, então "NumExplod" retorna o número de "Explod" com aquele número de ID que são mantidas pelo personagem.
+Número ID de -1 ou menor é o mesmo que omitir o número ID. Para maiores informações, veja o controle "Explod".
+
+Formato:
+  1. NumExplod
+  2. NumExplod(exprn)
+
+Argumentos:
+  exprn 
+    Expressão que dá o número ID. (inteiro).
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Retorna SFalse se exprn avaliado der SFalse.
+
+Exemplos:
+  1. trigger1 = NumExplod >= 4
+    Aciona se o personagem tem atualmente 4 ou mais "Explod".
+  2. trigger1 = NumExplod1234 >= 4
+    Aciona se o personagem tem atualmente 4 ou mais "Explod com 
+número de ID 1234.
+
+
+------------------------------------------------------------
+NumHelper
+------------------------------------------------------------
+
+Este trigger pega um número de identificação (ID number) opcional como sufixo. Se o número de ID for omitido, "NumHelper" retorna o número total de "helpers" mantidos pelo personagem. Se o número ID estiver incluso, então "NumHelper" retorna o número de "helper" com aquele específico número de ID mantidos por um personagem pai (pode ser o seu personagem, ou um outro "helper". Se ID for 0 ou menor, então todos os "helpers" são contados.
+
+Formato:
+  1. NumHelper
+  2. NumHelper(exprn)
+
+Argumentos:
+  exprn
+    Expressão que dá o número ID. (inteiro).
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Retorna SFalse se exprn avaliado der SFalse.
+
+Exemplos:
+  1. trigger1 = NumHelper < 2
+    Aciona se o personagem têm agora menos que dois "helpers".
+  2. trigger1 = NumHelper1234 < 2
+    Aciona se o personagem têm agora menos de dois "helpers" com número de ID igual a 1234.
+
+
+------------------------------------------------------------
+NumPartner
+------------------------------------------------------------
+
+NumPartner retorna o número de parceiros que existem. Jogadores neutros e e "helpers" normais não são considerados parceiros.
+
+Formato:
+  NumPartner
+
+Argumentos:
+  nenhum
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = NumPartner = 1
+  trigger1 = partner, life < 200
+    Aciona se o seu personagem tem um parceiro com menos de 200 de vida.
+
+
+------------------------------------------------------------
+NumProj
+------------------------------------------------------------
+
+Retorna o atual número de projéteis atualmente mantidos pelo personagem. Para criar um projétil, veja o controle "Projectile".
+
+Formato:
+  NumProj
+
+Argumentos:
+  Nenhum.
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Nenhum.
+
+Exemplo:
+  trigger1 = NumProj = 0
+    Aciona se o personagem não ativou nenhum projétil.
+
+
+------------------------------------------------------------
+NumProjID
+------------------------------------------------------------
+
+Este comando requer como argumento um número de ID. Ele retorna o número de de projéteis com o específico número ID que atualmente estão sendo mantidos pelo seu personagem.
+
+Formato:
+  NumProjID(exprn)
+
+Argumentos:
+  exprn
+    Expressão que dá o número ID. (inteiro).
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Se um número negativo de ID for especificado, então o ID é encarado como 0. Retorna SFalse se exprn der SFalse.
+
+Exemplo:
+  trigger1 = NumProjID(1234) = 1
+    Aciona se o personagem têm exatamente apenas 1 projétil com número de ID 1234.
+
+
+------------------------------------------------------------
+NumTarget
+------------------------------------------------------------
+
+
+Este trigger pega um número de identificação (ID number) opcional como sufixo. Se o número de ID for omitido, "NumTarget" retorna o número total de "targets" do personagem. Se o número ID estiver incluso, então "NumTarget" retorna o número de "targets" com aquele específico número de ID. Se ID for -1 ou menor, o efeito é o mesmo se ID fosse omitido.
+
+Formato:
+  1. NumTarget
+  2. NumTarget(exprn)
+
+Argumentos:
+  exprn 
+    Expressão que dá o número ID. (inteiro).
+
+Tipo de retorno:
+  inteiro
+
+Condições de erro:
+  Retorna SFalse se exprn avaliado der SFalse.
+
+Exemplos:
+  Nenhum.

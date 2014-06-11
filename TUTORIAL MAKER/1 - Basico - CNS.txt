@@ -1,0 +1,748 @@
+CNS
+http://raphael-r2.ucoz.com/index/0-12
+
+	
+O Formato CNS
+=============
+M.U.G.E.N, (c) Elecbyte 2001
+Documentação para a versão 2001.04.14
+
+versão Beta da documentação (incompleta) Atualizada em 1 de Abril de 2001
+===================================================
+Traduzido para o português em 22 de Julho de 2.003, por John_MacEnroe    fhgz@bol.com.br
+
+Procurei ser o mais fiel possível às explicações da Elecbyte. Mantive alguns termos em inglês, pelo motivo de que se trata de comandos usados pelo MUGEN, mas dei a definição em português. Faça o que quiser com esse documento: inclusive hospede em seu site se for o caso. Tá aí, é teu.
+===================================================
+
+====================================================================
+0. Conteúdo
+====================================================================
+Seção I.           Introdução
+Seção II.           Variáveis do Jogador
+Seção III.           States
+Seção IV.           Expressões
+Apêndice A.    Números de States Especiais
+
+
+
+====================================================================
+I. Introdução
+====================================================================
+
+O arquivo CNS de um lutador serve para dois propósitos:
+i. Ele define as variáveis desse lutador, como a velocidade que ele caminha e o fator scale que ele será exibido (tamanho que ele será exibido), e por aí vai.
+
+ii. Ele contém os states do jogador, os quais descrevem todos os movimentos que o lutador pode fazer. States são os blocos de comando que você pode usar para criar desde movimentos simples até os mais complicados.
+
+Como muitos outros arquivos do lutador, o CNS é um arquivo de texto que você pode editar com qualquer editor de textos.
+
+No arquivo CNS, o ponto e vírgula (;) é considerado um caracter de comentários. Qualquer texto que esteja na mesma linha depois do ponto e vírgula será ignorado pelo programa. O CNS na maioria dos casos não diferencia letras maiúsculas das minúsculas, isto é, "MeuNome" é tratado da mesma maneira que "meunome" e "mEunOME". A única exceção é  o trigger "command", mas você não precisa se preocupar com isso por enquanto.
+
+Algumas terminologias
+-----------------------------
+Quando nós falamos "grupo", nós estamos nos referindo a qualquer bloco de linhas do texto que começa com qualquer coisa que se pareça com isso nomedogrupo], e termina antes do próximo grupo. Por exemplo, o grupo "Blah" consiste nas primeiras três linhas nesse caso:
+
+[Blah]
+linha1
+linha2
+[Grupo 2]
+mais linhas
+
+Em um grupo, os parâmetros podem aparecer em qualquer ordem. Então,
+
+[AlgumGrupo]
+value1 = 1234
+value2 = "A string"
+
+é equivalente a:
+
+[AlgumGrupo]
+value2 = "A string"
+value1 = 1234
+
+
+
+====================================================================
+II. Variáveis do Jogador
+====================================================================
+
+Sem documentação completa ainda. Veja em chars/kfm/kfm.cns para comentários em cada variável.
+
+Algumas variáveis importantes a serem notadas:
+- Em [Size] (size = tamanho), você pode usar "xscale" e "yscale" para mudar a largura e altura do seu personagem. Isso te livra do problema de ter que mudar o tamanho de cada um dos sprites.
+- Ajuste a velocidade do jogador em [Velocity]
+- Ajuste a velocidade de aceleração do jogador para baixo -- "yaccel" em [Movement]
+
+
+
+====================================================================
+III. States
+====================================================================
+
+a. Breve noção das Máquinas States Finitos no MUGEN
+b. Introdução aos States
+c. Partes Básicas de um State
+d. Detalhes de um StateDef
+e. Detalhes dos States Controllers
+f. States Comuns (commom1.cns)
+
+
+-------------------------------------------------
+III.a. Breve noção das Máquinas de States Finitos no MUGEN
+-------------------------------------------------
+
+Esta seção apresenta um trabalho (heurístico) de caracterização das máquinas de states finitos que são encontrados no MUGEN. Isto não é somente especialmente técnico, mas visa também o leitor que possui uma mente analítica. Sinta-se à vontade para pular essa seção se você já é familiarizado com as máquinas de states finitos, ou se você não está interessado nos detalhes.
+
+Uma máquina de state finito (a seguir abreviado como MSF) é um autômato (autômato = dispositivo que executa certos trabalhos ou funções), com uma coleção finita de sub-rotinas, cada qual realizando alguma função, e depois emprega algum critério para escolher qual será a próxima sub-rotina que será executada. Cada sub-rotina é chamada de um "state", e a MSF é chamada para estar em um dado state quando estiver correntemente processando as diretivas desse state. Uma MSF somente poderá estar em um state em um determinado tempo.
+
+A seguir está um exemplo trivial de uma MSF, dado em um pseudocódigo.
+
+State 0:
+1. Ler um número.
+2. Se o número for 0, ir para o state 0. Se não for, ir para o state 1.
+
+State 1:
+1. Imprimir "Woohoo!"
+2. Ir para o state 3.
+
+State 2:
+1. Ir para o state 0.
+
+State 3:
+1. Terminar
+
+Suponha que esta MSF começa no state 0 e leia o value 0. Então ela retornará para o início do state 0, e lerá outro número. Isso continuará até que a MSF leia um número que não seja o 0, sendo que nesse ponto ela mudará para o state 1. No state 1, a MSF imprime "Woohoo!" e então muda para o state 3. O state 3 faz a MSF terminar. o state 2 nunca será alcançado nesse exemplo.
+
+Aqui está um state de uma MSF que poderá ser usada por um personagem de um jogo de luta.
+
+State 555:
+1. Tentar socar o outro cara.
+2. Se tiver sucesso, e outro usuário estiver defendendo o soco, ir para o state 555 (movimento em cadeia).
+3. Se tiver sucesso e o outro usuário não estiver defendendo o soco, exibir animação de recuperação (no sentido de voltar como estava antes de dar o soco).
+4. Se não tiver sucesso, exibir animação de ter errado o golpe.
+5. Quando a animação de recuperação ou de ter errado o golpe terminar, ir para o state 0 (ocioso) (no sentido de estar esperando um comando para ir para outro state).
+
+Os lutadores no MUGEN são máquinas de state finito. O CNS do lutador define o número de states, sendo que cada qual contém um ou mais state controllers (controladores de state). Os State controllers são o que dão ao lutador sua funcionalidade, similarmente às instruções que o nosso lutador recebeu na MSF dada acima. Por exemplo, o controlador de HitDef permite que o lutador acerte um golpe no seu oponente, o controlador de ChangeState permite que o lutador faça uma transição entre os states, e o controlador ChangeAnim permite que o lutador exiba uma animação específica. Cada state controller é especificada em conjunto com uma ou mais condições de teste, chamadas de "triggers" ou " triggers de condições tipo", as quais precisam ser satisfeitas para que aquele controller seja executado.
+
+Cada lutador no MUGEN tem 3 states especiais, de número  -1, -2, e -3. Esses somente são os únicos states permitidos que possuem números negativos. O state -1 geralmente contém state controllers que determina as regras entre as transições dos states, baseado no que o usuário definiu (commands). O State -2 contém outros state controllers que precisam ser verificados a cada tick. O state -3 contém state controllers que são verificados a cada tick, a menos que o lutador esteja usando temporariamente as informações de state do outro lutador (por exemplo, quando o lutador é jogado).
+
+Para cada tick de tempo de jogo, o MUGEN dá uma única passada em cada um desses states especiais, do topo para o fundo, de maneira que aumente o número de state (-3, -2, e então -1). Para cada state controller encontrado, seus triggers de condições-tipo são avaliados e, se estiverem satisfeitos, o controller é executado no state. Uma transição de state (ChangeState) em qualquer dos states especiais atualizará o número atual de state do lutador, mas não interromperá o processo dos states especiais. Depois que todos os state controllers nos states especiais tiverem sido verificados, o state atual do lutador é processado, de novo do topo para o fundo. Se um state de transição está decifrando o state atual, o resto dos state controllers (se estiverem presentes) são pulados, e o processamento continua no 
+início do novo state. Quando o fim do state atual é alcançado e nenhuma transição de state é feita, o processo é interrompido nesse tick.
+
+Há uma exceção para o cenário acima. Se o lutador tem um "helper" (helper = char chamado pelo lutador para ajudá-lo), isso é, chamado pelo state controller de Helper, esse char não terá os states especiais -3 e -2. O char helper também não terá o state especial -1, a não ser que ele tenha sido criado para ser controlado pelo teclado. (Isso pode ser controlado pelo Helper state controller quando o lutador é criado.)
+
+-----------------------------
+III.b. Introdução aos States
+-----------------------------
+
+Programar os states é a parte mais difícil de se criar um lutador. Isso exige muito trabalho, testes, e algumas vezes, tentativa e erro. Nesta seção, nós nos referiremos ao lutador que está sendo programado, e também ao seu oponente. Vamos chamar o lutador do qual os states estão sendo editados de P1, e seu oponente de P2.
+
+Não se desecoraje se você não entender muita coisa deste documento na sua primeira leitura. A melhor maneira de aprender sobre os states é primeiramente brincar com os valores que estão no CNS de um char terminado, e ver quais efeitos foram feitos nele ou nela. Não há nada a temer quando você mexe no CNS; o M.U.G.E.N é desenhado para detectar erros de sintaxe e reportá-los.
+
+Incluído no pacote de distribuição do M.U.G.E.N está um lutador de nome Kung Fu Man (KFM para abreviar). Você pode encontrá-lo no diretório chars/kfm.
+
+O arquivo CMD contém os nomes dos comandos e a definição do state -1, um state especial que é usado para controlar como o lutador responde aos comandos do usuário. Veja o documento sobre CMD para mais informações.
+
+Aqui estão alguns conceitos que serão úteis para você saber:
+
+1. Life (vida) e power (energia)
+2. Controle
+3. Tempo do jogo e tempo do state
+4. Posição, velocidade e aceleração
+5. Juggling (não sei uma palavra em português correspondente, definido abaixo)
+
+1. Life (vida) e power (energia)
+A barra de life de um lutador é a barra amarela no topo da tela em seu lado da tela. Quando a barra de life atinge o zero, o lutador é nocauteado. Sua barra de power é a barra azul, e ela aumenta conforme o lutador dá ou recebe os ataques. Quando a barra de power atinge certos valores, ele pode realizar super golpes.
+
+2. Controle
+Quando nós dizemos que um lutador "tem o controle", nós queremos dizer que ele está pronto para andar ou pular ou atacar. Um lutador que não tem o controle não responderá aos seus comandos (do teclado ou do joystick). Por exemplo, quando o P1 está em seu state parado (stand), ele tem o controle, e andará para frente se você apertar o botão para frente. Um lutador tipicamente não terá o controle quando ele está em um state de ataque, porque de outra maneira você poderia simplesmente sair andando enquanto está no meio de um soco.
+
+Há uma exceção a essa regra, no entanto.
+Algumas vezes você pode deixar o lutador responder a certos movimentos mesmo se ele não tiver o controle. Isso é chamado uma "interrupção no movimento", ou um "cancelamento de movimento". Veja a documentação do CMD para maiores detalhes.
+
+Nós frequentemente nos referiremos à "control flag" de um lutador. Uma "flag" é um valor que é verdadeiro ou falso. Se nós dissermos que a control flag do lutador é verdadeira, isso significaque ele tem o controle.
+
+3. Tempo de jogo e tempo de state
+O M.U.G.E.N vai monitorando o tempo que tem passado no jogo. Cada vez que o jogo é atualizado (isso inclui atualização dos lutadores, verificando colisões, e desenhando a tela), nós dizemos que o tempo de jogo foi aumentado em um. O tempo que um jogador gastou em um state é chamado de "state-time" ("tempo de state"). O state-time começa no 0 no início de um state, e aumenta em um tick em cada tick do tempo de jogo.
+
+4. Posição, velocidade e aceleração
+Aqueles de vocês com conhecimento básico de matemática entenderão esses conceitos. O M.U.G.E.N usa o seguinte sistema de coordenadas. Quanto maior é a posição-X, mais longe à direita o lutador está. Quanto menor a posição-X, mais perto ele está da esquera. Uma posição-Y em zero é o nível do chão do cenário. Quanto maior for a posição-Y do lutador, mais ele se move para baixo. Por exemplo, uma posição-Y negativa significa que ele está no ar. Da mesma forma, quando nós dizemos que o lutador tem uma velocidade-X positiva, isso significa que que ele está se movendo para frente, e se ele tem uma velocidade-X negativa, ele está se movendo para trás. Um lutador com uma velocidade-Y positiva está se movendo para baixo, e uma velocidade-Y negativa significa que ele está se movendo para cima. Uma aceleração-X positiva significa que a velocidade-X do lutador está aumentando, uma aceleração-X negativa significa que sua velocidade-X está diminuindo. Funciona do mesmo modo na aceleração-Y.
+
+5. Juggling
+O M.U.G.E.N permite que certos movimentos usem "juggle", isso é, acertar os oponentes que já tenha apanhado no ar, ou estão caindo no chão. O sistema de juggling funciona dessa maneira: cada pessoa começa com um certo número de pontos juggle no primeiro golpe que o faz cair, tipicamente 15. 
+
+Algumas terminologias rápidas: quando nós dizemos que o lutador está caindo, nós queremos dizer que ele não tem o controle no ar, e cairá no chão. Se o lutador é atingido enquanto ele está caindo, ou já está caído no chão, seus pontos juggle diminuirão em uma quantidade que dependerá do ataque. Quando um ataque requer mais pontos juggle do que o oponente ainda tem, o ataque não acertará. Qualquer movimento que causa o oponente cair imediatamente subtrai os pontos juggle do primeiro golpe. Por exemplo, um ataque que requer 7 pontos juggle pode teoricamente ser usado para acertar o oponente no ar duas vezes (assumindo que você começou com 15 pontos), deixando o oponente com 1 ponto de sobra. Os ataques subsequentes não acertarão. A razão de existir esse sistema de juggle é prevenir combos aéreos infinitos.
+
+
+-----------------------------
+III.c. Partes Básicas de um State
+-----------------------------
+
+Nota: Esta seção assume que você já pelo menos deu uma olhada na documentação sobre os arquivos AIR, e entendeu os conceitos de animação, e sabe o significado das palavras chaves e frases como ação e elemento de uma ação. 
+
+Aqui está um exemplo simples de um state do P1:
+
+[Statedef 200]
+type = S
+physics = S
+movetype = I
+ctrl = 0
+anim = 200
+velset = 0
+
+[State 200, 1]
+type = ChangeState
+trigger1 = AnimTime = 0
+value = 0
+ctrl = 1
+
+Este state roda a ação 200 da animação do P1, e retorna o P1 os seu state de stand (parado aguardando comando) depois que a animação tiver terminado. Nesse caso, assuma que a ação 200 tenha um looptime finito. Isso é, a ação 200 não tem nenhum elemento com tempo igual a -1.
+
+Nesse ponto, você não precisa se preocupar com os detalhes. Vamos começar entendendo em quê um state consiste.
+
+Todos os states devem ter uma única seção de Statedef e uma ou mais seções de State.
+
+O Statedef contém as informações iniciais do state, como que tipo de state ele é (em pé, agachado, no ar), e que tipo de movimento ele está fazendo (atacando, aguardando comando).
+
+Cada seção do State contém referências a um state controller (controlador de state), ou a um controller para abreviar. O Controllers dizem ao programa o que fazer com o P1, e quando fazê-lo. Têm vários tipos de controllers, cada um com sua própria função. Por exemplo, existem controllers para mudar a posição ou  velocidade dos lutadores, definir os efeitos dos ataques , criar projéteis, mudar entre as ações da animação, mudar de states, e assim por diante. Cada controller deve ter ao menos um trigger. Um trigger é um evento que faz o controller ser ativado.
+Exemplos são:
+trigger no início do state, trigger no fim da animação (como visto no exemplo de State acima), trigger em um elemento de uma ação da animação, trigger quando o P2 está a uma certa distância do P1, e assim por diante.
+
+
+--------------------------
+III.d. Detalhes do StateDef
+--------------------------
+
+Cada state precisa começar com exatamente um grupo de StateDef, também chamado de uma seção de StateDef. Um grupo de StateDef precisa se parecer com isso (coloque um ou mais parâmetros no lugar dos pontos):
+(StateDef número_do_state)
+.. parâmetros_do_state
+..
+..
+Troque onde está escrito número_de_state com o número do state que você está programando. Com exceção do número de grupo especial (veja o Apêndice A) você pode usar qualquer número de state que você quiser. Para que não ocorra de você ter escolhido um número de grupo especial, não escolha números entre 0-199 e entre 5000-5999.
+
+As linhas a seguir devem incluir os seguintes parâmetros:
+1. type         (tipo)
+2. movetype     (tipo de movimento)
+3. physics     (física)
+4. anim         (animação)
+
+1. type
+Esse é o tipo de state do P1 naquele state. Ele define se ele está em pé, agachado, no ar, ou caindo. Os valores correspondentes são
+
+S     em pé
+C    agachado
+A    no ar
+L    caindo
+
+Para permanecer com o tipo de state do state anterior, use o valor U. Se essa linha for omitida, o MUGEN assume que o tipo é S. Você vai mais comumente usar S, C, e A. Por exemplo, um tipo de state agachado requer a seguinte linha:
+
+type = C
+
+O tipo é usado para determinar vários fatores, sendo o mais importante, como o P1 reagirá ao levar um golpe. Por exemplo, estando um tipo de state em pé, o P1 reagirá como se estivesseem pé no chão. Se o tipo for no ar, então o P1 reagirá como se tivesse levado o golpe no ar.
+
+2. movetype
+Esse é o tipo de movimento que o P1 está fazendo.
+A    atacando
+I    ocioso
+H    levando golpe
+
+Para manter o tipo de movimento do state anterior, use U. O valor assumido como I se essa linha for omitida. A e H se explicam por si sós. I é usado para quando o P1 não está nem atacando nem levando um golpe. Por exemplo, um state de ataque deve ter a linha:
+
+movetype = A
+
+Você precisa especificar o tipo de movimento para que o programa saiba como processar o state. Se o tipo de movimento for especificado de forma incorreta, o P1 agirá de forma incorreta.
+
+3 physics
+Você precisa especificar que física usará naquele state. Os valores válidos são
+
+S    em pé
+C    agachado
+A    no ar
+N    nenhum
+
+Para manter a física do state anterior, use o valor U. Se omitido, o valor N será assumido. O tipo de física é usado para determinar como o P1 se comporta.
+
+Para a física S, o P1 tocará o chão. O valor do coeficiente de toque no não é ajustável nas Variáveis do Lutador (veja a seção II).
+Para a física C, o P1 tocará o chão, assim como no state S acima.
+Para a física A, o P1 acelerará para baixo, e se sua posição-Y for maior que 0 (isso é, ele toca o chão) ele irá imediatamente para o seu state de aterrissagem.
+Se você usar a física N o P1 não usará nenhuma dessas físicas pré-programadas.
+
+Não confunda a física com o state "type". Elas são na maioria das vezes as mesmas, mas é dado a você a escolha se você quiser um maior controle. Por exemplo, você pode escolher usar N (nenhuma física), e especificar sua própria aceleração e detecção de aterrissagem em um state no ar.
+
+4. anim
+Este parâmetro muda a Ação de Animação do P1. Especifique o número da ação de animação como um valor. Se você não quer que o P1 mude a animação no começo do state, omita esse parâmetro.
+
+Assim, para ter um state com número 400, onde o lutador está fazendo um ataque agachado como a Ação 400, os parâmetros típicos seriam:
+
+[Statedef 400]
+type = c
+movetype = a
+physics = c
+anim = 400
+
+
+Os outros parâmetros opcionais que você pode usar são:
+4.  velset
+5.  ctrl
+6.  poweradd
+7.  juggle
+8.  facep2
+9.  hitdefpersist
+10.  movehitpersist
+11.  hitcountpersist
+12.  sprpriority
+
+4. velset
+Você pode usar o velset para determinar qual a velocidade do P1 no começo do state. O formato é uma dupla de números, representando a velocidade x e a velocidade y respectivamente. Omitindo essa linha você deixará a velocidade do P1 não modificada. Por exemplo, velset = 4, -8 faz o P1 começar a movimentar na diagonal para cima e para frente. Há uma exceção quanto a isto. Mesmo que você deixe velset = 0, se você atacar o P2 no canto, o P1 será empurrado para trás.
+
+5. ctrl
+Esse parâmetro irá ajustar o controle do P1. O valor de 0 ajusta a flag para falso (não tem o controle), 1 ajusta em verdadeiro (tem o controle). Se omitida, a control flag do P1 é deixada sem modificações. Por exemplo, para dar o controle ao P1, use ctrl = 1
+
+6. poweradd
+Quando incluído, o parâmetro poweradd adiciona energia à barra de power do lutador. O valor é um número, e pode ser positivo ou negativo. Esse parâmetro é usado tipicamente em movimentos de ataque, onde você quer que o lutador ganhe power simplesmente por realizar o ataque. Por exemplo, para adicionar 40 à barra de energia, digite poweradd = 40
+
+7. juggle
+O parâmetro juggle é útil somente para ataques. Ele especifica quantos pontos de juggle o movimento requer. Se omitido para um ataque, esse ataque realizará o juggle se o state de ataque anterior usar o juggle com sucesso. Você deve incluir o parâmetro de juggle em todos os ataques. Se um ataque atravessar mais de um state, inclua o parâmetro juggle somente no primeiro state daquele ataque. O juggle foi explicado em detalhes nos "Conceitos Uteis" da seção IIIa.
+
+8. facep2
+Quando você inclui a linha "facep2 = 1" (sem as aspas), o lutador se virarará, se necessário, para ficar de frente para o oponente no começo do state. O facep2 tem o valor 0 se for omitido.
+
+9. hitdefpersist
+Se ajustado em 1, quaisquer HitDef que estiverem ativos no momento da transição de state para esse state permanecerão ativos. Se ajustado em 0, que é o padrão, qualquer HitDef será desabilitado quando a trasição de states for feita.
+
+10. movehitpersist
+Se ajustado em 1, a informação de movimento do golpe do state anterior (não importa se o ataque for certeiro ou não, se foi defendido, etc.) será carregada para esse state. Se ajustado em 0 (o padrão), essa informação será resetada pela entrada nesse state.
+
+11. hitcountpersist
+Se ajustado em 1, o hit counter (quantos hits esse ataque fez) será carregado do state anterior para esse state. Se deixado em 0 (o padrão), o hit counter será resetado na transição de state. Esse parâmetro não afeta o contador de combo que é exibido na tela. Veja hitcount e uniqhitcount na documentação de trigger para aprender como verificar o hit counter.
+
+12. sprpriority
+Se este parâmetro estiver presente, a prioridade de exibição do sprite será ajustada pelo valor especificado. Se omitido, a prioridade de exibição do sprite será deixada como se encontra. O arquivo common1.cns (o arquivo CNS que é aplicado a todos os lutadores) define a prioridade dos sprites dos lutadores na stand ou agachados em 0, e pulando em 1. Para a maioria dos states de ataque, você vai querer ajustar a sprpriority = 2, para que o atacante apareça na frente. Veja SprPriority na documentação dos sctrls para saber como modificar a prioridade dos sprites usando um controller.
+
+
+-----------------------------------
+III.e. Detalhes dos State Controllers
+-----------------------------------
+
+d.1 Formato do Controller
+d.2 Triggers
+d.3 Controllers comumente usados
+
+
+III.d.1 Formato do Controller
+-------------------------
+
+Todos states devem ter ao menos um controlador de state, se não tiver isso causará um erro. Os grupos de state controller têm o seguinte formato:
+
+[State número_do_state, algum_número]
+type = tipo_de_controller
+trigger1 = condição_exp
+.. parâmetros opcionais universais
+.. parâmetros adicionais dependendo do controller
+..
+..
+
+O número_do_state precisa ser o mesmo número do state contido no statedef. algum_número pode ser qualquer número que você escolher; é o número que será reportado quando um erro for encontrado, então você saberá qual controller precisa ser consertado.
+
+Os parâmetros opcionais universais (aplicável a todos os state controllers) são os parâmetros ignorehitpause e persistency. Se ignorehitpause estiver ajustado em 1, o MUGEN checará esse state controller mesmo que o lutador esteja paralisado por algum golpe. Por outro lado, esse state controller não será checado durante um hit pause. O padrão é 0, o qual é recomendado para todas as situações, menos as absolutamente excepcionais. Para uma explicação do parâmetro persistency, veja a seção trigger persistency.
+
+O tipo_de_controller é o nome do controller que você está usando. Cada tipo de controller tem um efeito diferente, e requer parâmetros diferentes. Veja sctrls.txt para uma lista completa de state controllers.
+
+A ordem dos controllers é importante. Os controllers listados antes são checados antes e, se necessário, ativados antes.
+
+Aqui está um exemplo de um controller que dá ao P1 o controle no início do state (tem o mesmo efeito que colocar ctrl = 1 como um parâmetro no StateDef):
+
+[State 300, 1]; o State 300. 1 é um número qualquer
+type = CtrlSet; Muda o control flag
+trigger1 = Time = 0
+value = 1
+
+Nesse exemplo, o tipo CtrlSet permite que você modifique a control flag do P1. A linha onde está escrito "trigger1 = Time = 0" significa que este controller é ativado quando o tempo do state for 0, isso é, no começo do state. A linha "value = 1" diz que nós queremos ajustar o valor da control flag para 1, o que significa verdadeiro. Se nós quisermos fazer com que o P1 inicie o state sem o controle, então nós simplesmente mudamos a última linha para "value = 0".
+
+Vamos ver um outro exemplo. Este controller move o P1 10 pixels para frente duas vezes: no segundo e no terceiro elemento de sua Ação de Animação atual. Não se preocupe se você não sabe quais parâmetros que vão com cada tipo de controller. Você pode aprender mais sobre eles na documentação de state controller (sctrls).
+
+[State 300, 2]
+type = PosAdd ;Adiciona à posição do P1
+trigger1 = AnimElem = 2 ;Trigger no 2º elemento.
+trigger2 = AnimElem = 3 ;Trigger no 3º elemento.
+x = 10
+
+Como visto acima, cada controller precisa ter ao menos um trigger. Um trigger é uma condição que faz o controlador ser ativado. Este exemplo tem 2 triggers, e o controller é ativado quando QUALQUER UM DELES for verdadeiro.
+
+III.d.2 Triggers
+----------------
+
+i. A Lógica do Trigger
+
+O primeiro trigger deve sempre ser o "trigger1", e o trigger subsequente deve ser o "trigger2", depois o "trigger3", e assim por diante. A lógica que decide se um trigger deve ser ativado é:
+
+1. Todas as condições do "trigger1" são verdadeiras? Se sim, ativar o controller.
+2. Se não estiverem, repetir o teste no "trigger2", e assim por diante, até quando não forem encontrados mais triggers.Isso pode ser visto como a lógica "OU".
+
+Tenha cuidado; a omição de números pode fazer com que alguns triggers sejam ignorados. Por exemplo, se você tem os seguintes triggers: "trigger1", "trigger2" e
+"trigger4" sem ter o "trigger3", o "trigger4" será ignorado.
+ 
+E se você quiser que mais de uma condição esteja presente antes de ativar o controller? Aqui está um exemplo comumente usado para testar se um lutador atingiu o chão. Os triggers usados são:
+
+trigger1 = Vel Y > 0 ; Verdadeiro se a velocidade-Y é > 0 (indo para baixo)
+trigger1 = Pos Y > 0 ; Verdadeiro se a posição-Y for > que 0 (abaixo do chão)
+Neste ponto, você pode estar confuso devido ao formato do trigger. Não se preocupe com isso agora. Nós trataremos disso em breve. Como você pode ver acima, ambos triggers têm o mesmo número. Quando vários triggers têm o mesmo número, ele implementa a lógica do "E". Isso é, o controller é ativado se cada um dos triggers de mesmo número forem verdadeiros, mas não se um ou mais deles for falso.
+
+Você pode combinar as duas idéias. Por exemplo:
+trigger1 = Vel Y > 0 ; Verdadeiro se a velocidade-Y é > 0 (indo para baixo)
+trigger1 = Pos Y > 0 ; Verdadeiro se a posição-Y é > 0 (abaixo do chão)
+trigger2 = Time = 5  ; Verdadeiro se o tempo do state for 5
+O controller neste caso deverá ser ativado se o lutador aterrissar no chão (a velocidade-Y e a posição-Y são ambas > 0), OU se seu tempo de state for 5.
+
+Aqui está um sumário:
+- Os triggers de número igual ativam o controller somente se todos eles forem verdadeiros. 
+- Os triggers com números diferentes ativam o controller se algum ou mais de um forem 
+verdadeiros.
+
+O formato de um trigger é:
+trigger? = tipo_de_trigger trigger_test
+tipo_de_trigger é o nome do trigger (veja triggers.txt para a lista completa). 
+
+A condição_exp é uma expressão aritimética a ser checada no caso de igualdade a zero. Se a condição_exp é 0, então o trigger é falso. Se a condição_exp não é zero, então o trigger é verdadeiro. A condição_exp normalmente é uma simples expressão relacional como nos exemplos acima, mas pode se tornar tão simples ou complicada quanto seja necessário.
+
+É possível o uso de operadores lógicos entre expressões. Por exemplo, isso é equivalente ao exemplo dado acima:
+trigger1 = ((Vel Y > 0) && (Pos Y > 0)) || Time = 5
+Veja exp.txt para uma explicação detalhada de expressões aritiméticas.
+
+Um atalho útil que você poderá querer usar é o "trigerall". Ele determina que uma condição deve ser verdadeira em todos os triggers. Exemplo:
+
+triggerall = Vel X = 0
+trigger1 = Pos Y > -2
+trigger2 = AnimElem = 3
+trigger3 = Time = [2,9]
+
+Para que qualquer um entre o trigger1 e o trigger3 seja checado, a condição triggeral também precisa ser verdadeira. Neste caso, como a velocidade-X não é 0, o state controller não será ativado. Você pode ter mais de uma condição triggerall se você precisar. Note que pelo menos um trigger1 deve estar presente, mesmo que você especifique triggerall.
+
+ii. Persistência do Trigger
+
+No caso em que você não queira que o trigger seja ativado a cada vez que a condição seja verdadeira, você precisará adicionar o parâmetro "persistent". Vamos começar com um exemplo:
+
+[State 310, 1]
+type = PosAdd
+trigger1 = Vel Y > 1
+x = 10
+
+Este state controller movimenta o P1 para frente em 10 pixels em cada game-tick onde a velocidade-Y do P1 é maior que 1. Isso é, o controller está sendo ativado cada vez que a condição do trigger for verdadeira. Se nós quisermos que o controller seja ativado somente uma vez, nós precisaremos adicionar
+uma linha:
+
+[State 310, 1]
+type = PosAdd
+trigger1 = Vel Y > 1
+persistent = 0       ;<-- Esta linha foi adicionada
+x = 10
+
+O "persistent" tem um valor padrão de 1, o que significa que o controller é ativado toda vez que o trigger é verdadeiro. Ajustando o "persistent" em 0 permite que o controller seja ativado somente durante aquele state. Isto permanece verdadeiro até que o P1 saia desse state. Se o P1 retorna a esse state mais tarde, o controller pode ser ativado mais uma vez.
+
+O parâmetro "persistent" pode ter valores outros além de 0 e 1:
+
+[State 310, 1]
+type = PosAdd
+trigger1 = Vel Y > 1
+persistent = 2       ;<-- Esta linha foi modificada
+x = 10
+
+Neste caso, ajustando o "persistent" em 2 significa que o controller será ativado uma em cada duas vezes que o controller seja verdadeiro. Ajustando o "persistent" em 3 ativa o controller uma em cada três vezes, e assim por diante.
+
+iii. Trigger redirection
+
+Alguém pode querer checar o statetime do alvo do lutador, ou do helper do lutador, etc.
+
+
+III.d.3 Controllers comumente usados
+---------------------------------
+
+O controller "Null" é útil para fazer debug. Um controller "null" basicamente não faz nada. Você pode usá-lo para desligar temporariamente certos controllers, ao invés de ter que remover a seção inteira. Por exemplo, se você quiser desabilitar isso:
+
+[State 300, 1] ;Controller que acelera o P1 para frente
+type = VelAdd
+trigger1 = Time >= 0
+x = .8
+
+Simplesmente desabilite este controller colocando "null" e ponto e vírgula (;) em type:
+
+[State 300, 1] ;Controller que acelera o P1 para frente
+type = null ;VelAdd
+trigger1 = Time >= 0
+x = .8
+
+Mais tarde, quando você quiser reabilitar o controller, é só você voltar o type para que o era 
+antes.
+
+Agora vamos nos voltar para esse exemplo:
+
+[Statedef 200]
+type = S
+physics = S
+movetype = I
+ctrl = 0
+anim = 200
+velset = 0
+
+[State 200, 1]
+type = ChangeState
+trigger1 = AnimTime = 0
+value = 0
+ctrl = 1
+
+O [State 200,1] é um controller de "ChangeState". Como o próprio nome diz, ele muda o número de state do P1. O parâmetro "value" deve ter o número do state para o qual você pretende mudar. O parâmetro opcional "ctrl" pode mudar as control flags do P1 enquanto ele muda de states.
+
+Agora vamos fazer disso um state de ataque. Antes de qualquer coisa, a animação da ação precisa de caixas de colisão. Uma revisada rápida de documentação do AIR: Clsn1 é para ataque e Clsn2 é onde o lutador pode ser atingido. Então o P1 irá atingir o P2 se alguma das caixas de colisão Clsn1 do P1 se encontrar com alguma caixa de colisão Clsn2 do P2.
+
+Como exemplo, vamos supor que a ação de animação no arquivo AIR do P1 se pareça com isso:
+
+[Begin Action 200]
+200,0, 0,0, 3
+200,1, 0,0, 4
+200,2, 0,0, 4
+200,3, 0,0, 3
+
+Depois de definir as caixas de colisão, ele se parecerá com isso:
+
+[Begin Action 200]
+Clsn2: 1
+  Clsn2[0] = -10,0, 10,-80
+200,0, 0,0, 3
+Clsn1: 1
+  Clsn1[0] =  10,-70, 40,-60
+Clsn2: 2
+  Clsn2[0] = -10,  0, 10,-80
+  Clsn2[1] =  10,-70, 40,-60
+200,1, 0,0, 4
+Clsn2Default: 1 ;Usa esta caixa de colisão para os últimos dois sprites
+  Clsn2[0] = -10,0, 10,-80
+200,2, 0,0, 4
+200,3, 0,0, 3
+
+Como você pode ver, cada elemento tem uma caixa Clsn2 definida para ele (os últimos dois elementos estão usando as mesmas caixas). O segundo elemento é o único que tem um caixa Clsn1.
+
+Nota: Não há problemas em se definir caixas Clsn1 para qualquer elemento em uma ação de animação, mas se você colocar uma Clsn1 no primeiro elemento, o ataque será instantâneo, e se tornará indefensável. Desta forma, é recomendável que você defina as caixas Clsn1 somente para elementos que vierem depois do primeiro.
+
+Agora nós estamos prontos para ajustar o state no CNS. Nós explicaremos as mudanças abaixo.
+
+[Statedef 200]
+type = S
+physics = S
+movetype = A  ;<-- mudado de "I" para "A"
+ctrl = 0
+anim = 200
+velset = 0
+
+[State 200, 1] ;<-- Adicionado este state controller
+type = HitDef
+trigger1 = AnimElem = 2
+attr = S, NA
+animtype  = Light
+damage    = 10
+guardflag = MA
+pausetime = 12,12
+sparkxy = 0,-55
+hitsound   = 5,0
+guardsound = 6,0
+ground.type = High
+ground.slidetime = 12
+ground.hittime  = 15
+ground.velocity = -5
+air.velocity = -2.5,-3.5
+
+[State 200, 2]
+type = ChangeState
+trigger1 = AnimTime = 0
+value = 0
+ctrl = 1
+
+O parâmetro "movetype" no StateDef" foi ajustado para "A" porque se trata de um ataque.
+
+Lembre-se de fazer isto em todos os states de ataque. Como antes, o P1 volta para o seu state de stand depois que a animação tiver terminada.
+
+Aquele controller de HitDef parece um monstro! Não se preocupe, nós o explicaremos com calma.
+
+type = HitDef
+trigger1 = AnimElem = 2
+Isso especifica o tipo de controller como um "HitDef", o que significa Definição do Golpe. Ele está com um trigger no segundo elemento da animação. Qualquer caixa Clsn2 que exista no momento em que o trigger for ativado terá essa definição de golpe. Se, por exemplo, você tiver uma Clsn1 no segundo e terceiro elemento da animação, o trigger de HitDef do segundo elemento faz ele ser aplicável a ambos os elementos da animação. Assim o P1 irá acertar no máximo uma vez:
+se o segundo elemento acertar, o terceiro não irá. se o segundo elemento errar, o terceiro ainda pode acertar. Para fazer o ataque acertar duas vezes, você precisa fazer um trigger no HitDef de cada um dos dois elementos.
+
+atrr = S, NA
+Este é o atributo do ataque. Ele é usado para determinar se o ataque pode acertar o P2. Ele é um Standind Normal Attack (Ataque Normal em Pé). O "atrr" tem o seguinte formato:
+
+attr = arg1, arg2
+
+Onde:
+
+- O arg1 pode ser S, C ou A. Da mesma forma que é usado no "statetype" do StateDef, isso diz se o ataque é em pé (S), agachado (C), ou no ar (A).
+- O arg2 é um parâmetro de duas letras. A primeira letra pode ser "N" para normal, "S" para especial, ou "H" para hiper. A segunda letra pode ser "A" para ataque (um golpe normal de ataque), "T" para um agarrão (ou jogar o adversário), ou "P" para projéteis.
+
+animtype = Light
+Isso se refere ao tipo de animação que o P2 irá exibir quando for atingido pelo ataque. Escolha entre "light" (animação de receber golpe fraco), "medium" (golpe médio), "hard" (golpe forte), "back" (é lançado para cima).
+
+damage = 10
+Esse é o dano que o P2 sofre quando recebe o golpe, e no caso, não está causando nenhum dano se for defendido. Se nós mudarmos essa linha para "damage = 10, 1", então ele causará o dano de 1 ponto se for defendido.
+
+guardflag = MA
+Isso determina como o P2 pode defender o ataque. Aqui, o argumento tem que ter incluir qualquer das seguintes letras: "H" para defender em pé, "L" para defender agachado, "A" para defender no ar. "M", meio - defender entre em pé e agachado. "M" é equivalente a dizer "HL".
+
+pausetime = 12,12
+Este é o tempo em que os lutadores ficarão parados ao executar o golpe. O primeiro argumento é o tempo que o P1 ficará parado, medido em game-ticks. O segundo é o tempo que levará para o P2 se refazer do golpe.
+
+sparkxy = 0,-55
+Isso é onde vão aparecer os sparks do golpe e da defesa. Os argumentos precisam estar no formato "x,y". O x é relativo à frente do P2. Um x negativo faz o spark aparecer mais para dentro do P2. Um y negativo faz o spark aparecer mais para cima.
+
+hitsound = 5,0
+Esse é o som que será tocado no golpe (do arquivo fight.snd). O arquivo incluído fight.snd te deixa escolher entre o 5,0 (som de golpe fraco) até o 5,4 (porrada dolorida). Para tocar um som que esteja no arquivo SND do próprio lutador, coloque antes do primeiro número a letra "S". Por exemplo, "hitsound = S1,0".
+
+guardsound = 6,0
+Esse é o som que será tocado caso o P2 defenda o golpe (do arquivo fight.snd). Para tocar um som que esteja no arquivo SND do próprio lutador, coloque antes do primeiro número a letra "S".
+
+ground.type = High
+Este é o tipo de ataque para ataques no chão (também serve como padrão para ataques no ar se você não tiver a linha "air.type = ?"). Nesse caso, ele é um ataque alto. Escolha entre "High" para ataques que fazem a cabeça do P2 ir para trás, "Low" para ataques que parecem que acertaram o estômago, "Trip" para ataques abaixo da linha de cintura, ou "None" para não acontecer nada com o P2. Os ataques "High" e "Low" serão iguais no P2 se o AnimType for "Back".
+
+ground.slidetime = 12
+Esse é o tempo em game-ticks que o P2 será empurrado para trás depois de receber o golpe (esse tempo não é o mesmo do pausetime do P2). Somente é aplicável em golpes que mantém o P2 no chão.
+
+ground.hittime = 15
+Tempo que o P2 fica no state do golpe depois de receber o golpe. Somente é aplicável em golpes que mantém o P2 no chão.
+
+ground.velocity = -5
+Velocidade-X inicial a ser dada ao P2 depois de receber o golpe, se o P2 estiver em pé ou agachado. Você pode especificar uma velocidade-Y como um segundo argumento, se você quiser que o P2 seja lançado para cima, por exemplo "ground.velocity = -3, -2".
+
+air.velocity = -2.5,-3.5
+Velocidade inicial dada ao P2 se o P2 estiver no ar.
+
+Têm mais coisas que você pode controlar em um HitDef. Veja sctrls.txt para detalhes.
+
+
+----------------------------------
+III.f. States Comuns (common1.cns)
+----------------------------------
+
+Se você olhar no arquivo DEF de um lutador, você verá a linha:
+
+stcommon = common1.cns  ;Common states
+
+Todo lutador compartilha de alguns states comuns, nos quais são as partes básicas da engine do jogo. Esses states comuns são econtrados em data/common1.cns.
+Alguns exemplos são os states de correr e receber golpe. A lista completa está disponível no Apêndice A, Números Especiais de State Controller.
+
+Se existe um state comum que você gostaria de ignorar em um determinado lutador, tudo o que você precisa fazer é criar um state na CNS do lutador com o mesmo número do que você quer ignorar. Assim, quando o lutador mudar para esse número de state, ele entrará nesse novo state, ao invés do que está no common1.cns.
+
+Você deve ter em mente que se você ignorar certos states que têm propriedades especiais codificadas dentro do M.U.G.E.N, os novos states que você fizer ainda permanecerão tendo as mesmas propriedades especiais dos que você ignorou. Por exemplo, o state de correr (state 100) ajusta a velocidade do lutador para qualquer valor que você especificar nas variáveis do lutador. Se você ignorar o state 100, o novo state ainda terá a propriedade de ajustar a velocidade do lutador.
+
+Um exemplo comum é ignorar state de correr. O comportamento padrão do M.U.G.E.N no state de correr é fazer o lutador se mover para frente em uma velocidade constante, até que você pare de apertar a tecla de ir para frente. Nesse ponto, ele retorna no state de stand.
+
+Agora, vamos dizer que nós queremos que aquele lutador (vamos chamá-lo de P1) ao invés de correr para frente, salte para frente, da mesma maneira que ele salta para trás quando nós damos dois toques para trás. Você pode fazer um state assim no CNS do P1:
+
+; Correr para frente (ignorado para o salto para frente) 
+[Statedef 100]
+type    = S   ;Correr no chão
+physics = N   ;Nós definiremos nossa própria física
+anim = 100    ;Ação de animação 100
+ctrl = 0      ;Sem o controle durante o salto
+
+[State 100, 1] ;Para começar a saltar para frente
+type = VelSet
+trigger1 = Time = [0,5]
+x = 6
+
+[State 100, 2] ;Tocar o chão depois do salto inicial
+type = VelMul
+trigger1 = Time > 5
+x = .85
+
+[State 100, 3] ;
+type = ChangeState
+trigger1 = AnimTime = 0
+value = 0
+ctrl = 1
+
+Aqui nós assumimos que a Ação 100 tem um looptime finito. A velocidade em "run.fwd" abaixo de [Velocity] nas variáveis do lutador não é realmente ignorada, mas o [State 100,1] passa por cima desse detalhe, ajustando a velocidade-X para 6.
+
+
+
+====================================================================
+IV. Expressões
+====================================================================
+
+O MUGEN tem suporte para expressões tanto no arquivo CNS quanto no arquivo CMD. Esta seção te dará alguns breves exemplos de expressões. Não tenha isto como uma referência aprofundada; é somente um guia rápido para você ir se familiarizando. Para uma explicação completa das expressões, por favor veja a documentação sobre expressões 
+(exp.txt).
+
+As expressões lhe permitem usar um trigger como o valor de um parâmetro. O exemplo a seguir aumenta a posição-x do Lutador através de um valor que igual ao seu tempo de state.
+
+[State 200, 1]
+type = PosAdd
+trigger1 = Time = 0
+x = Time
+
+A matemática simples também é possível ao se usar expressões. Alguns operadores aritiméticos básicos são:
++ adição
+- subtração
+* multiplicação
+/ divisão
+
+[State 200, 1]
+type = VelSet
+   trigger1 = 1   ;Nota: isto é lógicamente equivalente a 
+   x = Time + 4   ;"trigger1 = Time >= 0"
+
+As expressões nos parâmetros do state controller são avaliadas no tempo da execução, o que significa que cada vez que um state controller com um parâmetro contendo uma expressão é executado, o valor do parâmetro é recalculado nesse instante. No exemplo acima, a velocidade-x do lutador é recomputada em cada frame em que ele fica no state 200.
+
+A ordem de avaliação é geralmente da esquerda para a direita, mas com a multiplicação e a divisão tendo precedência em relação à adição e subtração. Por exemplo, em uma expressão 5 + 6 / 2, o resultado é 8.
+Para forçar a adição a acontecer antes da divisão, você pode colocá-la entre parênteses, isto é, (5+6)/2, o que te dá o resultado de 5.5.
+
+As expressões também podem ser usadas na linha de trigger.
+Essas expressões são avaliadas a cada momento que o trigger é checado. Este próximo exemplo muda o state do lutador quando seu tempo de state for maior que o valor armazenado na variável var(1).
+
+[State 200, 1]
+type = ChangeState
+trigger1 = Time > var(1)
+value = 201
+
+As varáveis também podem ter expressões, como visto abaixo:
+
+[State 200, 1]
+type = VarSet
+trigger1 = Time = [1,5]
+var(Time) = Time * 2
+
+Opradores lógicos também podem ser usados. || é usado para "ou", e && para "e". Por exemplo, isso muda o state do lutador quando seu tempo de state for maior que 90, e sua animação tiver terminado.
+
+[State 200, 1]
+type = ChangeState
+trigger1 = Time > 90 && AnimTime = 0
+value = 0
+
+O trigger da linha cima é lógicamente equivalente à essas duas linhas:
+
+trigger1 = Time > 90
+trigger1 = AnimTime = 0
+
+&& têm precedência sobre ||. Quando você quiser usar mais de um operador lógico em uma expressão, tente usar os parêntese para ficar mais claro. Isso não é necessário, mas faz ficar mais fácil de entender. Por exemplo:
+
+trigger1 = ((Time > 90) && (AnimTime = 0) || (var(2) = [5,9]))
+
+Nem todos os parâmetros suportam expressões. Tipicamente, aqueles que são do tipo não númericos não suportam expressões. Por exemplo, esta é uma construção ilegal:
+
+[State 300, 5]
+type = HitDef
+trigger1 = Time = 0
+ground.type = High && Low    ; <-- ilegal -- tipos não numéricos!
+
+====================================================================
+Apêndice A.  Números de States Especiais
+====================================================================
+
+A não ser que você planeje ignorar um state comum, evite usar números de state entre 0-199 e 5000-5999. Aqui está uma lista de states que estão no common1.cns. Números de state com a designação "reservados" não devem ser usados, porque eles podem receber funções especiais em uma versão futura do MUGEN.
+
+Número      Descrição
+------      -----------
+0    Parado em pé
+10    De parado em pé para indo agachar 
+11    Agachado
+12    De agachado para indo se levantar
+20    Andar
+
+A ser finalizado.
+
+(Nota minha: a ser finalizado pela Elecbyte e não por mim. Esta é a tradução integral do documento cns.txt. "A ser finalizado." É o que consta no documento cns.txt, o que significa que a Elecbyte não terminou de definir todos os comandos possíveis no MUGEN, talvez porque eles ainda não tenham sido implementados nessa versão do MUGEN.)
